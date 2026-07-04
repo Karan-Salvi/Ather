@@ -635,26 +635,19 @@
         }
       }
 
-      /* Case studies horizontal scroll — touch-enabled on mobile.
-         overflow-x: auto alone forces overflow-y: auto (CSS spec), which adds a
-         second vertical scrollbar track — pin overflow-y explicitly. */
+      /* Case studies horizontal scroll — scroll-driven on all viewports.
+         overflow-x: hidden keeps the wide track clipped; page scroll drives translateX. */
       #horizontal-container {
         width: 100%;
         max-width: 100%;
         min-width: 0;
-        overflow-x: auto;
+        overflow-x: hidden;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
       }
       #horizontal-container::-webkit-scrollbar {
         display: none;
-      }
-      /* Restore GSAP-controlled state on desktop (overflow hidden via GSAP/parent) */
-      @media (min-width: 1024px) {
-        #horizontal-container {
-          overflow: hidden;
-        }
       }
 
       /* ── Loader — full viewport, centered, scroll-locked ─────────────── */
@@ -3110,21 +3103,17 @@
           }
 
           if (casesSection && horizontalScroll) {
-            if (window.innerWidth >= 1024) {
-              const rect = casesSection.getBoundingClientRect();
-              if (rect.top < viewHeight && rect.bottom > 0) {
-                const scrollProgress =
-                  (viewHeight - rect.top) / (viewHeight + rect.height);
-                const maxTranslate =
-                  horizontalScroll.scrollWidth - window.innerWidth + 48;
-                const moveX = Math.min(
-                  maxTranslate,
-                  Math.max(0, scrollProgress * maxTranslate * 1.5),
-                );
-                horizontalScroll.style.transform = `translate3d(-${moveX}px, 0, 0)`;
-              }
-            } else {
-              horizontalScroll.style.transform = "";
+            const rect = casesSection.getBoundingClientRect();
+            if (rect.top < viewHeight && rect.bottom > 0) {
+              const scrollProgress =
+                (viewHeight - rect.top) / (viewHeight + rect.height);
+              const maxTranslate =
+                horizontalScroll.scrollWidth - window.innerWidth + 48;
+              const moveX = Math.min(
+                maxTranslate,
+                Math.max(0, scrollProgress * maxTranslate * 1.5),
+              );
+              horizontalScroll.style.transform = `translate3d(-${moveX}px, 0, 0)`;
             }
           }
         }
@@ -3144,221 +3133,193 @@
         gsap.registerPlugin(ScrollTrigger);
         ScrollTrigger.config({ limitCallbacks: true });
 
-        if (!prefersReducedMotion && statsSection) {
-          ScrollTrigger.matchMedia({
-            "(min-width: 768px)": function () {
-              // ── Set initial hidden states (desktop pin animation) ────────────────
-              gsap.set(".pin-bullet", { opacity: 0, x: 60 });
-              gsap.set(".pin-bullet .check-icon", { scale: 0.8 });
-              gsap.set(".dashboard-shell", { opacity: 0, scale: 0.96 });
-              gsap.set("#card-network-health", { opacity: 0, x: -30 });
-              gsap.set("#bar-network-health", { width: "0%" });
-              gsap.set("#card-active-models", { opacity: 0, x: -30 });
-              gsap.set(
-                [
-                  "#active-model-bar-1",
-                  "#active-model-bar-2",
-                  "#active-model-bar-3",
-                  "#active-model-bar-4",
-                ],
-                { width: "0%" },
-              );
-              gsap.set("#panel-radar", { opacity: 0, x: -40 });
-              gsap.set("#radar-rings", { scale: 0.7 });
-              gsap.set("#card-ai-insight", { opacity: 0, x: 40 });
+        if (!prefersReducedMotion && document.getElementById("dashboard-pin")) {
+          // ── Set initial hidden states (pin animation — all viewports) ────────
+          gsap.set(".pin-bullet", { opacity: 0, x: 60 });
+          gsap.set(".pin-bullet .check-icon", { scale: 0.8 });
+          gsap.set(".dashboard-shell", { opacity: 0, scale: 0.96 });
+          gsap.set("#card-network-health", { opacity: 0, x: -30 });
+          gsap.set("#bar-network-health", { width: "0%" });
+          gsap.set("#card-active-models", { opacity: 0, x: -30 });
+          gsap.set(
+            [
+              "#active-model-bar-1",
+              "#active-model-bar-2",
+              "#active-model-bar-3",
+              "#active-model-bar-4",
+            ],
+            { width: "0%" },
+          );
+          gsap.set("#panel-radar", { opacity: 0, x: -40 });
+          gsap.set("#radar-rings", { scale: 0.7 });
+          gsap.set("#card-ai-insight", { opacity: 0, x: 40 });
 
-              const tl = gsap.timeline({
-                scrollTrigger: {
-                  trigger: "#dashboard-pin",
-                  start: "top top",
-                  end: "+=200%",
-                  pin: true,
-                  pinSpacing: true,
-                  anticipatePin: 1,
-                  scrub: 0.8,
-                  invalidateOnRefresh: true,
-                  onUpdate: () => {
-                    const dot = document.getElementById("insight-status-dot");
-                    if (dot) {
-                      if (tl.progress() >= 0.88) {
-                        dot.classList.add("animate-ping");
-                      } else {
-                        dot.classList.remove("animate-ping");
-                      }
-                    }
-                  },
-                },
-              });
-
-              tl.to(".pin-bullet:nth-child(1)", {
-                opacity: 1,
-                x: 0,
-                duration: 2.8,
-                ease: "power1.inOut",
-              })
-                .to(
-                  ".pin-bullet:nth-child(1) .check-icon",
-                  {
-                    scale: 1.12,
-                    duration: 0.2,
-                    ease: "power1.in",
-                  },
-                  "-=0.2",
-                )
-                .to(".pin-bullet:nth-child(1) .check-icon", {
-                  scale: 1,
-                  duration: 0.2,
-                  ease: "power1.out",
-                });
-
-              tl.to(".pin-bullet:nth-child(2)", {
-                opacity: 1,
-                x: 0,
-                duration: 2.8,
-                ease: "power1.inOut",
-              })
-                .to(
-                  ".pin-bullet:nth-child(2) .check-icon",
-                  {
-                    scale: 1.12,
-                    duration: 0.2,
-                    ease: "power1.in",
-                  },
-                  "-=0.2",
-                )
-                .to(".pin-bullet:nth-child(2) .check-icon", {
-                  scale: 1,
-                  duration: 0.2,
-                  ease: "power1.out",
-                });
-
-              tl.to(".pin-bullet:nth-child(3)", {
-                opacity: 1,
-                x: 0,
-                duration: 2.8,
-                ease: "power1.inOut",
-              })
-                .to(
-                  ".pin-bullet:nth-child(3) .check-icon",
-                  {
-                    scale: 1.12,
-                    duration: 0.2,
-                    ease: "power1.in",
-                  },
-                  "-=0.2",
-                )
-                .to(".pin-bullet:nth-child(3) .check-icon", {
-                  scale: 1,
-                  duration: 0.2,
-                  ease: "power1.out",
-                });
-
-              tl.to(
-                ".dashboard-shell",
-                {
-                  opacity: 1,
-                  scale: 1,
-                  duration: 2.2,
-                  ease: "power1.inOut",
-                },
-                "+=0.2",
-              );
-
-              tl.to("#card-network-health", {
-                opacity: 1,
-                x: 0,
-                duration: 1.8,
-                ease: "power1.inOut",
-              }).to(
-                "#bar-network-health",
-                {
-                  width: "75%",
-                  duration: 1.6,
-                  ease: "power1.inOut",
-                },
-                "-=0.4",
-              );
-
-              tl.to("#card-active-models", {
-                opacity: 1,
-                x: 0,
-                duration: 1.6,
-                ease: "power1.inOut",
-              })
-                .to("#active-model-bar-1", {
-                  width: "100%",
-                  duration: 0.5,
-                  ease: "power1.inOut",
-                })
-                .to("#active-model-bar-2", {
-                  width: "80%",
-                  duration: 0.5,
-                  ease: "power1.inOut",
-                })
-                .to("#active-model-bar-3", {
-                  width: "65%",
-                  duration: 0.5,
-                  ease: "power1.inOut",
-                })
-                .to("#active-model-bar-4", {
-                  width: "75%",
-                  duration: 0.5,
-                  ease: "power1.inOut",
-                });
-
-              tl.to("#panel-radar", {
-                opacity: 1,
-                x: 0,
-                duration: 2.4,
-                ease: "power1.inOut",
-              }).to(
-                "#radar-rings",
-                {
-                  scale: 1,
-                  duration: 2,
-                  ease: "power1.inOut",
-                },
-                "<",
-              );
-
-              tl.to("#card-ai-insight", {
-                opacity: 1,
-                x: 0,
-                duration: 2.4,
-                ease: "power1.inOut",
-              });
-
-              tl.to({}, { duration: 4 });
-            },
-
-            "(max-width: 767px)": function () {
-              gsap.set(".pin-bullet", { opacity: 1, x: 0, clearProps: "transform" });
-              gsap.set(".pin-bullet .check-icon", { scale: 1 });
-              gsap.set(".dashboard-shell", {
-                opacity: 1,
-                scale: 1,
-                x: 0,
-                clearProps: "transform",
-              });
-              gsap.set("#card-network-health", { opacity: 1, x: 0, clearProps: "transform" });
-              gsap.set("#bar-network-health", { width: "75%" });
-              gsap.set("#card-active-models", { opacity: 1, x: 0, clearProps: "transform" });
-              gsap.set("#active-model-bar-1", { width: "100%" });
-              gsap.set("#active-model-bar-2", { width: "80%" });
-              gsap.set("#active-model-bar-3", { width: "65%" });
-              gsap.set("#active-model-bar-4", { width: "75%" });
-              gsap.set("#panel-radar", { opacity: 1, x: 0, clearProps: "transform" });
-              gsap.set("#radar-rings", { scale: 1 });
-              gsap.set("#card-ai-insight", { opacity: 1, x: 0, clearProps: "transform" });
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#dashboard-pin",
+              start: "top top",
+              end: "+=200%",
+              pin: true,
+              pinSpacing: true,
+              anticipatePin: 1,
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+              onUpdate: () => {
+                const dot = document.getElementById("insight-status-dot");
+                if (dot) {
+                  if (tl.progress() >= 0.88) {
+                    dot.classList.add("animate-ping");
+                  } else {
+                    dot.classList.remove("animate-ping");
+                  }
+                }
+              },
             },
           });
+
+          tl.to(".pin-bullet:nth-child(1)", {
+            opacity: 1,
+            x: 0,
+            duration: 2.8,
+            ease: "power1.inOut",
+          })
+            .to(
+              ".pin-bullet:nth-child(1) .check-icon",
+              {
+                scale: 1.12,
+                duration: 0.2,
+                ease: "power1.in",
+              },
+              "-=0.2",
+            )
+            .to(".pin-bullet:nth-child(1) .check-icon", {
+              scale: 1,
+              duration: 0.2,
+              ease: "power1.out",
+            });
+
+          tl.to(".pin-bullet:nth-child(2)", {
+            opacity: 1,
+            x: 0,
+            duration: 2.8,
+            ease: "power1.inOut",
+          })
+            .to(
+              ".pin-bullet:nth-child(2) .check-icon",
+              {
+                scale: 1.12,
+                duration: 0.2,
+                ease: "power1.in",
+              },
+              "-=0.2",
+            )
+            .to(".pin-bullet:nth-child(2) .check-icon", {
+              scale: 1,
+              duration: 0.2,
+              ease: "power1.out",
+            });
+
+          tl.to(".pin-bullet:nth-child(3)", {
+            opacity: 1,
+            x: 0,
+            duration: 2.8,
+            ease: "power1.inOut",
+          })
+            .to(
+              ".pin-bullet:nth-child(3) .check-icon",
+              {
+                scale: 1.12,
+                duration: 0.2,
+                ease: "power1.in",
+              },
+              "-=0.2",
+            )
+            .to(".pin-bullet:nth-child(3) .check-icon", {
+              scale: 1,
+              duration: 0.2,
+              ease: "power1.out",
+            });
+
+          tl.to(
+            ".dashboard-shell",
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 2.2,
+              ease: "power1.inOut",
+            },
+            "+=0.2",
+          );
+
+          tl.to("#card-network-health", {
+            opacity: 1,
+            x: 0,
+            duration: 1.8,
+            ease: "power1.inOut",
+          }).to(
+            "#bar-network-health",
+            {
+              width: "75%",
+              duration: 1.6,
+              ease: "power1.inOut",
+            },
+            "-=0.4",
+          );
+
+          tl.to("#card-active-models", {
+            opacity: 1,
+            x: 0,
+            duration: 1.6,
+            ease: "power1.inOut",
+          })
+            .to("#active-model-bar-1", {
+              width: "100%",
+              duration: 0.5,
+              ease: "power1.inOut",
+            })
+            .to("#active-model-bar-2", {
+              width: "80%",
+              duration: 0.5,
+              ease: "power1.inOut",
+            })
+            .to("#active-model-bar-3", {
+              width: "65%",
+              duration: 0.5,
+              ease: "power1.inOut",
+            })
+            .to("#active-model-bar-4", {
+              width: "75%",
+              duration: 0.5,
+              ease: "power1.inOut",
+            });
+
+          tl.to("#panel-radar", {
+            opacity: 1,
+            x: 0,
+            duration: 2.4,
+            ease: "power1.inOut",
+          }).to(
+            "#radar-rings",
+            {
+              scale: 1,
+              duration: 2,
+              ease: "power1.inOut",
+            },
+            "<",
+          );
+
+          tl.to("#card-ai-insight", {
+            opacity: 1,
+            x: 0,
+            duration: 2.4,
+            ease: "power1.inOut",
+          });
+
+          tl.to({}, { duration: 4 });
         }
 
         // Recalculate ScrollTrigger on window resize to ensure correct pin boundaries
         window.addEventListener("resize", () => {
-          if (horizontalScroll && window.innerWidth < 1024) {
-            horizontalScroll.style.transform = "";
-          }
           ScrollTrigger.refresh();
         });
 
