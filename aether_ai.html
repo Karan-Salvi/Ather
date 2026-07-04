@@ -1831,30 +1831,7 @@
         ).matches;
 
         if (!prefersReducedMotion && statsSection) {
-          // Initialize GSAP ScrollTrigger timeline
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: "#dashboard-pin",
-              start: "top top",
-              end: "+=150%",
-              pin: true,
-              scrub: 1,
-              invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                const dot = document.getElementById("insight-status-dot");
-                if (dot) {
-                  // Activate pulse indicator once dashboard layout has fully assembled (approx. 94% timeline progress)
-                  if (tl.progress() >= 0.94) {
-                    dot.classList.add("animate-ping");
-                  } else {
-                    dot.classList.remove("animate-ping");
-                  }
-                }
-              },
-            },
-          });
-
-          // Set initial hidden states for animated elements
+          // ── Set initial hidden states (always explicit start + end values) ───────
           gsap.set(".pin-bullet", { opacity: 0, x: 60 });
           gsap.set(".pin-bullet .check-icon", { scale: 0.8 });
           gsap.set(".dashboard-shell", { opacity: 0, scale: 0.96 });
@@ -1874,70 +1851,109 @@
           gsap.set("#radar-rings", { scale: 0.7 });
           gsap.set("#card-ai-insight", { opacity: 0, x: 40 });
 
-          // STAGE 1 — CHECKLIST BULLETS, RIGHT TO LEFT, ONE BY ONE
-          // Bullet 1
-          tl.to(".pin-bullet:nth-child(1)", { opacity: 1, x: 0, duration: 1 })
+          // ── Single scrubbed timeline — total notional duration = 30 units ────────
+          // Stage 1 (bullets)  : 0  – 11  (~37 %)
+          // Stage 2 (dashboard): 11 – 26  (~50 %)
+          // Hold               : 26 – 30  (~13 %)
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#dashboard-pin",
+              start: "top top",          // locks cleanly at viewport top edge
+              end: "+=200%",             // enough scroll distance for both stages to read comfortably
+              pin: true,
+              pinSpacing: true,          // lets ScrollTrigger insert its own spacer — no layout jump
+              anticipatePin: 1,          // pre-calculates pin ahead of time, removes entry stutter
+              scrub: 0.8,               // smoothing lag — reads as fluid, not mechanical
+              invalidateOnRefresh: true,
+              onUpdate: () => {
+                const dot = document.getElementById("insight-status-dot");
+                if (dot) {
+                  if (tl.progress() >= 0.88) {
+                    dot.classList.add("animate-ping");
+                  } else {
+                    dot.classList.remove("animate-ping");
+                  }
+                }
+              },
+            },
+          });
+
+          // ── STAGE 1: Checklist bullets, right → left, one by one ────────────────
+          // Each bullet = ~3.2 units; scale micro-bounce is included but stays within
+          // the same position window so it can't feel "rushed" on a scrub.
+
+          // Bullet 1 (t=0 → 3.2)
+          tl.to(".pin-bullet:nth-child(1)", {
+            opacity: 1, x: 0, duration: 2.8, ease: "power1.inOut",
+          })
             .to(".pin-bullet:nth-child(1) .check-icon", {
-              scale: 1.15,
-              duration: 0.3,
-            })
+              scale: 1.12, duration: 0.2, ease: "power1.in",
+            }, "-=0.2")
             .to(".pin-bullet:nth-child(1) .check-icon", {
-              scale: 1,
-              duration: 0.2,
+              scale: 1, duration: 0.2, ease: "power1.out",
             });
 
-          // Bullet 2
-          tl.to(".pin-bullet:nth-child(2)", { opacity: 1, x: 0, duration: 1 })
+          // Bullet 2 (t≈3.2 → 6.6)
+          tl.to(".pin-bullet:nth-child(2)", {
+            opacity: 1, x: 0, duration: 2.8, ease: "power1.inOut",
+          })
             .to(".pin-bullet:nth-child(2) .check-icon", {
-              scale: 1.15,
-              duration: 0.3,
-            })
+              scale: 1.12, duration: 0.2, ease: "power1.in",
+            }, "-=0.2")
             .to(".pin-bullet:nth-child(2) .check-icon", {
-              scale: 1,
-              duration: 0.2,
+              scale: 1, duration: 0.2, ease: "power1.out",
             });
 
-          // Bullet 3
-          tl.to(".pin-bullet:nth-child(3)", { opacity: 1, x: 0, duration: 1 })
+          // Bullet 3 (t≈6.6 → 10.6)
+          tl.to(".pin-bullet:nth-child(3)", {
+            opacity: 1, x: 0, duration: 2.8, ease: "power1.inOut",
+          })
             .to(".pin-bullet:nth-child(3) .check-icon", {
-              scale: 1.15,
-              duration: 0.3,
-            })
+              scale: 1.12, duration: 0.2, ease: "power1.in",
+            }, "-=0.2")
             .to(".pin-bullet:nth-child(3) .check-icon", {
-              scale: 1,
-              duration: 0.2,
+              scale: 1, duration: 0.2, ease: "power1.out",
             });
 
-          // STAGE 2 — DASHBOARD MOCKUP
-          // 2a. Browser chrome frame
-          tl.to(".dashboard-shell", { opacity: 1, scale: 1, duration: 1.2 });
+          // ── STAGE 2: Dashboard mockup, back → front ──────────────────────────────
 
-          // 2b. Left stacked cards
-          // Network Health
-          tl.to("#card-network-health", { opacity: 1, x: 0, duration: 1 }).to(
-            "#bar-network-health",
-            { width: "75%", duration: 1 },
-          );
+          // 2a. Browser chrome frame (t≈11 → 13.2)
+          tl.to(".dashboard-shell", {
+            opacity: 1, scale: 1, duration: 2.2, ease: "power1.inOut",
+          }, "+=0.2"); // tiny gap so the stage boundary feels intentional
 
-          // Active Models
-          tl.to("#card-active-models", { opacity: 1, x: 0, duration: 1 })
-            .to("#active-model-bar-1", { width: "100%", duration: 0.4 })
-            .to("#active-model-bar-2", { width: "80%", duration: 0.4 })
-            .to("#active-model-bar-3", { width: "65%", duration: 0.4 })
-            .to("#active-model-bar-4", { width: "75%", duration: 0.4 });
+          // 2b-i. Network Health card slides in, then bar fills (t≈13.2 → 16.5)
+          tl.to("#card-network-health", {
+            opacity: 1, x: 0, duration: 1.8, ease: "power1.inOut",
+          })
+            .to("#bar-network-health", {
+              width: "75%", duration: 1.6, ease: "power1.inOut",
+            }, "-=0.4");
 
-          // 2c. Large right-hand panel
-          tl.to("#panel-radar", { opacity: 1, x: 0, duration: 1.5 }).to(
-            "#radar-rings",
-            { scale: 1, duration: 1 },
-            "<",
-          );
+          // 2b-ii. Active Models card + sequential bars (t≈16.5 → 19.5)
+          tl.to("#card-active-models", {
+            opacity: 1, x: 0, duration: 1.6, ease: "power1.inOut",
+          })
+            .to("#active-model-bar-1", { width: "100%", duration: 0.5, ease: "power1.inOut" })
+            .to("#active-model-bar-2", { width: "80%",  duration: 0.5, ease: "power1.inOut" })
+            .to("#active-model-bar-3", { width: "65%",  duration: 0.5, ease: "power1.inOut" })
+            .to("#active-model-bar-4", { width: "75%",  duration: 0.5, ease: "power1.inOut" });
 
-          // 2d. Floating "AI Insight" card
-          tl.to("#card-ai-insight", { opacity: 1, x: 0, duration: 1.5 });
+          // 2c. Large radar panel + rings (t≈19.5 → 22.5, panels in parallel)
+          tl.to("#panel-radar", {
+            opacity: 1, x: 0, duration: 2.4, ease: "power1.inOut",
+          })
+            .to("#radar-rings", {
+              scale: 1, duration: 2, ease: "power1.inOut",
+            }, "<");                    // radar rings expand at same time as panel
 
-          // Hold the fully assembled state briefly before releasing the pin
-          tl.to({}, { duration: 0.8 });
+          // 2d. Floating AI Insight card (t≈22.5 → 25.5)
+          tl.to("#card-ai-insight", {
+            opacity: 1, x: 0, duration: 2.4, ease: "power1.inOut",
+          });
+
+          // ── Hold: fully assembled state before pin releases (t≈25.5 → 30) ───────
+          tl.to({}, { duration: 4 });
         }
 
         // Recalculate ScrollTrigger on window resize to ensure correct pin boundaries
