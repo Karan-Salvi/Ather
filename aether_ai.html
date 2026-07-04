@@ -437,39 +437,72 @@
         font-weight: 700;
       }
 
-      /* Mobile timeline — left-aligned single column */
+      /* ── Mobile Timeline — two-column flex: [icon lane] [text lane] ── */
       @media (max-width: 767px) {
+        /* Outer step row: always horizontal (icon left, text right) */
         .timeline-step {
-          flex-direction: column !important;
+          display: flex !important;
+          flex-direction: row !important;
           align-items: flex-start !important;
           gap: 1rem !important;
-          padding-left: 2.5rem;
+          padding-left: 0 !important;
           position: relative;
         }
+        /* Icon lane: fixed 44px column, stacks icon above the connecting line */
+        .timeline-step-icon-lane {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          flex-shrink: 0;
+          width: 44px;
+        }
+        /* Text lane: fills remaining width */
         .timeline-step .step-content {
           text-align: left !important;
-          width: 100% !important;
-          order: 2;
+          flex: 1 1 0;
+          min-width: 0;
+          padding-top: 0.6rem; /* vertically align first line with icon center */
+          order: unset !important;
         }
-        .timeline-step .step-node {
-          order: 1;
-          position: absolute;
-          left: 0;
-          top: 0;
+        /* Hide the old step-node placement — the new icon-lane div owns it */
+        .timeline-step > .step-node {
+          display: none !important;
         }
-        /* Mobile left rail */
-        .timeline-mobile-rail {
-          display: block;
-          position: absolute;
-          left: 1.4rem;
-          top: 0;
-          bottom: 0;
+        /* Icon circle in the lane */
+        .timeline-step-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 9999px;
+          background: #1b1c1c;
+          color: #8e9192;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          position: relative;
+          z-index: 10;
+          box-shadow: 0 0 0 6px #1f1f1f; /* ring effect */
+        }
+        /* Connector line below the icon, running to next step */
+        .timeline-step-connector {
+          flex: 1;
           width: 2px;
-          background: rgba(255,255,255,0.1);
+          min-height: 2rem;
+          background: rgba(255, 255, 255, 0.12);
+          margin-top: 2px;
+        }
+        /* No connector after last step */
+        .timeline-step:last-child .timeline-step-connector {
+          display: none;
+        }
+        /* Empty desktop spacer column — hide on mobile */
+        .timeline-step > .md\:w-1\/2:last-child {
+          display: none !important;
         }
       }
       @media (min-width: 768px) {
-        .timeline-mobile-rail { display: none; }
+        .timeline-step-icon-lane { display: none !important; }
+        .timeline-step-connector { display: none !important; }
       }
 
       /* Dashboard inner grid responsive */
@@ -713,10 +746,10 @@
           id="glow-2"
         ></div>
       </div>
-      <!-- 3D Sphere: proportionally scaled, clipped to hero bounds -->
+      <!-- 3D Sphere: proportionally scaled, half-visible on mobile as bg accent -->
       <div
-        class="threejs-container absolute top-1/2 right-0 lg:right-[5%] -translate-y-1/2 pointer-events-none z-0 overflow-hidden"
-        style="width: clamp(180px, 35vw, 600px); height: clamp(180px, 35vw, 600px); opacity: 0.35;"
+        class="threejs-container absolute top-1/2 -translate-y-1/2 right-[-10%] sm:right-[-5%] lg:right-[2%] pointer-events-none z-0"
+        style="width: clamp(220px, 50vw, 600px); height: clamp(220px, 50vw, 600px); opacity: 0.25;"
         id="threejs-sphere"
       ></div>
       <div
@@ -1176,8 +1209,7 @@
           <div class="w-24 h-1 bg-white mx-auto rounded-full"></div>
         </div>
         <div class="relative max-w-5xl mx-auto z-10">
-          <!-- Mobile left rail (hidden on md+) -->
-          <div class="timeline-mobile-rail"></div>
+          <!-- Mobile left rail — hidden, new layout uses inline icon lanes instead -->
           <!-- Desktop center line (hidden on mobile) -->
           <div
             class="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-[2px] bg-white/10 hidden md:block"
@@ -1188,12 +1220,25 @@
             ></div>
           </div>
           <div class="space-y-16 md:space-y-48 py-6 md:py-20">
+            <!-- Step 1 -->
             <div
               class="flex flex-col md:flex-row items-center gap-12 group timeline-step"
             >
+              <!-- Mobile only: icon lane with connector line -->
+              <div class="timeline-step-icon-lane">
+                <div class="timeline-step-icon">
+                  <span
+                    class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1"
+                    >input</span
+                  >
+                </div>
+                <div class="timeline-step-connector"></div>
+              </div>
+              <!-- Text (desktop: right-aligned, mobile: left) -->
               <div class="md:w-1/2 md:text-right step-content">
                 <h4
-                  class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors"
+                  class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
                 >
                   01. Neural Ingestion
                 </h4>
@@ -1202,6 +1247,7 @@
                   contextualizes input in milliseconds.
                 </p>
               </div>
+              <!-- Desktop: centered icon node -->
               <div
                 class="w-12 h-12 rounded-full bg-[#1b1c1c] text-[#8e9192] flex items-center justify-center z-10 ring-8 ring-surface-container step-node"
               >
@@ -1213,12 +1259,25 @@
               </div>
               <div class="md:w-1/2"></div>
             </div>
+            <!-- Step 2 -->
             <div
               class="flex flex-col md:flex-row-reverse items-center gap-12 group timeline-step"
             >
+              <!-- Mobile only: icon lane with connector line -->
+              <div class="timeline-step-icon-lane">
+                <div class="timeline-step-icon">
+                  <span
+                    class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1"
+                    >settings_slow_motion</span
+                  >
+                </div>
+                <div class="timeline-step-connector"></div>
+              </div>
+              <!-- Text -->
               <div class="md:w-1/2 text-left step-content">
                 <h4
-                  class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors"
+                  class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
                 >
                   02. Atomic Processing
                 </h4>
@@ -1227,6 +1286,7 @@
                   across our global edge network.
                 </p>
               </div>
+              <!-- Desktop icon -->
               <div
                 class="w-12 h-12 rounded-full bg-[#1b1c1c] text-[#8e9192] flex items-center justify-center z-10 ring-8 ring-surface-container step-node"
               >
@@ -1238,12 +1298,25 @@
               </div>
               <div class="md:w-1/2"></div>
             </div>
+            <!-- Step 3 -->
             <div
               class="flex flex-col md:flex-row items-center gap-12 group timeline-step"
             >
+              <!-- Mobile only: icon lane (no connector — last step) -->
+              <div class="timeline-step-icon-lane">
+                <div class="timeline-step-icon">
+                  <span
+                    class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1"
+                    >auto_awesome</span
+                  >
+                </div>
+                <!-- No connector div here: last step -->
+              </div>
+              <!-- Text -->
               <div class="md:w-1/2 md:text-right step-content">
                 <h4
-                  class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors"
+                  class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
                 >
                   03. Predictive Output
                 </h4>
@@ -1252,6 +1325,7 @@
                   actions based on historical success.
                 </p>
               </div>
+              <!-- Desktop icon -->
               <div
                 class="w-12 h-12 rounded-full bg-[#1b1c1c] text-[#8e9192] flex items-center justify-center z-10 ring-8 ring-surface-container step-node"
               >
@@ -2084,152 +2158,157 @@
     <script>
       (function () {
         function initThreeJS() {
-        const container = document.querySelector(".threejs-container");
-        if (!container) return;
-        const width = container.clientWidth;
-        const height = container.clientHeight;
+          var container = document.querySelector(".threejs-container");
+          if (!container) return;
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(
-          75,
-          width / height,
-          0.1,
-          1000,
-        );
-        camera.position.z = 5;
+          // Guard: wait for a valid paint size before initializing WebGL
+          // On mobile, clientWidth may be 0 at script-parse time.
+          var width = container.clientWidth || container.getBoundingClientRect().width;
+          var height = container.clientHeight || container.getBoundingClientRect().height;
 
-        const renderer = new THREE.WebGLRenderer({
-          alpha: true,
-          antialias: true,
-        });
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
-
-        const coreGroup = new THREE.Group();
-        scene.add(coreGroup);
-
-        const outerGeo = new THREE.SphereGeometry(2, 32, 32);
-        const outerMat = new THREE.MeshPhongMaterial({
-          color: 0x888888,
-          transparent: true,
-          opacity: 0.1,
-          wireframe: true,
-        });
-        const outerSphere = new THREE.Mesh(outerGeo, outerMat);
-        coreGroup.add(outerSphere);
-
-        const innerGeo = new THREE.IcosahedronGeometry(1, 1);
-        const innerMat = new THREE.MeshStandardMaterial({
-          color: 0xffffff,
-          emissive: 0xffffff,
-          emissiveIntensity: 0.5,
-          metalness: 0.9,
-          roughness: 0.1,
-        });
-        const innerCore = new THREE.Mesh(innerGeo, innerMat);
-        coreGroup.add(innerCore);
-
-        const ringGeo = new THREE.TorusGeometry(2.5, 0.01, 16, 100);
-        const ringMat = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.2,
-        });
-        const ring1 = new THREE.Mesh(ringGeo, ringMat);
-        const ring2 = new THREE.Mesh(ringGeo, ringMat);
-        ring2.rotation.x = Math.PI / 2;
-        coreGroup.add(ring1, ring2);
-
-        // Item 4: Orbiting particles on the sphere's ring paths
-        const particleGeo = new THREE.SphereGeometry(0.03, 8, 8);
-        const particleMat = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.6,
-        });
-        const particles = [];
-        const particleCount = 3;
-        for (let i = 0; i < particleCount; i++) {
-          const particle = new THREE.Mesh(particleGeo, particleMat);
-          const angle = (i / particleCount) * Math.PI * 2;
-          particle.userData = { angle, speed: 0.002 + i * 0.0005, radius: 2.5 };
-          particles.push(particle);
-          coreGroup.add(particle);
+          if (width === 0 || height === 0) {
+            // Defer to next animation frame to let layout settle
+            requestAnimationFrame(function () {
+              width = container.clientWidth || container.getBoundingClientRect().width;
+              height = container.clientHeight || container.getBoundingClientRect().height;
+              if (width > 0 && height > 0) {
+                bootThreeJS(container, width, height);
+              }
+            });
+            return;
+          }
+          bootThreeJS(container, width, height);
         }
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-        scene.add(ambientLight);
-        const pointLight = new THREE.PointLight(0xffffff, 1, 10);
-        pointLight.position.set(5, 5, 5);
-        scene.add(pointLight);
+        function bootThreeJS(container, width, height) {
+          var isMobile = width < 600;
 
-        // Item 5: Cursor-reactive sphere tilt state
-        const tiltTarget = { x: 0, y: 0 };
-        const tiltCurrent = { x: 0, y: 0 };
-        const heroSection = document.getElementById("hero");
+          var scene = new THREE.Scene();
+          var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+          camera.position.z = isMobile ? 6.5 : 5; // pull camera back on mobile so sphere isn't cropped
 
-        if (heroSection) {
-          heroSection.addEventListener("mousemove", (e) => {
-            const rect = heroSection.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const normX = (e.clientX - centerX) / (rect.width / 2);
-            const normY = (e.clientY - centerY) / (rect.height / 2);
-            tiltTarget.x = -normY * 0.1;
-            tiltTarget.y = normX * 0.1;
+          var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
+          renderer.setSize(width, height);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+          container.appendChild(renderer.domElement);
+
+          var coreGroup = new THREE.Group();
+          scene.add(coreGroup);
+
+          // Reduce geometry density on mobile for performance
+          var sphereDetail = isMobile ? 20 : 32;
+          var outerGeo = new THREE.SphereGeometry(2, sphereDetail, sphereDetail);
+          var outerMat = new THREE.MeshPhongMaterial({
+            color: 0x888888,
+            transparent: true,
+            opacity: isMobile ? 0.15 : 0.1,
+            wireframe: true,
+          });
+          var outerSphere = new THREE.Mesh(outerGeo, outerMat);
+          coreGroup.add(outerSphere);
+
+          var innerGeo = new THREE.IcosahedronGeometry(1, 1);
+          var innerMat = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            emissive: 0xffffff,
+            emissiveIntensity: 0.5,
+            metalness: 0.9,
+            roughness: 0.1,
+          });
+          var innerCore = new THREE.Mesh(innerGeo, innerMat);
+          coreGroup.add(innerCore);
+
+          var ringGeo = new THREE.TorusGeometry(2.5, 0.01, 16, 100);
+          var ringMat = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.2,
+          });
+          var ring1 = new THREE.Mesh(ringGeo, ringMat);
+          var ring2 = new THREE.Mesh(ringGeo, ringMat);
+          ring2.rotation.x = Math.PI / 2;
+          coreGroup.add(ring1, ring2);
+
+          // Orbiting particles
+          var particleGeo = new THREE.SphereGeometry(0.03, 8, 8);
+          var particleMat = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.6,
+          });
+          var particles = [];
+          var particleCount = isMobile ? 2 : 3;
+          for (var i = 0; i < particleCount; i++) {
+            var particle = new THREE.Mesh(particleGeo, particleMat);
+            var angle = (i / particleCount) * Math.PI * 2;
+            particle.userData = { angle: angle, speed: 0.002 + i * 0.0005, radius: 2.5 };
+            particles.push(particle);
+            coreGroup.add(particle);
+          }
+
+          var ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+          scene.add(ambientLight);
+          var pointLight = new THREE.PointLight(0xffffff, 1, 10);
+          pointLight.position.set(5, 5, 5);
+          scene.add(pointLight);
+
+          // Cursor-reactive tilt (desktop only)
+          var tiltTarget = { x: 0, y: 0 };
+          var tiltCurrent = { x: 0, y: 0 };
+          var heroSection = document.getElementById("hero");
+
+          if (heroSection && !isMobile) {
+            heroSection.addEventListener("mousemove", function (e) {
+              var rect = heroSection.getBoundingClientRect();
+              var normX = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+              var normY = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+              tiltTarget.x = -normY * 0.1;
+              tiltTarget.y = normX * 0.1;
+            });
+            heroSection.addEventListener("mouseleave", function () {
+              tiltTarget.x = 0;
+              tiltTarget.y = 0;
+            });
+          }
+
+          function animate() {
+            requestAnimationFrame(animate);
+
+            tiltCurrent.x += (tiltTarget.x - tiltCurrent.x) * 0.05;
+            tiltCurrent.y += (tiltTarget.y - tiltCurrent.y) * 0.05;
+
+            // Same rotation speed on all devices
+            coreGroup.rotation.y += 0.002;
+            coreGroup.rotation.x += 0.001;
+            coreGroup.rotation.x = (coreGroup.rotation.x % (Math.PI * 2)) + tiltCurrent.x;
+            coreGroup.rotation.y = (coreGroup.rotation.y % (Math.PI * 2)) + tiltCurrent.y;
+
+            innerCore.rotation.y -= 0.005;
+            ring1.rotation.z += 0.003;
+            ring2.rotation.z -= 0.003;
+            coreGroup.position.y = Math.sin(Date.now() * 0.0008) * 0.1;
+
+            particles.forEach(function (particle) {
+              particle.userData.angle += particle.userData.speed;
+              particle.position.x = Math.cos(particle.userData.angle) * particle.userData.radius;
+              particle.position.z = Math.sin(particle.userData.angle) * particle.userData.radius;
+              particle.position.y = 0;
+            });
+
+            renderer.render(scene, camera);
+          }
+
+          window.addEventListener("resize", function () {
+            var w = container.clientWidth || container.getBoundingClientRect().width;
+            var h = container.clientHeight || container.getBoundingClientRect().height;
+            if (w === 0 || h === 0) return;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
           });
 
-          heroSection.addEventListener("mouseleave", () => {
-            tiltTarget.x = 0;
-            tiltTarget.y = 0;
-          });
+          animate();
         }
-
-        function animate() {
-          requestAnimationFrame(animate);
-
-          // Smooth cursor tilt interpolation
-          tiltCurrent.x += (tiltTarget.x - tiltCurrent.x) * 0.05;
-          tiltCurrent.y += (tiltTarget.y - tiltCurrent.y) * 0.05;
-
-          coreGroup.rotation.y += 0.002;
-          coreGroup.rotation.x += 0.001;
-
-          // Apply cursor-reactive tilt on top of idle rotation
-          const baseRotX = coreGroup.rotation.x % (Math.PI * 2);
-          const baseRotY = coreGroup.rotation.y % (Math.PI * 2);
-          coreGroup.rotation.x = baseRotX + tiltCurrent.x;
-          coreGroup.rotation.y = baseRotY + tiltCurrent.y;
-
-          innerCore.rotation.y -= 0.005;
-          ring1.rotation.z += 0.003;
-          ring2.rotation.z -= 0.003;
-          coreGroup.position.y = Math.sin(Date.now() * 0.0008) * 0.1;
-
-          // Animate orbiting particles
-          particles.forEach((particle) => {
-            particle.userData.angle += particle.userData.speed;
-            particle.position.x =
-              Math.cos(particle.userData.angle) * particle.userData.radius;
-            particle.position.z =
-              Math.sin(particle.userData.angle) * particle.userData.radius;
-            particle.position.y = 0;
-          });
-
-          renderer.render(scene, camera);
-        }
-
-        window.addEventListener("resize", () => {
-          const newWidth = container.clientWidth;
-          const newHeight = container.clientHeight;
-          camera.aspect = newWidth / newHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(newWidth, newHeight);
-        });
-
-        animate();
-      }
         try {
           initThreeJS();
         } catch (e) {
