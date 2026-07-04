@@ -362,49 +362,144 @@
     </style>
   </head>
   <body class="font-body-md selection:bg-white selection:text-black">
-
     <!-- ── AETHER Premium Loading Intro ──────────────────────────────────── -->
-    <div id="page-loader" class="fixed inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden">
+    <div
+      id="page-loader"
+      class="fixed inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden"
+    >
       <!-- Exit-wipe split panels (sit behind content while loading, then split open) -->
-      <div id="loader-panel-top" class="absolute top-0 left-0 w-full h-1/2 bg-black"></div>
-      <div id="loader-panel-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-black"></div>
+      <div
+        id="loader-panel-top"
+        class="absolute top-0 left-0 w-full h-1/2 bg-black"
+      ></div>
+      <div
+        id="loader-panel-bottom"
+        class="absolute bottom-0 left-0 w-full h-1/2 bg-black"
+      ></div>
 
       <!-- Center content: mark + wordmark + counter -->
       <div class="relative z-10 flex flex-col items-center gap-8">
-
         <!-- Animated orbital SVG mark -->
-        <svg id="loader-mark" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          id="loader-mark"
+          width="64"
+          height="64"
+          viewBox="0 0 64 64"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <!-- Static ghost ring -->
-          <circle cx="32" cy="32" r="28" stroke="white" stroke-opacity="0.12" stroke-width="1.5"/>
+          <circle
+            cx="32"
+            cy="32"
+            r="28"
+            stroke="white"
+            stroke-opacity="0.12"
+            stroke-width="1.5"
+          />
           <!-- Animated draw-in ring -->
-          <circle id="loader-mark-ring" cx="32" cy="32" r="28" stroke="white" stroke-width="1.5"
-                  stroke-dasharray="176" stroke-dashoffset="176" transform="rotate(-90 32 32)"/>
+          <circle
+            id="loader-mark-ring"
+            cx="32"
+            cy="32"
+            r="28"
+            stroke="white"
+            stroke-width="1.5"
+            stroke-dasharray="176"
+            stroke-dashoffset="176"
+            transform="rotate(-90 32 32)"
+          />
           <!-- Three orbital nodes -->
-          <circle id="loader-node-1" cx="32" cy="4"  r="2.5" fill="white" opacity="0"/>
-          <circle id="loader-node-2" cx="56" cy="46" r="2.5" fill="white" opacity="0"/>
-          <circle id="loader-node-3" cx="8"  cy="46" r="2.5" fill="white" opacity="0"/>
+          <circle
+            id="loader-node-1"
+            cx="32"
+            cy="4"
+            r="2.5"
+            fill="white"
+            opacity="0"
+          />
+          <circle
+            id="loader-node-2"
+            cx="56"
+            cy="46"
+            r="2.5"
+            fill="white"
+            opacity="0"
+          />
+          <circle
+            id="loader-node-3"
+            cx="8"
+            cy="46"
+            r="2.5"
+            fill="white"
+            opacity="0"
+          />
           <!-- Core -->
-          <circle id="loader-mark-core" cx="32" cy="32" r="4" fill="white" opacity="0"/>
+          <circle
+            id="loader-mark-core"
+            cx="32"
+            cy="32"
+            r="4"
+            fill="white"
+            opacity="0"
+          />
         </svg>
 
         <!-- AETHER wordmark — letters revealed individually -->
-        <div id="loader-wordmark" class="font-display-lg text-headline-md font-bold tracking-[0.25em] flex overflow-hidden" style="font-size:2rem">
-          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">A</span>
-          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">E</span>
-          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">T</span>
-          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">H</span>
-          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">E</span>
-          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">R</span>
+        <div
+          id="loader-wordmark"
+          class="font-display-lg text-headline-md font-bold tracking-[0.25em] flex overflow-hidden"
+          style="font-size: 2rem"
+        >
+          <span
+            class="loader-letter inline-block"
+            style="transform: translateY(100%); opacity: 0"
+            >A</span
+          >
+          <span
+            class="loader-letter inline-block"
+            style="transform: translateY(100%); opacity: 0"
+            >E</span
+          >
+          <span
+            class="loader-letter inline-block"
+            style="transform: translateY(100%); opacity: 0"
+            >T</span
+          >
+          <span
+            class="loader-letter inline-block"
+            style="transform: translateY(100%); opacity: 0"
+            >H</span
+          >
+          <span
+            class="loader-letter inline-block"
+            style="transform: translateY(100%); opacity: 0"
+            >E</span
+          >
+          <span
+            class="loader-letter inline-block"
+            style="transform: translateY(100%); opacity: 0"
+            >R</span
+          >
         </div>
 
         <!-- Percentage counter -->
-        <div id="loader-percent" class="font-label-sm text-label-sm tracking-widest text-on-surface-variant" style="font-size:0.7rem;letter-spacing:0.18em">0%</div>
+        <div
+          id="loader-percent"
+          class="font-label-sm text-label-sm tracking-widest text-on-surface-variant"
+          style="font-size: 0.7rem; letter-spacing: 0.18em"
+        >
+          0%
+        </div>
 
         <!-- Thin progress line -->
         <div class="w-40 h-[1px] bg-white/10 relative overflow-hidden">
-          <div id="loader-progress" class="absolute inset-y-0 left-0 bg-white" style="width:0%"></div>
+          <div
+            id="loader-progress"
+            class="absolute inset-y-0 left-0 bg-white"
+            style="width: 0%"
+          ></div>
         </div>
-
       </div>
     </div>
     <!-- ── End Loading Intro ──────────────────────────────────────────────── -->
@@ -659,23 +754,40 @@
         </div>
       </div>
     </section>
-    <section id="services" class="py-section-gap container mx-auto px-gutter scroll-reveal relative">
+    <section
+      id="services"
+      class="py-section-gap container mx-auto px-gutter scroll-reveal relative"
+    >
       <!-- Background Parallax Glow -->
-      <div id="services-bg-glow" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/[0.02] blur-[150px] rounded-full pointer-events-none z-0"></div>
+      <div
+        id="services-bg-glow"
+        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/[0.02] blur-[150px] rounded-full pointer-events-none z-0"
+      ></div>
       <div class="mb-20 max-w-2xl relative z-10">
-        <h2 id="services-heading" class="font-display-lg text-display-lg mb-6 leading-tight">
+        <h2
+          id="services-heading"
+          class="font-display-lg text-display-lg mb-6 leading-tight"
+        >
           Engineered for <span class="text-white">Infinite</span> Scale.
         </h2>
-        <p id="services-subtext" class="font-body-lg text-body-lg text-on-surface-variant" style="opacity:0;transform:translateY(20px)">
+        <p
+          id="services-subtext"
+          class="font-body-lg text-body-lg text-on-surface-variant"
+          style="opacity: 0; transform: translateY(20px)"
+        >
           Three pillars of neural architecture designed to transform technical
           debt into competitive advantage.
         </p>
       </div>
-      <div id="services-grid" class="grid grid-cols-12 gap-8" style="perspective:800px">
+      <div
+        id="services-grid"
+        class="grid grid-cols-12 gap-8"
+        style="perspective: 800px"
+      >
         <div
           id="card-workflows"
           class="stagger-item col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 relative overflow-hidden group hover:border-white/30 transition-all duration-700"
-          style="transform-style:preserve-3d"
+          style="transform-style: preserve-3d"
         >
           <div class="card-spotlight"></div>
           <div
@@ -715,7 +827,7 @@
         <div
           id="card-neural"
           class="stagger-item col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700 relative overflow-hidden"
-          style="transform-style:preserve-3d"
+          style="transform-style: preserve-3d"
         >
           <div class="card-spotlight"></div>
           <span
@@ -733,7 +845,7 @@
         <div
           id="card-scaling"
           class="stagger-item col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700 relative overflow-hidden"
-          style="transform-style:preserve-3d"
+          style="transform-style: preserve-3d"
         >
           <div class="card-spotlight"></div>
           <span
@@ -753,7 +865,7 @@
         <div
           id="card-power"
           class="stagger-item col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden"
-          style="transform-style:preserve-3d"
+          style="transform-style: preserve-3d"
         >
           <div class="card-spotlight"></div>
           <div class="md:w-1/2">
@@ -1779,45 +1891,249 @@
       })();
 
       document.addEventListener("DOMContentLoaded", () => {
-        setTimeout(() => {
-          const nav = document.getElementById("navbar");
-          nav.classList.remove("-translate-y-20", "opacity-0");
-          nav.classList.add("translate-y-0", "opacity-100");
-        }, 100);
+        // ── Hero entrance — called by loader on completion ─────────────────────
+        function initHeroEntrance() {
+          setTimeout(() => {
+            const nav = document.getElementById("navbar");
+            if (nav) {
+              nav.classList.remove("-translate-y-20", "opacity-0");
+              nav.classList.add("translate-y-0", "opacity-100");
+            }
+          }, 100);
 
-        const headline = document.getElementById("hero-headline");
-        const words = headline.querySelectorAll(".reveal-word");
-        words.forEach((word, i) => {
-          setTimeout(() => word.classList.add("active"), 400 + i * 150);
-        });
+          const headline = document.getElementById("hero-headline");
+          if (headline) {
+            const words = headline.querySelectorAll(".reveal-word");
+            words.forEach((word, i) => {
+              setTimeout(() => word.classList.add("active"), 400 + i * 150);
+            });
+          }
 
-        const entrances = [
-          { id: "hero-badge", class: "opacity-100" },
-          { id: "hero-description", class: "active" },
-          { id: "hero-btn-1", class: "active" },
-          { id: "hero-btn-2", class: "active" },
-          { id: "metric-card-1", class: "active" },
-          { id: "metric-card-2", class: "active" },
-        ];
-        entrances.forEach((entry) => {
-          const el = document.getElementById(entry.id);
-          if (el) setTimeout(() => el.classList.add(entry.class), 100);
-        });
+          const entrances = [
+            { id: "hero-badge", class: "opacity-100" },
+            { id: "hero-description", class: "active" },
+            { id: "hero-btn-1", class: "active" },
+            { id: "hero-btn-2", class: "active" },
+            { id: "metric-card-1", class: "active" },
+            { id: "metric-card-2", class: "active" },
+          ];
+          entrances.forEach((entry) => {
+            const el = document.getElementById(entry.id);
+            if (el) setTimeout(() => el.classList.add(entry.class), 100);
+          });
 
-        setTimeout(() => {
-          document
-            .getElementById("glow-1")
-            .classList.remove("scale-0", "opacity-0");
-          document
-            .getElementById("glow-1")
-            .classList.add("scale-100", "opacity-100");
-          document
-            .getElementById("glow-2")
-            .classList.remove("scale-0", "opacity-0");
-          document
-            .getElementById("glow-2")
-            .classList.add("scale-100", "opacity-100");
-        }, 300);
+          setTimeout(() => {
+            const g1 = document.getElementById("glow-1");
+            const g2 = document.getElementById("glow-2");
+            if (g1) {
+              g1.classList.remove("scale-0", "opacity-0");
+              g1.classList.add("scale-100", "opacity-100");
+            }
+            if (g2) {
+              g2.classList.remove("scale-0", "opacity-0");
+              g2.classList.add("scale-100", "opacity-100");
+            }
+          }, 300);
+        }
+
+        // ── Premium AETHER Loader ─────────────────────────────────────────────
+        const loaderEl = document.getElementById("page-loader");
+        const loaderRing = document.getElementById("loader-mark-ring");
+        const loaderCore = document.getElementById("loader-mark-core");
+        const loaderNodes = [
+          "loader-node-1",
+          "loader-node-2",
+          "loader-node-3",
+        ].map((id) => document.getElementById(id));
+        const loaderLetters = document.querySelectorAll(".loader-letter");
+        const loaderPercent = document.getElementById("loader-percent");
+        const loaderBar = document.getElementById("loader-progress");
+        const panelTop = document.getElementById("loader-panel-top");
+        const panelBottom = document.getElementById("loader-panel-bottom");
+        const loaderContent = loaderEl
+          ? loaderEl.querySelector(".relative.z-10")
+          : null;
+
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+
+        // Skip full loader for subsequent visits in the same session
+        const loaderShown = sessionStorage.getItem("aether_loader_shown");
+
+        function runLoader() {
+          if (prefersReducedMotion || loaderShown) {
+            // Reduced / returning visitor: instant crossfade out, then hero
+            if (loaderEl) {
+              gsap.to(loaderEl, {
+                opacity: 0,
+                duration: 0.4,
+                ease: "power1.out",
+                onComplete: () => {
+                  loaderEl.style.display = "none";
+                  initHeroEntrance();
+                },
+              });
+            } else {
+              initHeroEntrance();
+            }
+            sessionStorage.setItem("aether_loader_shown", "1");
+            return;
+          }
+
+          sessionStorage.setItem("aether_loader_shown", "1");
+
+          // ── Track load progress for the counter ──────────────────────────────
+          let loadProgress = 0; // 0–100, updated as resources load
+          const MIN_DURATION = 1800; // never finish in < 1.8 s
+          const MAX_DURATION = 3500; // never wait longer than 3.5 s
+          const startTime = Date.now();
+          let loadDone = false;
+
+          // Drive a fake-but-realistic progress tween that can be overridden
+          const progressObj = { value: 0 };
+          const progressTween = gsap.to(progressObj, {
+            value: 90,
+            duration: MAX_DURATION / 1000,
+            ease: "power2.out",
+            onUpdate: () => {
+              loadProgress = Math.max(loadProgress, progressObj.value);
+              updateCounter(loadProgress);
+            },
+          });
+
+          window.addEventListener("load", () => {
+            loadDone = true;
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, MIN_DURATION - elapsed);
+            // Jump counter to 100 after minimum duration
+            setTimeout(() => {
+              progressTween.kill();
+              gsap.to(progressObj, {
+                value: 100,
+                duration: 0.4,
+                ease: "power2.out",
+                onUpdate: () => updateCounter(progressObj.value),
+                onComplete: triggerExit,
+              });
+            }, remaining);
+          });
+
+          // Safety ceiling — force-complete after MAX_DURATION
+          setTimeout(() => {
+            if (!loadDone) {
+              loadDone = true;
+              progressTween.kill();
+              gsap.to(progressObj, {
+                value: 100,
+                duration: 0.4,
+                ease: "power2.out",
+                onUpdate: () => updateCounter(progressObj.value),
+                onComplete: triggerExit,
+              });
+            }
+          }, MAX_DURATION);
+
+          function updateCounter(val) {
+            const n = Math.min(100, Math.round(val));
+            if (loaderPercent) loaderPercent.textContent = n + "%";
+            if (loaderBar) loaderBar.style.width = n + "%";
+          }
+
+          // ── Stage 1–2: Mark draw + wordmark reveal (run immediately) ─────────
+          const loaderTL = gsap.timeline();
+
+          // Stage 1a: Ring draws in clockwise
+          loaderTL.to(
+            loaderRing,
+            {
+              strokeDashoffset: 0,
+              duration: 1.1,
+              ease: "power2.inOut",
+            },
+            0,
+          );
+
+          // Stage 1b: Orbital nodes pop in as ring nears completion
+          loaderTL.to(
+            loaderNodes,
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.35,
+              ease: "back.out(2)",
+              stagger: 0.08,
+            },
+            0.8,
+          );
+
+          // Stage 1c: Core dot lands
+          loaderTL.to(
+            loaderCore,
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 0.4,
+              ease: "back.out(2)",
+            },
+            1.0,
+          );
+
+          // Stage 2: Letters rise up from underneath, staggered 60ms apart
+          loaderTL.to(
+            loaderLetters,
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              ease: "power4.out",
+              stagger: 0.06,
+            },
+            0.85,
+          );
+
+          let exitTriggered = false;
+          function triggerExit() {
+            if (exitTriggered) return;
+            exitTriggered = true;
+
+            // Stage 4: Brief hold at 100%, then exit
+            gsap
+              .timeline()
+              // Content fades out first
+              .to(loaderContent, {
+                opacity: 0,
+                duration: 0.35,
+                ease: "power1.in",
+                delay: 0.3,
+              })
+              // Stage 5: Split panels separate — top flies up, bottom flies down
+              .to(
+                panelTop,
+                {
+                  yPercent: -100,
+                  duration: 1,
+                  ease: "expo.inOut",
+                },
+                "wipe",
+              )
+              .to(
+                panelBottom,
+                {
+                  yPercent: 100,
+                  duration: 1,
+                  ease: "expo.inOut",
+                  onComplete: () => {
+                    if (loaderEl) loaderEl.style.display = "none";
+                    initHeroEntrance();
+                  },
+                },
+                "wipe",
+              );
+          }
+        }
+
+        runLoader();
 
         const scrollRevealObserver = new IntersectionObserver(
           (entries) => {
@@ -1836,10 +2152,8 @@
           .forEach((el) => {
             // Skip any element that is #dashboard-pin itself or lives inside it —
             // GSAP owns that element's transform; IntersectionObserver must not touch it.
-            if (
-              el.id === "dashboard-pin" ||
-              el.closest("#dashboard-pin")
-            ) return;
+            if (el.id === "dashboard-pin" || el.closest("#dashboard-pin"))
+              return;
             el.classList.add(
               "transition-all",
               "duration-1000",
@@ -1914,10 +2228,6 @@
         // GSAP ScrollTrigger pinning and animation sequence for the dashboard control center
         gsap.registerPlugin(ScrollTrigger);
 
-        const prefersReducedMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)",
-        ).matches;
-
         if (!prefersReducedMotion && statsSection) {
           // ── Set initial hidden states (always explicit start + end values) ───────
           gsap.set(".pin-bullet", { opacity: 0, x: 60 });
@@ -1946,12 +2256,12 @@
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: "#dashboard-pin",
-              start: "top top",          // locks cleanly at viewport top edge
-              end: "+=200%",             // enough scroll distance for both stages to read comfortably
+              start: "top top", // locks cleanly at viewport top edge
+              end: "+=200%", // enough scroll distance for both stages to read comfortably
               pin: true,
-              pinSpacing: true,          // lets ScrollTrigger insert its own spacer — no layout jump
-              anticipatePin: 1,          // pre-calculates pin ahead of time, removes entry stutter
-              scrub: 0.8,               // smoothing lag — reads as fluid, not mechanical
+              pinSpacing: true, // lets ScrollTrigger insert its own spacer — no layout jump
+              anticipatePin: 1, // pre-calculates pin ahead of time, removes entry stutter
+              scrub: 0.8, // smoothing lag — reads as fluid, not mechanical
               invalidateOnRefresh: true,
               onUpdate: () => {
                 const dot = document.getElementById("insight-status-dot");
@@ -1972,72 +2282,150 @@
 
           // Bullet 1 (t=0 → 3.2)
           tl.to(".pin-bullet:nth-child(1)", {
-            opacity: 1, x: 0, duration: 2.8, ease: "power1.inOut",
+            opacity: 1,
+            x: 0,
+            duration: 2.8,
+            ease: "power1.inOut",
           })
+            .to(
+              ".pin-bullet:nth-child(1) .check-icon",
+              {
+                scale: 1.12,
+                duration: 0.2,
+                ease: "power1.in",
+              },
+              "-=0.2",
+            )
             .to(".pin-bullet:nth-child(1) .check-icon", {
-              scale: 1.12, duration: 0.2, ease: "power1.in",
-            }, "-=0.2")
-            .to(".pin-bullet:nth-child(1) .check-icon", {
-              scale: 1, duration: 0.2, ease: "power1.out",
+              scale: 1,
+              duration: 0.2,
+              ease: "power1.out",
             });
 
           // Bullet 2 (t≈3.2 → 6.6)
           tl.to(".pin-bullet:nth-child(2)", {
-            opacity: 1, x: 0, duration: 2.8, ease: "power1.inOut",
+            opacity: 1,
+            x: 0,
+            duration: 2.8,
+            ease: "power1.inOut",
           })
+            .to(
+              ".pin-bullet:nth-child(2) .check-icon",
+              {
+                scale: 1.12,
+                duration: 0.2,
+                ease: "power1.in",
+              },
+              "-=0.2",
+            )
             .to(".pin-bullet:nth-child(2) .check-icon", {
-              scale: 1.12, duration: 0.2, ease: "power1.in",
-            }, "-=0.2")
-            .to(".pin-bullet:nth-child(2) .check-icon", {
-              scale: 1, duration: 0.2, ease: "power1.out",
+              scale: 1,
+              duration: 0.2,
+              ease: "power1.out",
             });
 
           // Bullet 3 (t≈6.6 → 10.6)
           tl.to(".pin-bullet:nth-child(3)", {
-            opacity: 1, x: 0, duration: 2.8, ease: "power1.inOut",
+            opacity: 1,
+            x: 0,
+            duration: 2.8,
+            ease: "power1.inOut",
           })
+            .to(
+              ".pin-bullet:nth-child(3) .check-icon",
+              {
+                scale: 1.12,
+                duration: 0.2,
+                ease: "power1.in",
+              },
+              "-=0.2",
+            )
             .to(".pin-bullet:nth-child(3) .check-icon", {
-              scale: 1.12, duration: 0.2, ease: "power1.in",
-            }, "-=0.2")
-            .to(".pin-bullet:nth-child(3) .check-icon", {
-              scale: 1, duration: 0.2, ease: "power1.out",
+              scale: 1,
+              duration: 0.2,
+              ease: "power1.out",
             });
 
           // ── STAGE 2: Dashboard mockup, back → front ──────────────────────────────
 
           // 2a. Browser chrome frame (t≈11 → 13.2)
-          tl.to(".dashboard-shell", {
-            opacity: 1, scale: 1, duration: 2.2, ease: "power1.inOut",
-          }, "+=0.2"); // tiny gap so the stage boundary feels intentional
+          tl.to(
+            ".dashboard-shell",
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 2.2,
+              ease: "power1.inOut",
+            },
+            "+=0.2",
+          ); // tiny gap so the stage boundary feels intentional
 
           // 2b-i. Network Health card slides in, then bar fills (t≈13.2 → 16.5)
           tl.to("#card-network-health", {
-            opacity: 1, x: 0, duration: 1.8, ease: "power1.inOut",
-          })
-            .to("#bar-network-health", {
-              width: "75%", duration: 1.6, ease: "power1.inOut",
-            }, "-=0.4");
+            opacity: 1,
+            x: 0,
+            duration: 1.8,
+            ease: "power1.inOut",
+          }).to(
+            "#bar-network-health",
+            {
+              width: "75%",
+              duration: 1.6,
+              ease: "power1.inOut",
+            },
+            "-=0.4",
+          );
 
           // 2b-ii. Active Models card + sequential bars (t≈16.5 → 19.5)
           tl.to("#card-active-models", {
-            opacity: 1, x: 0, duration: 1.6, ease: "power1.inOut",
+            opacity: 1,
+            x: 0,
+            duration: 1.6,
+            ease: "power1.inOut",
           })
-            .to("#active-model-bar-1", { width: "100%", duration: 0.5, ease: "power1.inOut" })
-            .to("#active-model-bar-2", { width: "80%",  duration: 0.5, ease: "power1.inOut" })
-            .to("#active-model-bar-3", { width: "65%",  duration: 0.5, ease: "power1.inOut" })
-            .to("#active-model-bar-4", { width: "75%",  duration: 0.5, ease: "power1.inOut" });
+            .to("#active-model-bar-1", {
+              width: "100%",
+              duration: 0.5,
+              ease: "power1.inOut",
+            })
+            .to("#active-model-bar-2", {
+              width: "80%",
+              duration: 0.5,
+              ease: "power1.inOut",
+            })
+            .to("#active-model-bar-3", {
+              width: "65%",
+              duration: 0.5,
+              ease: "power1.inOut",
+            })
+            .to("#active-model-bar-4", {
+              width: "75%",
+              duration: 0.5,
+              ease: "power1.inOut",
+            });
 
           // 2c. Large radar panel + rings (t≈19.5 → 22.5, panels in parallel)
           tl.to("#panel-radar", {
-            opacity: 1, x: 0, duration: 2.4, ease: "power1.inOut",
-          })
-            .to("#radar-rings", {
-              scale: 1, duration: 2, ease: "power1.inOut",
-            }, "<");                    // radar rings expand at same time as panel
+            opacity: 1,
+            x: 0,
+            duration: 2.4,
+            ease: "power1.inOut",
+          }).to(
+            "#radar-rings",
+            {
+              scale: 1,
+              duration: 2,
+              ease: "power1.inOut",
+            },
+            "<",
+          ); // radar rings expand at same time as panel
 
           // 2d. Floating AI Insight card (t≈22.5 → 25.5)
           tl.to("#card-ai-insight", {
-            opacity: 1, x: 0, duration: 2.4, ease: "power1.inOut",
+            opacity: 1,
+            x: 0,
+            duration: 2.4,
+            ease: "power1.inOut",
           });
 
           // ── Hold: fully assembled state before pin releases (t≈25.5 → 30) ───────
@@ -2114,7 +2502,7 @@
         // Scroll-linked horizontal logo carousel (replaces CSS autoplay marquee)
         if (!prefersReducedMotion) {
           const marqueeSection = document.querySelector(
-            ".py-20.border-y.overflow-hidden"
+            ".py-20.border-y.overflow-hidden",
           );
           const marqueeContent = document.querySelector(".marquee-content");
           if (marqueeSection && marqueeContent) {
@@ -2135,14 +2523,12 @@
           }
         }
 
-
         // ═══════════════════════════════════════════════════════════════
         // SERVICES BENTO GRID — All animations scoped to #services only
         // ═══════════════════════════════════════════════════════════════
         if (!prefersReducedMotion) {
           const servicesSection = document.getElementById("services");
           if (servicesSection) {
-
             // ── 1. Heading entrance (scroll into view, fire once) ──────────────
             ScrollTrigger.create({
               trigger: servicesSection,
@@ -2162,10 +2548,15 @@
 
             // ── 2 + 3. Card entrance stagger + icon bounces ────────────────────
             // Initial hidden states — scoped to #services cards only
-            const serviceCards = servicesSection.querySelectorAll(".stagger-item");
+            const serviceCards =
+              servicesSection.querySelectorAll(".stagger-item");
             gsap.set(serviceCards, { opacity: 0, y: 40 });
 
-            const iconIds = ["#icon-workflows", "#icon-neural", "#icon-scaling"];
+            const iconIds = [
+              "#icon-workflows",
+              "#icon-neural",
+              "#icon-scaling",
+            ];
             iconIds.forEach((id) => {
               gsap.set(id, { scale: 0.5, rotation: -15, opacity: 0 });
             });
@@ -2249,7 +2640,11 @@
               const pos = i * barStep;
               barTl.to(
                 bar,
-                { height: `${barTargets[i]}%`, ease: "power1.inOut", duration: 0.4 },
+                {
+                  height: `${barTargets[i]}%`,
+                  ease: "power1.inOut",
+                  duration: 0.4,
+                },
                 pos,
               );
             });
@@ -2264,10 +2659,10 @@
 
               card.addEventListener("mousemove", (e) => {
                 const rect = card.getBoundingClientRect();
-                const relX = (e.clientX - rect.left) / rect.width;   // 0→1
-                const relY = (e.clientY - rect.top) / rect.height;   // 0→1
-                const normX = relX * 2 - 1;  // -1→1
-                const normY = relY * 2 - 1;  // -1→1
+                const relX = (e.clientX - rect.left) / rect.width; // 0→1
+                const relY = (e.clientY - rect.top) / rect.height; // 0→1
+                const normX = relX * 2 - 1; // -1→1
+                const normY = relY * 2 - 1; // -1→1
 
                 // Update spotlight position CSS vars
                 if (spotlight) {
@@ -2318,30 +2713,35 @@
               // Heading and subtext drift upward at different rates
               .to("#services-heading", { y: -60, ease: "none", duration: 1 }, 0)
               .to("#services-subtext", { y: -30, ease: "none", duration: 1 }, 0)
-              
+
               // Cards drift upward at different speeds (parallax depth)
               .to("#card-workflows", { y: -20, ease: "none", duration: 1 }, 0)
               .to("#card-neural", { y: -45, ease: "none", duration: 1 }, 0)
               .to("#card-scaling", { y: -35, ease: "none", duration: 1 }, 0)
               .to("#card-power", { y: -55, ease: "none", duration: 1 }, 0)
-              
+
               // Icons move in opposite direction relative to card movement (counter-movement)
               .to("#icon-workflows", { y: 10, ease: "none", duration: 1 }, 0)
               .to("#icon-neural", { y: 22.5, ease: "none", duration: 1 }, 0)
               .to("#icon-scaling", { y: 17.5, ease: "none", duration: 1 }, 0)
-              
+
               // Bar chart horizontal drift
               .to("#chart-bars", { x: -15, ease: "none", duration: 1 }, 0)
-              
+
               // Background parallax depth glow
-              .fromTo("#services-bg-glow", 
-                { y: 40, scale: 0.9 }, 
-                { y: -40, scale: 1.1, ease: "none", duration: 1 }, 
-                0
+              .fromTo(
+                "#services-bg-glow",
+                { y: 40, scale: 0.9 },
+                { y: -40, scale: 1.1, ease: "none", duration: 1 },
+                0,
               )
-              
+
               // Section-exit fade (transition into next section)
-              .to("#services-grid", { opacity: 0.85, ease: "power1.in", duration: 0.3 }, 0.7);
+              .to(
+                "#services-grid",
+                { opacity: 0.85, ease: "power1.in", duration: 0.3 },
+                0.7,
+              );
           }
         }
 
