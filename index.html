@@ -170,18 +170,19 @@
         box-sizing: border-box;
       }
 
-      /* Single scroll owner: clip horizontal overflow on html only.
-         Applying overflow-x to both html AND body creates a nested scroll
-         container and a duplicate vertical scrollbar track at the viewport edge.
+      /* Clip horizontal overflow on html + body. Use clip (not hidden) on both
+         to avoid nested scroll-container duplicate vertical scrollbar tracks.
          100vw includes the scrollbar gutter and can itself trigger overflow. */
       html {
         overflow-x: clip;
         width: 100%;
+        background-color: #000000;
       }
 
       body {
         background-color: #000000;
         color: #e2e2e2;
+        overflow-x: clip;
         width: 100%;
         max-width: 100%;
         margin: 0;
@@ -190,7 +191,7 @@
 
       /* ── Navbar + mobile menu ─────────────────────────────────────── */
       #navbar-wrapper {
-        width: min(100%, calc(100vw - 2rem));
+        width: calc(100% - 2rem);
         max-width: 80rem;
       }
 
@@ -462,6 +463,13 @@
         gap: 3rem;
         padding-bottom: 2rem;
         will-change: transform;
+        width: max-content;
+      }
+
+      #cases-section {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: clip;
       }
 
       .hero-bg-glow {
@@ -631,6 +639,9 @@
          overflow-x: auto alone forces overflow-y: auto (CSS spec), which adds a
          second vertical scrollbar track — pin overflow-y explicitly. */
       #horizontal-container {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
@@ -645,14 +656,48 @@
           overflow: hidden;
         }
       }
+
+      /* ── Loader — full viewport, centered, scroll-locked ─────────────── */
+      #page-loader {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100dvh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        z-index: 10000;
+        background-color: #000000;
+      }
+
+      #loader-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        position: relative;
+        z-index: 10;
+      }
+
+      html.loader-active,
+      body.loader-active {
+        overflow: hidden !important;
+        height: 100dvh;
+        width: 100%;
+        max-width: 100%;
+      }
     </style>
   </head>
   <body class="font-body-md selection:bg-white selection:text-black">
+    <script>
+      document.documentElement.classList.add("loader-active");
+      document.body.classList.add("loader-active");
+    </script>
     <!-- ── AETHER Premium Loading Intro ──────────────────────────────────── -->
-    <div
-      id="page-loader"
-      class="fixed inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden"
-    >
+    <div id="page-loader">
       <!-- Exit-wipe split panels (sit behind content while loading, then split open) -->
       <div
         id="loader-panel-top"
@@ -664,7 +709,7 @@
       ></div>
 
       <!-- Center content: mark + wordmark + counter -->
-      <div class="relative z-10 flex flex-col items-center gap-8">
+      <div id="loader-content">
         <!-- Animated orbital SVG mark -->
         <svg
           id="loader-mark"
@@ -792,7 +837,7 @@
 
     <!-- Navbar -->
     <div
-      class="fixed top-3 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] sm:w-[90%] max-w-7xl px-[max(0px,env(safe-area-inset-left))]"
+      class="fixed top-3 sm:top-6 left-1/2 -translate-x-1/2 z-50 px-[max(0px,env(safe-area-inset-left))]"
       id="navbar-wrapper"
     >
       <nav
@@ -1756,7 +1801,7 @@
             Daily Requests
           </div>
         </div>
-        <div class="p-8">
+        <div class="p-4 md:p-8">
           <div
             class="font-display-2xl text-white mb-4 counter"
             style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
@@ -1771,7 +1816,7 @@
             Data Sources
           </div>
         </div>
-        <div class="p-8">
+        <div class="p-4 md:p-8">
           <div
             class="font-display-2xl text-white mb-4 counter"
             style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
@@ -1787,7 +1832,7 @@
             Uptime SLA
           </div>
         </div>
-        <div class="p-8">
+        <div class="p-4 md:p-8">
           <div
             class="font-display-2xl text-on-surface-variant mb-4 counter"
             style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
@@ -2125,7 +2170,7 @@
       </div>
     </section>
     <!-- Pricing -->
-    <section class="py-section-gap bg-surface-container-lowest scroll-reveal">
+    <section class="py-section-gap bg-surface-container-lowest scroll-reveal scroll-reveal-fade">
       <div class="container mx-auto px-4 sm:px-gutter">
         <div class="text-center mb-16">
           <h2 class="font-display-lg text-display-lg mb-4 text-white">
@@ -2264,7 +2309,7 @@
     </section>
     <!-- Massive CTA -->
     <section
-      class="py-[200px] relative overflow-hidden text-center scroll-reveal"
+      class="section-pad md:py-[200px] relative overflow-hidden text-center scroll-reveal scroll-reveal-fade"
     >
       <div
         class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent"
@@ -2296,14 +2341,14 @@
     </section>
     <!-- Footer -->
     <footer
-      class="bg-black w-full py-20 px-4 sm:px-gutter border-t border-white/5 scroll-reveal"
+      class="bg-black w-full max-w-full py-20 border-t border-white/5 scroll-reveal scroll-reveal-fade relative z-10"
     >
       <div
-        class="flex flex-col md:flex-row justify-between items-start md:items-end w-full max-w-7xl mx-auto space-y-stack-md"
+        class="flex flex-col md:flex-row justify-between items-start md:items-end w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-gutter space-y-stack-md"
       >
-        <div>
+        <div class="min-w-0">
           <div
-            class="font-display-2xl text-display-2xl opacity-10 font-bold uppercase tracking-tighter text-white mb-8"
+            class="font-display-2xl text-[clamp(2.5rem,12vw,4.5rem)] leading-none opacity-10 font-bold uppercase tracking-tighter text-white mb-8"
           >
             AETHER
           </div>
@@ -2311,7 +2356,7 @@
             © 2024 Aether AI. Engineered for Invisible Power.
           </div>
         </div>
-        <div class="flex gap-12">
+        <div class="flex gap-12 min-w-0">
           <div class="flex flex-col gap-3">
             <span
               class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2"
@@ -2681,6 +2726,18 @@
         }
 
         // ── Premium AETHER Loader ─────────────────────────────────────────────
+        function lockLoaderScroll() {
+          document.documentElement.classList.add("loader-active");
+          document.body.classList.add("loader-active");
+        }
+
+        function unlockLoaderScroll() {
+          document.documentElement.classList.remove("loader-active");
+          document.body.classList.remove("loader-active");
+        }
+
+        lockLoaderScroll();
+
         const loaderEl = document.getElementById("page-loader");
         const loaderRing = document.getElementById("loader-mark-ring");
         const loaderCore = document.getElementById("loader-mark-core");
@@ -2694,9 +2751,7 @@
         const loaderBar = document.getElementById("loader-progress");
         const panelTop = document.getElementById("loader-panel-top");
         const panelBottom = document.getElementById("loader-panel-bottom");
-        const loaderContent = loaderEl
-          ? loaderEl.querySelector(".relative.z-10")
-          : null;
+        const loaderContent = document.getElementById("loader-content");
 
         const prefersReducedMotion = window.matchMedia(
           "(prefers-reduced-motion: reduce)",
@@ -2706,6 +2761,8 @@
         const loaderShown = sessionStorage.getItem("aether_loader_shown");
 
         function runLoader() {
+          lockLoaderScroll();
+
           if (prefersReducedMotion || loaderShown) {
             // Reduced / returning visitor: instant crossfade out, then hero
             if (loaderEl) {
@@ -2715,10 +2772,12 @@
                 ease: "power1.out",
                 onComplete: () => {
                   loaderEl.style.display = "none";
+                  unlockLoaderScroll();
                   initHeroEntrance();
                 },
               });
             } else {
+              unlockLoaderScroll();
               initHeroEntrance();
             }
             sessionStorage.setItem("aether_loader_shown", "1");
@@ -2869,6 +2928,7 @@
                   ease: "expo.inOut",
                   onComplete: () => {
                     if (loaderEl) loaderEl.style.display = "none";
+                    unlockLoaderScroll();
                     initHeroEntrance();
                   },
                 },
@@ -2884,6 +2944,7 @@
           // Hard-ceiling fallback if loader setup fails completely
           const loaderEl = document.getElementById("page-loader");
           if (loaderEl) loaderEl.style.display = "none";
+          unlockLoaderScroll();
           initHeroEntrance();
         }
 
@@ -2983,12 +3044,18 @@
             // GSAP owns that element's transform; IntersectionObserver must not touch it.
             if (el.id === "dashboard-pin" || el.closest("#dashboard-pin"))
               return;
+            const isMobileReveal = window.matchMedia(
+              "(max-width: 767px)",
+            ).matches;
+            const fadeOnly = el.classList.contains("scroll-reveal-fade");
             el.classList.add(
               "transition-all",
               "duration-1000",
               "opacity-0",
-              "translate-y-10",
             );
+            if (!fadeOnly || !isMobileReveal) {
+              el.classList.add("translate-y-10");
+            }
             scrollRevealObserver.observe(el);
           });
 
@@ -3043,17 +3110,21 @@
           }
 
           if (casesSection && horizontalScroll) {
-            const rect = casesSection.getBoundingClientRect();
-            if (rect.top < viewHeight && rect.bottom > 0) {
-              const scrollProgress =
-                (viewHeight - rect.top) / (viewHeight + rect.height);
-              const maxTranslate =
-                horizontalScroll.scrollWidth - window.innerWidth + 48;
-              const moveX = Math.min(
-                maxTranslate,
-                Math.max(0, scrollProgress * maxTranslate * 1.5),
-              );
-              horizontalScroll.style.transform = `translate3d(-${moveX}px, 0, 0)`;
+            if (window.innerWidth >= 1024) {
+              const rect = casesSection.getBoundingClientRect();
+              if (rect.top < viewHeight && rect.bottom > 0) {
+                const scrollProgress =
+                  (viewHeight - rect.top) / (viewHeight + rect.height);
+                const maxTranslate =
+                  horizontalScroll.scrollWidth - window.innerWidth + 48;
+                const moveX = Math.min(
+                  maxTranslate,
+                  Math.max(0, scrollProgress * maxTranslate * 1.5),
+                );
+                horizontalScroll.style.transform = `translate3d(-${moveX}px, 0, 0)`;
+              }
+            } else {
+              horizontalScroll.style.transform = "";
             }
           }
         }
@@ -3074,211 +3145,220 @@
         ScrollTrigger.config({ limitCallbacks: true });
 
         if (!prefersReducedMotion && statsSection) {
-          // ── Set initial hidden states (always explicit start + end values) ───────
-          gsap.set(".pin-bullet", { opacity: 0, x: 60 });
-          gsap.set(".pin-bullet .check-icon", { scale: 0.8 });
-          gsap.set(".dashboard-shell", { opacity: 0, scale: 0.96 });
-          gsap.set("#card-network-health", { opacity: 0, x: -30 });
-          gsap.set("#bar-network-health", { width: "0%" });
-          gsap.set("#card-active-models", { opacity: 0, x: -30 });
-          gsap.set(
-            [
-              "#active-model-bar-1",
-              "#active-model-bar-2",
-              "#active-model-bar-3",
-              "#active-model-bar-4",
-            ],
-            { width: "0%" },
-          );
-          gsap.set("#panel-radar", { opacity: 0, x: -40 });
-          gsap.set("#radar-rings", { scale: 0.7 });
-          gsap.set("#card-ai-insight", { opacity: 0, x: 40 });
+          ScrollTrigger.matchMedia({
+            "(min-width: 768px)": function () {
+              // ── Set initial hidden states (desktop pin animation) ────────────────
+              gsap.set(".pin-bullet", { opacity: 0, x: 60 });
+              gsap.set(".pin-bullet .check-icon", { scale: 0.8 });
+              gsap.set(".dashboard-shell", { opacity: 0, scale: 0.96 });
+              gsap.set("#card-network-health", { opacity: 0, x: -30 });
+              gsap.set("#bar-network-health", { width: "0%" });
+              gsap.set("#card-active-models", { opacity: 0, x: -30 });
+              gsap.set(
+                [
+                  "#active-model-bar-1",
+                  "#active-model-bar-2",
+                  "#active-model-bar-3",
+                  "#active-model-bar-4",
+                ],
+                { width: "0%" },
+              );
+              gsap.set("#panel-radar", { opacity: 0, x: -40 });
+              gsap.set("#radar-rings", { scale: 0.7 });
+              gsap.set("#card-ai-insight", { opacity: 0, x: 40 });
 
-          // ── Single scrubbed timeline — total notional duration = 30 units ────────
-          // Stage 1 (bullets)  : 0  – 11  (~37 %)
-          // Stage 2 (dashboard): 11 – 26  (~50 %)
-          // Hold               : 26 – 30  (~13 %)
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: "#dashboard-pin",
-              start: "top top", // locks cleanly at viewport top edge
-              end: "+=200%", // enough scroll distance for both stages to read comfortably
-              pin: true,
-              pinSpacing: true, // lets ScrollTrigger insert its own spacer — no layout jump
-              anticipatePin: 1, // pre-calculates pin ahead of time, removes entry stutter
-              scrub: 0.8, // smoothing lag — reads as fluid, not mechanical
-              invalidateOnRefresh: true,
-              onUpdate: () => {
-                const dot = document.getElementById("insight-status-dot");
-                if (dot) {
-                  if (tl.progress() >= 0.88) {
-                    dot.classList.add("animate-ping");
-                  } else {
-                    dot.classList.remove("animate-ping");
-                  }
-                }
-              },
+              const tl = gsap.timeline({
+                scrollTrigger: {
+                  trigger: "#dashboard-pin",
+                  start: "top top",
+                  end: "+=200%",
+                  pin: true,
+                  pinSpacing: true,
+                  anticipatePin: 1,
+                  scrub: 0.8,
+                  invalidateOnRefresh: true,
+                  onUpdate: () => {
+                    const dot = document.getElementById("insight-status-dot");
+                    if (dot) {
+                      if (tl.progress() >= 0.88) {
+                        dot.classList.add("animate-ping");
+                      } else {
+                        dot.classList.remove("animate-ping");
+                      }
+                    }
+                  },
+                },
+              });
+
+              tl.to(".pin-bullet:nth-child(1)", {
+                opacity: 1,
+                x: 0,
+                duration: 2.8,
+                ease: "power1.inOut",
+              })
+                .to(
+                  ".pin-bullet:nth-child(1) .check-icon",
+                  {
+                    scale: 1.12,
+                    duration: 0.2,
+                    ease: "power1.in",
+                  },
+                  "-=0.2",
+                )
+                .to(".pin-bullet:nth-child(1) .check-icon", {
+                  scale: 1,
+                  duration: 0.2,
+                  ease: "power1.out",
+                });
+
+              tl.to(".pin-bullet:nth-child(2)", {
+                opacity: 1,
+                x: 0,
+                duration: 2.8,
+                ease: "power1.inOut",
+              })
+                .to(
+                  ".pin-bullet:nth-child(2) .check-icon",
+                  {
+                    scale: 1.12,
+                    duration: 0.2,
+                    ease: "power1.in",
+                  },
+                  "-=0.2",
+                )
+                .to(".pin-bullet:nth-child(2) .check-icon", {
+                  scale: 1,
+                  duration: 0.2,
+                  ease: "power1.out",
+                });
+
+              tl.to(".pin-bullet:nth-child(3)", {
+                opacity: 1,
+                x: 0,
+                duration: 2.8,
+                ease: "power1.inOut",
+              })
+                .to(
+                  ".pin-bullet:nth-child(3) .check-icon",
+                  {
+                    scale: 1.12,
+                    duration: 0.2,
+                    ease: "power1.in",
+                  },
+                  "-=0.2",
+                )
+                .to(".pin-bullet:nth-child(3) .check-icon", {
+                  scale: 1,
+                  duration: 0.2,
+                  ease: "power1.out",
+                });
+
+              tl.to(
+                ".dashboard-shell",
+                {
+                  opacity: 1,
+                  scale: 1,
+                  duration: 2.2,
+                  ease: "power1.inOut",
+                },
+                "+=0.2",
+              );
+
+              tl.to("#card-network-health", {
+                opacity: 1,
+                x: 0,
+                duration: 1.8,
+                ease: "power1.inOut",
+              }).to(
+                "#bar-network-health",
+                {
+                  width: "75%",
+                  duration: 1.6,
+                  ease: "power1.inOut",
+                },
+                "-=0.4",
+              );
+
+              tl.to("#card-active-models", {
+                opacity: 1,
+                x: 0,
+                duration: 1.6,
+                ease: "power1.inOut",
+              })
+                .to("#active-model-bar-1", {
+                  width: "100%",
+                  duration: 0.5,
+                  ease: "power1.inOut",
+                })
+                .to("#active-model-bar-2", {
+                  width: "80%",
+                  duration: 0.5,
+                  ease: "power1.inOut",
+                })
+                .to("#active-model-bar-3", {
+                  width: "65%",
+                  duration: 0.5,
+                  ease: "power1.inOut",
+                })
+                .to("#active-model-bar-4", {
+                  width: "75%",
+                  duration: 0.5,
+                  ease: "power1.inOut",
+                });
+
+              tl.to("#panel-radar", {
+                opacity: 1,
+                x: 0,
+                duration: 2.4,
+                ease: "power1.inOut",
+              }).to(
+                "#radar-rings",
+                {
+                  scale: 1,
+                  duration: 2,
+                  ease: "power1.inOut",
+                },
+                "<",
+              );
+
+              tl.to("#card-ai-insight", {
+                opacity: 1,
+                x: 0,
+                duration: 2.4,
+                ease: "power1.inOut",
+              });
+
+              tl.to({}, { duration: 4 });
+            },
+
+            "(max-width: 767px)": function () {
+              gsap.set(".pin-bullet", { opacity: 1, x: 0, clearProps: "transform" });
+              gsap.set(".pin-bullet .check-icon", { scale: 1 });
+              gsap.set(".dashboard-shell", {
+                opacity: 1,
+                scale: 1,
+                x: 0,
+                clearProps: "transform",
+              });
+              gsap.set("#card-network-health", { opacity: 1, x: 0, clearProps: "transform" });
+              gsap.set("#bar-network-health", { width: "75%" });
+              gsap.set("#card-active-models", { opacity: 1, x: 0, clearProps: "transform" });
+              gsap.set("#active-model-bar-1", { width: "100%" });
+              gsap.set("#active-model-bar-2", { width: "80%" });
+              gsap.set("#active-model-bar-3", { width: "65%" });
+              gsap.set("#active-model-bar-4", { width: "75%" });
+              gsap.set("#panel-radar", { opacity: 1, x: 0, clearProps: "transform" });
+              gsap.set("#radar-rings", { scale: 1 });
+              gsap.set("#card-ai-insight", { opacity: 1, x: 0, clearProps: "transform" });
             },
           });
-
-          // ── STAGE 1: Checklist bullets, right → left, one by one ────────────────
-          // Each bullet = ~3.2 units; scale micro-bounce is included but stays within
-          // the same position window so it can't feel "rushed" on a scrub.
-
-          // Bullet 1 (t=0 → 3.2)
-          tl.to(".pin-bullet:nth-child(1)", {
-            opacity: 1,
-            x: 0,
-            duration: 2.8,
-            ease: "power1.inOut",
-          })
-            .to(
-              ".pin-bullet:nth-child(1) .check-icon",
-              {
-                scale: 1.12,
-                duration: 0.2,
-                ease: "power1.in",
-              },
-              "-=0.2",
-            )
-            .to(".pin-bullet:nth-child(1) .check-icon", {
-              scale: 1,
-              duration: 0.2,
-              ease: "power1.out",
-            });
-
-          // Bullet 2 (t≈3.2 → 6.6)
-          tl.to(".pin-bullet:nth-child(2)", {
-            opacity: 1,
-            x: 0,
-            duration: 2.8,
-            ease: "power1.inOut",
-          })
-            .to(
-              ".pin-bullet:nth-child(2) .check-icon",
-              {
-                scale: 1.12,
-                duration: 0.2,
-                ease: "power1.in",
-              },
-              "-=0.2",
-            )
-            .to(".pin-bullet:nth-child(2) .check-icon", {
-              scale: 1,
-              duration: 0.2,
-              ease: "power1.out",
-            });
-
-          // Bullet 3 (t≈6.6 → 10.6)
-          tl.to(".pin-bullet:nth-child(3)", {
-            opacity: 1,
-            x: 0,
-            duration: 2.8,
-            ease: "power1.inOut",
-          })
-            .to(
-              ".pin-bullet:nth-child(3) .check-icon",
-              {
-                scale: 1.12,
-                duration: 0.2,
-                ease: "power1.in",
-              },
-              "-=0.2",
-            )
-            .to(".pin-bullet:nth-child(3) .check-icon", {
-              scale: 1,
-              duration: 0.2,
-              ease: "power1.out",
-            });
-
-          // ── STAGE 2: Dashboard mockup, back → front ──────────────────────────────
-
-          // 2a. Browser chrome frame (t≈11 → 13.2)
-          tl.to(
-            ".dashboard-shell",
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 2.2,
-              ease: "power1.inOut",
-            },
-            "+=0.2",
-          ); // tiny gap so the stage boundary feels intentional
-
-          // 2b-i. Network Health card slides in, then bar fills (t≈13.2 → 16.5)
-          tl.to("#card-network-health", {
-            opacity: 1,
-            x: 0,
-            duration: 1.8,
-            ease: "power1.inOut",
-          }).to(
-            "#bar-network-health",
-            {
-              width: "75%",
-              duration: 1.6,
-              ease: "power1.inOut",
-            },
-            "-=0.4",
-          );
-
-          // 2b-ii. Active Models card + sequential bars (t≈16.5 → 19.5)
-          tl.to("#card-active-models", {
-            opacity: 1,
-            x: 0,
-            duration: 1.6,
-            ease: "power1.inOut",
-          })
-            .to("#active-model-bar-1", {
-              width: "100%",
-              duration: 0.5,
-              ease: "power1.inOut",
-            })
-            .to("#active-model-bar-2", {
-              width: "80%",
-              duration: 0.5,
-              ease: "power1.inOut",
-            })
-            .to("#active-model-bar-3", {
-              width: "65%",
-              duration: 0.5,
-              ease: "power1.inOut",
-            })
-            .to("#active-model-bar-4", {
-              width: "75%",
-              duration: 0.5,
-              ease: "power1.inOut",
-            });
-
-          // 2c. Large radar panel + rings (t≈19.5 → 22.5, panels in parallel)
-          tl.to("#panel-radar", {
-            opacity: 1,
-            x: 0,
-            duration: 2.4,
-            ease: "power1.inOut",
-          }).to(
-            "#radar-rings",
-            {
-              scale: 1,
-              duration: 2,
-              ease: "power1.inOut",
-            },
-            "<",
-          ); // radar rings expand at same time as panel
-
-          // 2d. Floating AI Insight card (t≈22.5 → 25.5)
-          tl.to("#card-ai-insight", {
-            opacity: 1,
-            x: 0,
-            duration: 2.4,
-            ease: "power1.inOut",
-          });
-
-          // ── Hold: fully assembled state before pin releases (t≈25.5 → 30) ───────
-          tl.to({}, { duration: 4 });
         }
 
         // Recalculate ScrollTrigger on window resize to ensure correct pin boundaries
         window.addEventListener("resize", () => {
+          if (horizontalScroll && window.innerWidth < 1024) {
+            horizontalScroll.style.transform = "";
+          }
           ScrollTrigger.refresh();
         });
 
