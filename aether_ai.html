@@ -2813,21 +2813,23 @@
         const parallaxLayers = document.querySelectorAll(".parallax-layer");
         const bgGlows = document.querySelectorAll(".hero-bg-glow");
 
-        window.addEventListener("scroll", () => {
-          const scrolled = window.pageYOffset;
+        let scrollEffectsTicking = false;
+
+        function updateScrollEffects() {
+          scrollEffectsTicking = false;
+          const scrolled = window.scrollY;
           const viewHeight = window.innerHeight;
 
           if (scrolled < 1200) {
             parallaxLayers.forEach((layer) => {
-              layer.style.transform = `translateY(${scrolled * 0.2}px) scale(${1 - scrolled * 0.0001})`;
+              layer.style.transform = `translate3d(0, ${scrolled * 0.2}px, 0) scale(${1 - scrolled * 0.0001})`;
             });
             bgGlows.forEach((glow, i) => {
               const drift = i === 0 ? -0.05 : 0.04;
-              glow.style.transform = `translate(${scrolled * drift}px, ${scrolled * Math.abs(drift) * 0.5}px)`;
+              glow.style.transform = `translate3d(${scrolled * drift}px, ${scrolled * Math.abs(drift) * 0.5}px, 0)`;
             });
           }
 
-          // Statistics counters dynamic scroll progress
           if (statsSection) {
             const statsRect = statsSection.getBoundingClientRect();
             if (statsRect.top < viewHeight && statsRect.bottom > 0) {
@@ -2854,22 +2856,36 @@
             }
           }
 
-          const rect = casesSection.getBoundingClientRect();
-          if (rect.top < viewHeight && rect.bottom > 0) {
-            const scrollProgress =
-              (viewHeight - rect.top) / (viewHeight + rect.height);
-            const maxTranslate =
-              horizontalScroll.scrollWidth - window.innerWidth + 48;
-            const moveX = Math.min(
-              maxTranslate,
-              Math.max(0, scrollProgress * maxTranslate * 1.5),
-            );
-            horizontalScroll.style.transform = `translateX(-${moveX}px)`;
+          if (casesSection && horizontalScroll) {
+            const rect = casesSection.getBoundingClientRect();
+            if (rect.top < viewHeight && rect.bottom > 0) {
+              const scrollProgress =
+                (viewHeight - rect.top) / (viewHeight + rect.height);
+              const maxTranslate =
+                horizontalScroll.scrollWidth - window.innerWidth + 48;
+              const moveX = Math.min(
+                maxTranslate,
+                Math.max(0, scrollProgress * maxTranslate * 1.5),
+              );
+              horizontalScroll.style.transform = `translate3d(-${moveX}px, 0, 0)`;
+            }
           }
-        });
+        }
+
+        window.addEventListener(
+          "scroll",
+          () => {
+            if (!scrollEffectsTicking) {
+              scrollEffectsTicking = true;
+              requestAnimationFrame(updateScrollEffects);
+            }
+          },
+          { passive: true },
+        );
 
         // GSAP ScrollTrigger pinning and animation sequence for the dashboard control center
         gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.config({ limitCallbacks: true });
 
         if (!prefersReducedMotion && statsSection) {
           // ── Set initial hidden states (always explicit start + end values) ───────
@@ -3142,8 +3158,10 @@
           });
         }
 
-        // Logo strip — translateX driven purely by scroll position (no autoplay).
-        // GSAP ScrollTrigger scrub: true + ease: "none" = 1:1 scroll lock, zero lag.
+        // Logo strip — scroll-position-driven translateX with GSAP scrub smoothing.
+        // scrub: 0.15 (~150 ms catch-up) removes wheel/trackpad micro-jitter without
+        // perceptible post-stop drift. No Lenis: its lerp keeps scroll moving after
+        // input stops, which would violate the instant-freeze rule.
         function initScrollLinkedLogoStrip() {
           const section = document.getElementById("logo-marquee-section");
           const track = document.getElementById("marquee-track");
@@ -3152,7 +3170,17 @@
             : null;
           if (!section || !track || !firstSet) return;
 
-          gsap.set(track, { x: 0, force3D: true });
+          if (window.__logoStripTween) {
+            window.__logoStripTween.scrollTrigger?.kill();
+            window.__logoStripTween.kill();
+            window.__logoStripTween = null;
+          }
+
+          gsap.set(track, {
+            x: 0,
+            force3D: true,
+            willChange: "transform",
+          });
 
           if (prefersReducedMotion) return;
 
@@ -3163,17 +3191,19 @@
             return setWidth * multiplier;
           }
 
-          gsap.to(track, {
+          const tween = gsap.to(track, {
             x: () => -getTravelDistance(),
             ease: "none",
             scrollTrigger: {
               trigger: section,
               start: "top bottom",
               end: "bottom top",
-              scrub: true,
+              scrub: 0.15,
               invalidateOnRefresh: true,
             },
           });
+
+          window.__logoStripTween = tween;
         }
 
         initScrollLinkedLogoStrip();
