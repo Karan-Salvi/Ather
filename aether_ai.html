@@ -362,6 +362,53 @@
     </style>
   </head>
   <body class="font-body-md selection:bg-white selection:text-black">
+
+    <!-- ── AETHER Premium Loading Intro ──────────────────────────────────── -->
+    <div id="page-loader" class="fixed inset-0 z-[10000] bg-black flex flex-col items-center justify-center overflow-hidden">
+      <!-- Exit-wipe split panels (sit behind content while loading, then split open) -->
+      <div id="loader-panel-top" class="absolute top-0 left-0 w-full h-1/2 bg-black"></div>
+      <div id="loader-panel-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-black"></div>
+
+      <!-- Center content: mark + wordmark + counter -->
+      <div class="relative z-10 flex flex-col items-center gap-8">
+
+        <!-- Animated orbital SVG mark -->
+        <svg id="loader-mark" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Static ghost ring -->
+          <circle cx="32" cy="32" r="28" stroke="white" stroke-opacity="0.12" stroke-width="1.5"/>
+          <!-- Animated draw-in ring -->
+          <circle id="loader-mark-ring" cx="32" cy="32" r="28" stroke="white" stroke-width="1.5"
+                  stroke-dasharray="176" stroke-dashoffset="176" transform="rotate(-90 32 32)"/>
+          <!-- Three orbital nodes -->
+          <circle id="loader-node-1" cx="32" cy="4"  r="2.5" fill="white" opacity="0"/>
+          <circle id="loader-node-2" cx="56" cy="46" r="2.5" fill="white" opacity="0"/>
+          <circle id="loader-node-3" cx="8"  cy="46" r="2.5" fill="white" opacity="0"/>
+          <!-- Core -->
+          <circle id="loader-mark-core" cx="32" cy="32" r="4" fill="white" opacity="0"/>
+        </svg>
+
+        <!-- AETHER wordmark — letters revealed individually -->
+        <div id="loader-wordmark" class="font-display-lg text-headline-md font-bold tracking-[0.25em] flex overflow-hidden" style="font-size:2rem">
+          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">A</span>
+          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">E</span>
+          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">T</span>
+          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">H</span>
+          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">E</span>
+          <span class="loader-letter inline-block" style="transform:translateY(100%);opacity:0">R</span>
+        </div>
+
+        <!-- Percentage counter -->
+        <div id="loader-percent" class="font-label-sm text-label-sm tracking-widest text-on-surface-variant" style="font-size:0.7rem;letter-spacing:0.18em">0%</div>
+
+        <!-- Thin progress line -->
+        <div class="w-40 h-[1px] bg-white/10 relative overflow-hidden">
+          <div id="loader-progress" class="absolute inset-y-0 left-0 bg-white" style="width:0%"></div>
+        </div>
+
+      </div>
+    </div>
+    <!-- ── End Loading Intro ──────────────────────────────────────────────── -->
+
     <!-- Navbar -->
     <nav
       class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl rounded-full bg-surface/30 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex justify-between items-center px-8 py-3 z-50 -translate-y-20 opacity-0 transition-all duration-1000 ease-out"
