@@ -215,20 +215,7 @@
         gap: 5rem;
         padding: 0 2.5rem;
         white-space: nowrap;
-        animation: marquee-scroll 40s linear infinite;
-      }
-
-      .marquee-container:hover .marquee-content {
-        animation-play-state: paused;
-      }
-
-      @keyframes marquee-scroll {
-        from {
-          transform: translateX(0);
-        }
-        to {
-          transform: translateX(-50%);
-        }
+        will-change: transform;
       }
 
       .marquee-item {
@@ -725,8 +712,13 @@
           <div class="w-24 h-1 bg-white mx-auto rounded-full"></div>
         </div>
         <div class="relative max-w-5xl mx-auto z-10">
-          <div class="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-[2px] bg-white/10 hidden md:block">
-            <div id="timeline-scroll-line" class="w-full bg-gradient-to-b from-white to-white/40 h-0 origin-top"></div>
+          <div
+            class="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-[2px] bg-white/10 hidden md:block"
+          >
+            <div
+              id="timeline-scroll-line"
+              class="w-full bg-gradient-to-b from-white to-white/40 h-0 origin-top"
+            ></div>
           </div>
           <div class="space-y-64 py-20">
             <div
@@ -930,7 +922,10 @@
                       Active Models
                     </div>
                     <div class="space-y-4">
-                      <div id="active-model-bar-1" class="h-2 w-full bg-white/10 rounded-full"></div>
+                      <div
+                        id="active-model-bar-1"
+                        class="h-2 w-full bg-white/10 rounded-full"
+                      ></div>
                       <div
                         id="active-model-bar-2"
                         class="h-2 w-4/5 bg-white/10 rounded-full opacity-60"
@@ -1007,7 +1002,10 @@
       </div>
     </section>
     <!-- Statistics -->
-    <section id="stats-section" class="py-section-gap container mx-auto px-gutter scroll-reveal">
+    <section
+      id="stats-section"
+      class="py-section-gap container mx-auto px-gutter scroll-reveal"
+    >
       <div class="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
         <div class="p-8">
           <div
@@ -1788,11 +1786,23 @@
           if (statsSection) {
             const statsRect = statsSection.getBoundingClientRect();
             if (statsRect.top < viewHeight && statsRect.bottom > 0) {
-              const statsProgress = Math.min(Math.max((viewHeight - statsRect.top) / (viewHeight + statsRect.height), 0), 1);
+              const statsProgress = Math.min(
+                Math.max(
+                  (viewHeight - statsRect.top) /
+                    (viewHeight + statsRect.height),
+                  0,
+                ),
+                1,
+              );
               counters.forEach((counter) => {
-                const targetValue = parseFloat(counter.getAttribute("data-target"));
+                const targetValue = parseFloat(
+                  counter.getAttribute("data-target"),
+                );
                 const suffix = counter.getAttribute("data-suffix") || "";
-                const decimals = parseInt(counter.getAttribute("data-decimals") || "0", 10);
+                const decimals = parseInt(
+                  counter.getAttribute("data-decimals") || "0",
+                  10,
+                );
                 const currentValue = statsProgress * targetValue;
                 counter.textContent = currentValue.toFixed(decimals) + suffix;
               });
@@ -1816,7 +1826,9 @@
         // GSAP ScrollTrigger pinning and animation sequence for the dashboard control center
         gsap.registerPlugin(ScrollTrigger);
 
-        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const prefersReducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
 
         if (!prefersReducedMotion && statsSection) {
           // Initialize GSAP ScrollTrigger timeline
@@ -1838,8 +1850,8 @@
                     dot.classList.remove("animate-ping");
                   }
                 }
-              }
-            }
+              },
+            },
           });
 
           // Set initial hidden states for animated elements
@@ -1849,7 +1861,15 @@
           gsap.set("#card-network-health", { opacity: 0, x: -30 });
           gsap.set("#bar-network-health", { width: "0%" });
           gsap.set("#card-active-models", { opacity: 0, x: -30 });
-          gsap.set(["#active-model-bar-1", "#active-model-bar-2", "#active-model-bar-3", "#active-model-bar-4"], { width: "0%" });
+          gsap.set(
+            [
+              "#active-model-bar-1",
+              "#active-model-bar-2",
+              "#active-model-bar-3",
+              "#active-model-bar-4",
+            ],
+            { width: "0%" },
+          );
           gsap.set("#panel-radar", { opacity: 0, x: -40 });
           gsap.set("#radar-rings", { scale: 0.7 });
           gsap.set("#card-ai-insight", { opacity: 0, x: 40 });
@@ -1857,18 +1877,36 @@
           // STAGE 1 — CHECKLIST BULLETS, RIGHT TO LEFT, ONE BY ONE
           // Bullet 1
           tl.to(".pin-bullet:nth-child(1)", { opacity: 1, x: 0, duration: 1 })
-            .to(".pin-bullet:nth-child(1) .check-icon", { scale: 1.15, duration: 0.3 })
-            .to(".pin-bullet:nth-child(1) .check-icon", { scale: 1, duration: 0.2 });
+            .to(".pin-bullet:nth-child(1) .check-icon", {
+              scale: 1.15,
+              duration: 0.3,
+            })
+            .to(".pin-bullet:nth-child(1) .check-icon", {
+              scale: 1,
+              duration: 0.2,
+            });
 
           // Bullet 2
           tl.to(".pin-bullet:nth-child(2)", { opacity: 1, x: 0, duration: 1 })
-            .to(".pin-bullet:nth-child(2) .check-icon", { scale: 1.15, duration: 0.3 })
-            .to(".pin-bullet:nth-child(2) .check-icon", { scale: 1, duration: 0.2 });
+            .to(".pin-bullet:nth-child(2) .check-icon", {
+              scale: 1.15,
+              duration: 0.3,
+            })
+            .to(".pin-bullet:nth-child(2) .check-icon", {
+              scale: 1,
+              duration: 0.2,
+            });
 
           // Bullet 3
           tl.to(".pin-bullet:nth-child(3)", { opacity: 1, x: 0, duration: 1 })
-            .to(".pin-bullet:nth-child(3) .check-icon", { scale: 1.15, duration: 0.3 })
-            .to(".pin-bullet:nth-child(3) .check-icon", { scale: 1, duration: 0.2 });
+            .to(".pin-bullet:nth-child(3) .check-icon", {
+              scale: 1.15,
+              duration: 0.3,
+            })
+            .to(".pin-bullet:nth-child(3) .check-icon", {
+              scale: 1,
+              duration: 0.2,
+            });
 
           // STAGE 2 — DASHBOARD MOCKUP
           // 2a. Browser chrome frame
@@ -1876,9 +1914,11 @@
 
           // 2b. Left stacked cards
           // Network Health
-          tl.to("#card-network-health", { opacity: 1, x: 0, duration: 1 })
-            .to("#bar-network-health", { width: "75%", duration: 1 });
-          
+          tl.to("#card-network-health", { opacity: 1, x: 0, duration: 1 }).to(
+            "#bar-network-health",
+            { width: "75%", duration: 1 },
+          );
+
           // Active Models
           tl.to("#card-active-models", { opacity: 1, x: 0, duration: 1 })
             .to("#active-model-bar-1", { width: "100%", duration: 0.4 })
@@ -1887,8 +1927,11 @@
             .to("#active-model-bar-4", { width: "75%", duration: 0.4 });
 
           // 2c. Large right-hand panel
-          tl.to("#panel-radar", { opacity: 1, x: 0, duration: 1.5 })
-            .to("#radar-rings", { scale: 1, duration: 1 }, "<");
+          tl.to("#panel-radar", { opacity: 1, x: 0, duration: 1.5 }).to(
+            "#radar-rings",
+            { scale: 1, duration: 1 },
+            "<",
+          );
 
           // 2d. Floating "AI Insight" card
           tl.to("#card-ai-insight", { opacity: 1, x: 0, duration: 1.5 });
@@ -1913,7 +1956,7 @@
               start: "top 35%",
               end: "bottom 65%",
               scrub: 0.5,
-            }
+            },
           });
 
           // Animate steps and nodes individually as they scroll into view
@@ -1926,10 +1969,10 @@
 
             // Set initial states explicitly
             gsap.set(content, { opacity: 0.1, x: startX });
-            gsap.set(node, { 
-              backgroundColor: "#1b1c1c", 
-              color: "#8e9192", 
-              boxShadow: "0 0 0px rgba(255, 255, 255, 0)" 
+            gsap.set(node, {
+              backgroundColor: "#1b1c1c",
+              color: "#8e9192",
+              boxShadow: "0 0 0px rgba(255, 255, 255, 0)",
             });
 
             // Timeline for step activation
@@ -1939,18 +1982,47 @@
                 start: "top 60%",
                 end: "top 25%",
                 scrub: 0.5,
-              }
+              },
             });
 
-            stepTl.to(content, { opacity: 1, x: 0, ease: "none", duration: 1 })
-                  .to(node, {
-                    backgroundColor: "#ffffff",
-                    color: "#000000",
-                    boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)",
-                    ease: "none",
-                    duration: 0.8
-                  }, "<");
+            stepTl
+              .to(content, { opacity: 1, x: 0, ease: "none", duration: 1 })
+              .to(
+                node,
+                {
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)",
+                  ease: "none",
+                  duration: 0.8,
+                },
+                "<",
+              );
           });
+        }
+
+        // Scroll-linked horizontal logo carousel (replaces CSS autoplay marquee)
+        if (!prefersReducedMotion) {
+          const marqueeSection = document.querySelector(
+            ".py-20.border-y.overflow-hidden"
+          );
+          const marqueeContent = document.querySelector(".marquee-content");
+          if (marqueeSection && marqueeContent) {
+            // Ensure we start from a defined position
+            gsap.set(marqueeContent, { x: 0 });
+            // Scrub translateX from 0 → -50% as the section passes through the viewport
+            gsap.to(marqueeContent, {
+              xPercent: -50,
+              ease: "none",
+              scrollTrigger: {
+                trigger: marqueeSection,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
+                invalidateOnRefresh: true,
+              },
+            });
+          }
         }
 
         document.addEventListener("mousemove", (e) => {
