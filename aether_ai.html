@@ -245,18 +245,25 @@
 
       .marquee-content {
         display: flex;
-        gap: 5rem;
-        padding: 0 2.5rem;
-        white-space: nowrap;
+        width: max-content;
         will-change: transform;
       }
 
+      .marquee-set {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        gap: clamp(2rem, 6vw, 5rem);
+        padding: 0 clamp(1rem, 3vw, 2.5rem);
+      }
+
       .marquee-item {
+        flex-shrink: 0;
         opacity: 0.3;
         transition:
           opacity 0.5s ease,
           filter 0.5s ease;
-        animation: opacity-pulse 8s ease-in-out infinite;
+        font-size: clamp(0.9rem, 2.8vw, 1.35rem);
       }
 
       .marquee-item:hover {
@@ -991,75 +998,113 @@
     </header>
     <!-- Trusted By Marquee -->
     <section
+      id="logo-marquee-section"
       class="py-10 md:py-20 border-y border-white/5 bg-surface-container-lowest/50 overflow-hidden"
     >
       <div class="marquee-container">
-        <div class="marquee-content">
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >QUANTUM CORE</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >NEXUS SYSTEMS</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >STRATOS INC</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >VOID LABS</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >ELEVATE DIGITAL</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >CYBERDYNE</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >NEURAL NET</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >ZENITH DATA</span
-          >
-          <!-- Duplicates -->
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >QUANTUM CORE</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >NEXUS SYSTEMS</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >STRATOS INC</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >VOID LABS</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >ELEVATE DIGITAL</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >CYBERDYNE</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >NEURAL NET</span
-          >
-          <span
-            class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200"
-            >ZENITH DATA</span
-          >
+        <div class="marquee-content" id="marquee-track">
+          <div class="marquee-set" data-marquee-set>
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >QUANTUM CORE</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >NEXUS SYSTEMS</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >STRATOS INC</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >VOID LABS</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >ELEVATE DIGITAL</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >CYBERDYNE</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >NEURAL NET</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >ZENITH DATA</span
+            >
+          </div>
+          <div class="marquee-set" data-marquee-set aria-hidden="true">
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >QUANTUM CORE</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >NEXUS SYSTEMS</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >STRATOS INC</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >VOID LABS</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >ELEVATE DIGITAL</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >CYBERDYNE</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >NEURAL NET</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >ZENITH DATA</span
+            >
+          </div>
+          <div class="marquee-set" data-marquee-set aria-hidden="true">
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >QUANTUM CORE</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >NEXUS SYSTEMS</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >STRATOS INC</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >VOID LABS</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >ELEVATE DIGITAL</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >CYBERDYNE</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >NEURAL NET</span
+            >
+            <span
+              class="marquee-item font-display-lg font-bold grayscale brightness-200"
+              >ZENITH DATA</span
+            >
+          </div>
         </div>
       </div>
     </section>
@@ -3097,29 +3142,41 @@
           });
         }
 
-        // Scroll-linked horizontal logo carousel (replaces CSS autoplay marquee)
-        if (!prefersReducedMotion) {
-          const marqueeSection = document.querySelector(
-            ".py-20.border-y.overflow-hidden",
-          );
-          const marqueeContent = document.querySelector(".marquee-content");
-          if (marqueeSection && marqueeContent) {
-            // Ensure we start from a defined position
-            gsap.set(marqueeContent, { x: 0 });
-            // Scrub translateX from 0 → -50% as the section passes through the viewport
-            gsap.to(marqueeContent, {
-              xPercent: -50,
-              ease: "none",
-              scrollTrigger: {
-                trigger: marqueeSection,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 0.5,
-                invalidateOnRefresh: true,
-              },
-            });
+        // Logo strip — translateX driven purely by scroll position (no autoplay).
+        // GSAP ScrollTrigger scrub: true + ease: "none" = 1:1 scroll lock, zero lag.
+        function initScrollLinkedLogoStrip() {
+          const section = document.getElementById("logo-marquee-section");
+          const track = document.getElementById("marquee-track");
+          const firstSet = track
+            ? track.querySelector("[data-marquee-set]")
+            : null;
+          if (!section || !track || !firstSet) return;
+
+          gsap.set(track, { x: 0, force3D: true });
+
+          if (prefersReducedMotion) return;
+
+          function getTravelDistance() {
+            const setWidth = firstSet.offsetWidth;
+            const w = window.innerWidth;
+            const multiplier = w < 640 ? 1.25 : w < 1024 ? 1.6 : 2;
+            return setWidth * multiplier;
           }
+
+          gsap.to(track, {
+            x: () => -getTravelDistance(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          });
         }
+
+        initScrollLinkedLogoStrip();
 
         // ═══════════════════════════════════════════════════════════════
         // SERVICES BENTO GRID — All animations scoped to #services only
