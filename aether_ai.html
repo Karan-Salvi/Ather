@@ -835,7 +835,7 @@
       </div>
     </section>
     <!-- Dashboard Showcase (The Control Center) -->
-    <section class="py-section-gap scroll-reveal bg-black" id="dashboard-pin">
+    <section class="py-section-gap bg-black" id="dashboard-pin">
       <div class="container mx-auto px-gutter">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <!-- Left Content Column -->
@@ -1786,6 +1786,12 @@
         document
           .querySelectorAll(".scroll-reveal, .scroll-reveal-stagger")
           .forEach((el) => {
+            // Skip any element that is #dashboard-pin itself or lives inside it —
+            // GSAP owns that element's transform; IntersectionObserver must not touch it.
+            if (
+              el.id === "dashboard-pin" ||
+              el.closest("#dashboard-pin")
+            ) return;
             el.classList.add(
               "transition-all",
               "duration-1000",
@@ -1992,6 +1998,12 @@
 
         // Recalculate ScrollTrigger on window resize to ensure correct pin boundaries
         window.addEventListener("resize", () => {
+          ScrollTrigger.refresh();
+        });
+
+        // Recalculate ScrollTrigger once all fonts/icons have fully loaded so the
+        // pin-spacer height is accurate and doesn't self-correct on first re-entry.
+        window.addEventListener("load", () => {
           ScrollTrigger.refresh();
         });
 
