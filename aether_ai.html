@@ -725,14 +725,14 @@
           <div class="w-24 h-1 bg-white mx-auto rounded-full"></div>
         </div>
         <div class="relative max-w-5xl mx-auto z-10">
-          <div
-            class="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 timeline-line hidden md:block"
-          ></div>
+          <div class="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-[2px] bg-white/10 hidden md:block">
+            <div id="timeline-scroll-line" class="w-full bg-gradient-to-b from-white to-white/40 h-0 origin-top"></div>
+          </div>
           <div class="space-y-64 py-20">
             <div
-              class="flex flex-col md:flex-row items-center gap-12 group scroll-reveal-stagger"
+              class="flex flex-col md:flex-row items-center gap-12 group timeline-step"
             >
-              <div class="md:w-1/2 md:text-right">
+              <div class="md:w-1/2 md:text-right step-content">
                 <h4
                   class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors"
                 >
@@ -744,10 +744,10 @@
                 </p>
               </div>
               <div
-                class="w-12 h-12 rounded-full bg-white flex items-center justify-center z-10 luminous-glow ring-8 ring-surface-container"
+                class="w-12 h-12 rounded-full bg-[#1b1c1c] text-[#8e9192] flex items-center justify-center z-10 ring-8 ring-surface-container step-node"
               >
                 <span
-                  class="material-symbols-outlined text-black"
+                  class="material-symbols-outlined"
                   style="font-variation-settings: &quot;FILL&quot; 1"
                   >input</span
                 >
@@ -755,9 +755,9 @@
               <div class="md:w-1/2"></div>
             </div>
             <div
-              class="flex flex-col md:flex-row-reverse items-center gap-12 group scroll-reveal-stagger"
+              class="flex flex-col md:flex-row-reverse items-center gap-12 group timeline-step"
             >
-              <div class="md:w-1/2 text-left">
+              <div class="md:w-1/2 text-left step-content">
                 <h4
                   class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors"
                 >
@@ -769,10 +769,10 @@
                 </p>
               </div>
               <div
-                class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center z-10 luminous-glow ring-8 ring-surface-container"
+                class="w-12 h-12 rounded-full bg-[#1b1c1c] text-[#8e9192] flex items-center justify-center z-10 ring-8 ring-surface-container step-node"
               >
                 <span
-                  class="material-symbols-outlined text-white"
+                  class="material-symbols-outlined"
                   style="font-variation-settings: &quot;FILL&quot; 1"
                   >settings_slow_motion</span
                 >
@@ -780,9 +780,9 @@
               <div class="md:w-1/2"></div>
             </div>
             <div
-              class="flex flex-col md:flex-row items-center gap-12 group scroll-reveal-stagger"
+              class="flex flex-col md:flex-row items-center gap-12 group timeline-step"
             >
-              <div class="md:w-1/2 md:text-right">
+              <div class="md:w-1/2 md:text-right step-content">
                 <h4
                   class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors"
                 >
@@ -794,10 +794,10 @@
                 </p>
               </div>
               <div
-                class="w-12 h-12 rounded-full bg-white flex items-center justify-center z-10 luminous-glow ring-8 ring-surface-container"
+                class="w-12 h-12 rounded-full bg-[#1b1c1c] text-[#8e9192] flex items-center justify-center z-10 ring-8 ring-surface-container step-node"
               >
                 <span
-                  class="material-symbols-outlined text-black"
+                  class="material-symbols-outlined"
                   style="font-variation-settings: &quot;FILL&quot; 1"
                   >auto_awesome</span
                 >
@@ -1901,6 +1901,57 @@
         window.addEventListener("resize", () => {
           ScrollTrigger.refresh();
         });
+
+        // Workflow Timeline scroll-linked animation
+        if (!prefersReducedMotion) {
+          // Animate connector line height on scroll through the section
+          gsap.to("#timeline-scroll-line", {
+            height: "100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: "#workflow",
+              start: "top 35%",
+              end: "bottom 65%",
+              scrub: 0.5,
+            }
+          });
+
+          // Animate steps and nodes individually as they scroll into view
+          const steps = document.querySelectorAll(".timeline-step");
+          steps.forEach((step) => {
+            const node = step.querySelector(".step-node");
+            const content = step.querySelector(".step-content");
+            const isRightSide = step.classList.contains("md:flex-row-reverse");
+            const startX = isRightSide ? 30 : -30;
+
+            // Set initial states explicitly
+            gsap.set(content, { opacity: 0.1, x: startX });
+            gsap.set(node, { 
+              backgroundColor: "#1b1c1c", 
+              color: "#8e9192", 
+              boxShadow: "0 0 0px rgba(255, 255, 255, 0)" 
+            });
+
+            // Timeline for step activation
+            const stepTl = gsap.timeline({
+              scrollTrigger: {
+                trigger: step,
+                start: "top 60%",
+                end: "top 25%",
+                scrub: 0.5,
+              }
+            });
+
+            stepTl.to(content, { opacity: 1, x: 0, ease: "none", duration: 1 })
+                  .to(node, {
+                    backgroundColor: "#ffffff",
+                    color: "#000000",
+                    boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)",
+                    ease: "none",
+                    duration: 0.8
+                  }, "<");
+          });
+        }
 
         document.addEventListener("mousemove", (e) => {
           const magnetics = document.querySelectorAll(".magnetic-hover");
