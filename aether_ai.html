@@ -612,9 +612,10 @@
         </div>
       </div>
     </section>
-    <!-- Services Bento Grid -->
-    <section id="services" class="py-section-gap container mx-auto px-gutter scroll-reveal">
-      <div class="mb-20 max-w-2xl">
+    <section id="services" class="py-section-gap container mx-auto px-gutter scroll-reveal relative">
+      <!-- Background Parallax Glow -->
+      <div id="services-bg-glow" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/[0.02] blur-[150px] rounded-full pointer-events-none z-0"></div>
+      <div class="mb-20 max-w-2xl relative z-10">
         <h2 id="services-heading" class="font-display-lg text-display-lg mb-6 leading-tight">
           Engineered for <span class="text-white">Infinite</span> Scale.
         </h2>
@@ -2229,10 +2230,12 @@
 
                 // Tilt: cursor right → right edge tilts back (rotateY positive)
                 //       cursor top  → top tilts back (rotateX negative)
+                // Lift: Animating z and scale to avoid conflicting with the scroll-parallax y tween
                 gsap.to(card, {
                   rotateX: -normY * 6,
                   rotateY: normX * 6,
-                  y: -6,
+                  z: 15,
+                  scale: 1.01,
                   duration: 0.4,
                   ease: "power2.out",
                   overwrite: "auto",
@@ -2244,7 +2247,8 @@
                 gsap.to(card, {
                   rotateX: 0,
                   rotateY: 0,
-                  y: 0,
+                  z: 0,
+                  scale: 1,
                   duration: 0.6,
                   ease: "elastic.out(1, 0.4)",
                   overwrite: "auto",
@@ -2252,27 +2256,45 @@
               });
             });
 
-            // ── 7. Subtle parallax — big card slower than small cards ──────────
-            gsap.to("#card-workflows", {
-              y: -20,
-              ease: "none",
+            // ── 7. Single ScrollTrigger Parallax Timeline ──────────────────────
+            const parallaxTl = gsap.timeline({
               scrollTrigger: {
                 trigger: servicesSection,
                 start: "top bottom",
                 end: "bottom top",
                 scrub: 0.6,
+                invalidateOnRefresh: true,
               },
             });
-            gsap.to(["#card-neural", "#card-scaling", "#card-power"], {
-              y: -40,
-              ease: "none",
-              scrollTrigger: {
-                trigger: servicesSection,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 0.6,
-              },
-            });
+
+            parallaxTl
+              // Heading and subtext drift upward at different rates
+              .to("#services-heading", { y: -60, ease: "none", duration: 1 }, 0)
+              .to("#services-subtext", { y: -30, ease: "none", duration: 1 }, 0)
+              
+              // Cards drift upward at different speeds (parallax depth)
+              .to("#card-workflows", { y: -20, ease: "none", duration: 1 }, 0)
+              .to("#card-neural", { y: -45, ease: "none", duration: 1 }, 0)
+              .to("#card-scaling", { y: -35, ease: "none", duration: 1 }, 0)
+              .to("#card-power", { y: -55, ease: "none", duration: 1 }, 0)
+              
+              // Icons move in opposite direction relative to card movement (counter-movement)
+              .to("#icon-workflows", { y: 10, ease: "none", duration: 1 }, 0)
+              .to("#icon-neural", { y: 22.5, ease: "none", duration: 1 }, 0)
+              .to("#icon-scaling", { y: 17.5, ease: "none", duration: 1 }, 0)
+              
+              // Bar chart horizontal drift
+              .to("#chart-bars", { x: -15, ease: "none", duration: 1 }, 0)
+              
+              // Background parallax depth glow
+              .fromTo("#services-bg-glow", 
+                { y: 40, scale: 0.9 }, 
+                { y: -40, scale: 1.1, ease: "none", duration: 1 }, 
+                0
+              )
+              
+              // Section-exit fade (transition into next section)
+              .to("#services-grid", { opacity: 0.85, ease: "power1.in", duration: 0.3 }, 0.7);
           }
         }
 
