@@ -359,6 +359,46 @@
       .hero-bg-glow {
         transition: transform 0.5s ease-out;
       }
+
+      /* Item 8: Gradient sweep on "INTELLIGENTLY" */
+      @keyframes gradient-sweep {
+        0% {
+          background-position: 0% 50%;
+        }
+        100% {
+          background-position: 200% 50%;
+        }
+      }
+      .gradient-text-animated {
+        background-size: 200% 100%;
+        animation: gradient-sweep 6s linear infinite;
+      }
+
+      /* Item 9: Play button pulse */
+      @keyframes play-pulse {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0;
+          transform: scale(1.4);
+        }
+      }
+
+      .play-pulse-ring {
+        animation: play-pulse 1.8s ease-in-out infinite;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .gradient-text-animated {
+          animation: none;
+        }
+        .play-pulse-ring {
+          animation: none;
+        }
+      }
     </style>
   </head>
   <body class="font-body-md selection:bg-white selection:text-black">
@@ -577,93 +617,208 @@
         class="container mx-auto px-gutter relative z-10 grid grid-cols-12 gap-unit parallax-layer"
       >
         <div
-          class="col-span-12 text-center md:text-left flex flex-col justify-center"
+          class="col-span-12 text-center md:text-left flex flex-col justify-center items-center md:items-start gap-8 z-10"
         >
+          <!-- Item 3: Live status ticker pill - crossfades between status messages -->
           <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 w-fit mb-8 mx-auto md:mx-0 opacity-0 transition-opacity duration-1000 delay-500"
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 w-fit opacity-0 transition-opacity duration-1000 delay-500"
             id="hero-badge"
           >
             <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-            <span
-              class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest"
-              >Next-Gen Intelligence Architecture</span
-            >
+            <div class="relative overflow-hidden h-[17px]">
+              <span
+                class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest absolute inset-0 status-ticker-text"
+                data-text="Next-Gen Intelligence Architecture"
+                style="opacity: 1; transform: translateY(0)"
+                >Next-Gen Intelligence Architecture</span
+              >
+              <span
+                class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest absolute inset-0 status-ticker-text"
+                data-text="1,204 workflows running now"
+                style="opacity: 0; transform: translateY(4px)"
+                >1,204 workflows running now</span
+              >
+              <span
+                class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest absolute inset-0 status-ticker-text"
+                data-text="99.99% uptime this month"
+                style="opacity: 0; transform: translateY(4px)"
+                >99.99% uptime this month</span
+              >
+            </div>
           </div>
           <h1
-            class="font-display-2xl text-display-2xl leading-[1.05] tracking-tighter mb-8 max-w-5xl"
+            class="font-display-2xl text-display-2xl leading-[1.05] tracking-tighter max-w-5xl"
             id="hero-headline"
           >
             <span class="reveal-word">AUTOMATE</span>
             <span class="reveal-word text-outline-variant">/</span> <br />
-            <span class="reveal-word gradient-text italic font-light glow-pulse"
+            <!-- Item 8: Gradient sweep applied to INTELLIGENTLY span -->
+            <span
+              class="reveal-word gradient-text gradient-text-animated italic font-light glow-pulse"
               >INTELLIGENTLY</span
             >
           </h1>
-          <div
-            class="flex flex-col md:flex-row gap-6 items-center md:items-start"
+          
+          <!-- Item 6: Terminal/log card (now in document flow) -->
+          <!-- <div
+            class="w-full max-w-md z-10"
+            id="terminal-card-wrapper"
+            style="opacity: 0"
           >
-            <p
-              class="fade-in-up font-body-lg text-body-lg text-on-surface-variant max-w-xl delay-1000"
-              id="hero-description"
+            <div
+              class="glass-panel top-light-border p-6 rounded-2xl luminous-glow pointer-events-auto text-left"
             >
-              Aether AI orchestrates complex enterprise workflows with invisible
-              precision. Seamless integration, predictive scaling, and neural
-              data processing at the speed of thought.
-            </p>
-            <div class="flex gap-4">
+              <div
+                class="font-mono-code text-mono-code text-on-surface-variant space-y-2"
+                id="terminal-log"
+              >
+                <div class="terminal-line" style="opacity: 0">
+                  $ aether deploy --env production
+                </div>
+                <div class="terminal-line" style="opacity: 0">
+                  ✓ Build complete (2.4s)
+                </div>
+                <div class="terminal-line" style="opacity: 0">
+                  ✓ 12 nodes provisioned
+                </div>
+                <div class="terminal-line" style="opacity: 0">
+                  ✓ Health check passed
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <p
+            class="fade-in-up font-body-lg text-body-lg text-on-surface-variant max-w-xl delay-1000"
+            id="hero-description"
+          >
+            Aether AI orchestrates complex enterprise workflows with invisible
+            precision. Seamless integration, predictive scaling, and neural
+            data processing at the speed of thought.
+          </p>
+          <div
+            class="flex flex-col gap-4 items-center md:items-start mt-2"
+            id="hero-btns"
+          >
+            <div class="flex flex-wrap gap-4 relative z-20 justify-center md:justify-start">
               <button
                 class="scale-in bg-white text-black font-bold px-8 py-4 rounded-xl text-body-md hover:scale-105 transition-transform luminous-glow delay-[1200ms]"
                 id="hero-btn-1"
               >
                 Deploy Now
               </button>
+              <!-- Item 9: Play icon overlay on Watch Demo button -->
               <button
-                class="scale-in glass-panel text-on-surface font-medium px-8 py-4 rounded-xl text-body-md hover:bg-white/10 transition-colors border border-white/20 delay-[1400ms]"
+                class="scale-in glass-panel text-on-surface font-medium px-8 py-4 rounded-xl text-body-md hover:bg-white/10 transition-colors border border-white/20 delay-[1400ms] flex items-center gap-3"
                 id="hero-btn-2"
               >
+                <div class="relative w-5 h-5">
+                  <div
+                    class="absolute inset-0 rounded-full border border-white/40 flex items-center justify-center"
+                  >
+                    <svg
+                      width="8"
+                      height="10"
+                      viewBox="0 0 8 10"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M0 0L8 5L0 10V0Z" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <div
+                    class="play-pulse-ring absolute inset-0 rounded-full border border-white/40"
+                  ></div>
+                </div>
                 Watch Demo
               </button>
             </div>
+            <!-- Item 7: Micro-copy under buttons -->
+            <p
+              class="font-label-sm text-label-sm text-on-surface-variant opacity-60"
+              id="hero-micro-copy"
+              style="opacity: 0"
+            >
+              No credit card required · Cancel anytime
+            </p>
+            <!-- Item 2: Social proof line with avatars -->
+            <div
+              class="flex items-center gap-3"
+              id="hero-social-proof"
+              style="opacity: 0; transform: translateY(10px)"
+            >
+              <div class="flex -space-x-2">
+                <div
+                  class="avatar-circle w-8 h-8 rounded-full bg-surface-container-high border border-white/10"
+                  style="opacity: 0; transform: scale(0.8)"
+                ></div>
+                <div
+                  class="avatar-circle w-8 h-8 rounded-full bg-surface-container-high border border-white/10"
+                  style="opacity: 0; transform: scale(0.8)"
+                ></div>
+                <div
+                  class="avatar-circle w-8 h-8 rounded-full bg-surface-container-high border border-white/10"
+                  style="opacity: 0; transform: scale(0.8)"
+                ></div>
+                <div
+                  class="avatar-circle w-8 h-8 rounded-full bg-surface-container-high border border-white/10"
+                  style="opacity: 0; transform: scale(0.8)"
+                ></div>
+              </div>
+              <span
+                class="font-label-sm text-label-sm text-on-surface-variant"
+                id="social-proof-text"
+                style="opacity: 0"
+                >Trusted by 2,000+ engineering teams</span
+              >
+            </div>
           </div>
         </div>
+        <!-- Floating Metric Cards Wrapper (2xl breakpoint prevents overlap with buttons/columns, flex-col with gap prevents vertical overlap) -->
         <div
-          class="slide-in-right absolute right-[5%] top-[20%] hidden xl:block floating-anim delay-[1600ms]"
-          id="metric-card-1"
+          class="absolute right-[5%] top-[15%] bottom-[15%] w-[340px] flex flex-col justify-between items-end gap-16 pointer-events-none z-10 hidden 2xl:flex"
         >
+          <!-- Metric Card 1 (Aligned Right) -->
           <div
-            class="glass-panel top-light-border p-8 rounded-3xl w-64 luminous-glow"
+            class="slide-in-right floating-anim delay-[1600ms] shrink-0 self-end pointer-events-auto"
+            id="metric-card-1"
           >
-            <span
-              class="material-symbols-outlined text-white mb-4"
-              style="font-size: 32px"
-              >speed</span
+            <div
+              class="glass-panel top-light-border p-8 rounded-3xl w-64 luminous-glow"
             >
-            <div class="font-display-lg text-headline-md font-bold mb-1">
-              20ms
-            </div>
-            <div class="font-body-md text-on-surface-variant">
-              Global Latency
+              <span
+                class="material-symbols-outlined text-white mb-4"
+                style="font-size: 32px"
+                >speed</span
+              >
+              <div class="font-display-lg text-headline-md font-bold mb-1">
+                20ms
+              </div>
+              <div class="font-body-md text-on-surface-variant">
+                Global Latency
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          class="slide-in-right absolute right-[15%] bottom-[15%] hidden xl:block floating-anim delay-[1800ms]"
-          id="metric-card-2"
-          style="animation-delay: -3s"
-        >
+          <!-- Metric Card 2 (Staggered Left) -->
           <div
-            class="glass-panel top-light-border p-8 rounded-3xl w-64 luminous-glow"
+            class="slide-in-right floating-anim delay-[1800ms] shrink-0 self-start pointer-events-auto"
+            id="metric-card-2"
+            style="animation-delay: -3s"
           >
-            <span
-              class="material-symbols-outlined text-outline-variant mb-4"
-              style="font-size: 32px"
-              >verified_user</span
+            <div
+              class="glass-panel top-light-border p-8 rounded-3xl w-64 luminous-glow"
             >
-            <div class="font-display-lg text-headline-md font-bold mb-1">
-              99.9%
-            </div>
-            <div class="font-body-md text-on-surface-variant">
-              Data Precision
+              <span
+                class="material-symbols-outlined text-outline-variant mb-4"
+                style="font-size: 32px"
+                >verified_user</span
+              >
+              <div class="font-display-lg text-headline-md font-bold mb-1">
+                99.9%
+              </div>
+              <div class="font-body-md text-on-surface-variant">
+                Data Precision
+              </div>
             </div>
           </div>
         </div>
@@ -675,9 +830,17 @@
           class="font-label-sm text-[10px] uppercase tracking-widest text-on-surface-variant"
           >Explore</span
         >
+        <!-- Item 1: Enhanced scroll indicator with animated segment -->
         <div
-          class="w-[1px] h-12 bg-gradient-to-b from-white/30 to-transparent"
-        ></div>
+          class="relative w-[1px] h-10 bg-white/20"
+          id="scroll-indicator-track"
+        >
+          <div
+            id="scroll-indicator-dot"
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-3 bg-white"
+            style="opacity: 1"
+          ></div>
+        </div>
       </div>
     </header>
     <!-- Trusted By Marquee -->
@@ -1804,7 +1967,8 @@
       </div>
     </footer>
     <script>
-      (function initThreeJS() {
+      (function () {
+        function initThreeJS() {
         const container = document.querySelector(".threejs-container");
         if (!container) return;
         const width = container.clientWidth;
@@ -1862,20 +2026,82 @@
         ring2.rotation.x = Math.PI / 2;
         coreGroup.add(ring1, ring2);
 
+        // Item 4: Orbiting particles on the sphere's ring paths
+        const particleGeo = new THREE.SphereGeometry(0.03, 8, 8);
+        const particleMat = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.6,
+        });
+        const particles = [];
+        const particleCount = 3;
+        for (let i = 0; i < particleCount; i++) {
+          const particle = new THREE.Mesh(particleGeo, particleMat);
+          const angle = (i / particleCount) * Math.PI * 2;
+          particle.userData = { angle, speed: 0.002 + i * 0.0005, radius: 2.5 };
+          particles.push(particle);
+          coreGroup.add(particle);
+        }
+
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
         scene.add(ambientLight);
         const pointLight = new THREE.PointLight(0xffffff, 1, 10);
         pointLight.position.set(5, 5, 5);
         scene.add(pointLight);
 
+        // Item 5: Cursor-reactive sphere tilt state
+        const tiltTarget = { x: 0, y: 0 };
+        const tiltCurrent = { x: 0, y: 0 };
+        const heroSection = document.getElementById("hero");
+
+        if (heroSection) {
+          heroSection.addEventListener("mousemove", (e) => {
+            const rect = heroSection.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const normX = (e.clientX - centerX) / (rect.width / 2);
+            const normY = (e.clientY - centerY) / (rect.height / 2);
+            tiltTarget.x = -normY * 0.1;
+            tiltTarget.y = normX * 0.1;
+          });
+
+          heroSection.addEventListener("mouseleave", () => {
+            tiltTarget.x = 0;
+            tiltTarget.y = 0;
+          });
+        }
+
         function animate() {
           requestAnimationFrame(animate);
+
+          // Smooth cursor tilt interpolation
+          tiltCurrent.x += (tiltTarget.x - tiltCurrent.x) * 0.05;
+          tiltCurrent.y += (tiltTarget.y - tiltCurrent.y) * 0.05;
+
           coreGroup.rotation.y += 0.002;
           coreGroup.rotation.x += 0.001;
+
+          // Apply cursor-reactive tilt on top of idle rotation
+          const baseRotX = coreGroup.rotation.x % (Math.PI * 2);
+          const baseRotY = coreGroup.rotation.y % (Math.PI * 2);
+          coreGroup.rotation.x = baseRotX + tiltCurrent.x;
+          coreGroup.rotation.y = baseRotY + tiltCurrent.y;
+
           innerCore.rotation.y -= 0.005;
           ring1.rotation.z += 0.003;
           ring2.rotation.z -= 0.003;
           coreGroup.position.y = Math.sin(Date.now() * 0.0008) * 0.1;
+
+          // Animate orbiting particles
+          particles.forEach((particle) => {
+            particle.userData.angle += particle.userData.speed;
+            particle.position.x =
+              Math.cos(particle.userData.angle) * particle.userData.radius;
+            particle.position.z =
+              Math.sin(particle.userData.angle) * particle.userData.radius;
+            particle.position.y = 0;
+          });
+
           renderer.render(scene, camera);
         }
 
@@ -1888,6 +2114,12 @@
         });
 
         animate();
+      }
+        try {
+          initThreeJS();
+        } catch (e) {
+          console.error("ThreeJS init failed:", e);
+        }
       })();
 
       document.addEventListener("DOMContentLoaded", () => {
@@ -1921,6 +2153,86 @@
             const el = document.getElementById(entry.id);
             if (el) setTimeout(() => el.classList.add(entry.class), 100);
           });
+
+          // Item 7: Micro-copy fade in after buttons
+          setTimeout(() => {
+            const microCopy = document.getElementById("hero-micro-copy");
+            if (microCopy) {
+              gsap.to(microCopy, { opacity: 0.6, duration: 0.8, delay: 0.3 });
+            }
+          }, 100);
+
+          // Item 2: Social proof animation - avatars stagger then text
+          setTimeout(() => {
+            const socialProof = document.getElementById("hero-social-proof");
+            const avatars = document.querySelectorAll(".avatar-circle");
+            const text = document.getElementById("social-proof-text");
+
+            if (socialProof && avatars.length > 0) {
+              gsap.to(socialProof, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                delay: 0.4,
+              });
+              avatars.forEach((avatar, i) => {
+                gsap.to(avatar, {
+                  opacity: 1,
+                  scale: 1,
+                  duration: 0.4,
+                  delay: 0.5 + i * 0.06,
+                  ease: "back.out(1.7)",
+                });
+              });
+              if (text) {
+                gsap.to(text, {
+                  opacity: 1,
+                  duration: 0.6,
+                  delay: 0.5 + avatars.length * 0.06,
+                });
+              }
+            }
+          }, 100);
+
+          // Item 6: Terminal card typewriter animation (looping)
+          const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+          ).matches;
+          if (!prefersReducedMotion) {
+            setTimeout(() => {
+              const terminalCard = document.getElementById(
+                "terminal-card-wrapper",
+              );
+              const terminalLines = document.querySelectorAll(".terminal-line");
+
+              if (terminalCard && terminalLines.length > 0) {
+                gsap.to(terminalCard, {
+                  opacity: 1,
+                  duration: 0.8,
+                  delay: 0.8,
+                });
+
+                function runTerminalLoop() {
+                  const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+                  terminalLines.forEach((line, i) => {
+                    tl.to(
+                      line,
+                      { opacity: 1, y: 0, duration: 0.5, delay: i * 0.5 },
+                      i * 0.5,
+                    );
+                  });
+                  tl.to(
+                    terminalLines,
+                    { opacity: 0, duration: 0.6, delay: 1.5 },
+                    "+=1.5",
+                  );
+                  return tl;
+                }
+
+                runTerminalLoop();
+              }
+            }, 100);
+          }
 
           setTimeout(() => {
             const g1 = document.getElementById("glow-1");
@@ -2133,7 +2445,92 @@
           }
         }
 
-        runLoader();
+        try {
+          runLoader();
+        } catch (e) {
+          console.error("Loader failed:", e);
+          // Hard-ceiling fallback if loader setup fails completely
+          const loaderEl = document.getElementById("page-loader");
+          if (loaderEl) loaderEl.style.display = "none";
+          initHeroEntrance();
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // HERO SECTION ENHANCEMENTS - Items 1 & 3
+        // ═══════════════════════════════════════════════════════════════
+
+        try {
+
+        // Item 1: Scroll indicator animation with click to scroll
+        if (!prefersReducedMotion) {
+          const scrollDot = document.getElementById("scroll-indicator-dot");
+          if (scrollDot) {
+            gsap.to(scrollDot, {
+              y: 40,
+              opacity: 0,
+              duration: 1.8,
+              ease: "power1.inOut",
+              repeat: -1,
+            });
+          }
+        }
+
+        const scrollIndicatorTrack = document.getElementById(
+          "scroll-indicator-track",
+        );
+        if (scrollIndicatorTrack) {
+          scrollIndicatorTrack.style.cursor = "pointer";
+          scrollIndicatorTrack.parentElement.style.cursor = "pointer";
+          scrollIndicatorTrack.parentElement.addEventListener("click", () => {
+            const servicesSection = document.getElementById("services");
+            if (servicesSection && window.lenis) {
+              window.lenis.scrollTo(servicesSection, {
+                offset: 0,
+                duration: 1.2,
+              });
+            } else if (servicesSection) {
+              servicesSection.scrollIntoView({ behavior: "smooth" });
+            }
+          });
+        }
+
+        // Item 3: Status ticker crossfade animation
+        if (!prefersReducedMotion) {
+          const tickerTexts = document.querySelectorAll(".status-ticker-text");
+          if (tickerTexts.length > 0) {
+            let currentIndex = 0;
+
+            function crossfadeToNext() {
+              const current = tickerTexts[currentIndex];
+              const nextIndex = (currentIndex + 1) % tickerTexts.length;
+              const next = tickerTexts[nextIndex];
+
+              const tl = gsap.timeline();
+              tl.to(current, {
+                opacity: 0,
+                y: -4,
+                duration: 0.4,
+                ease: "power2.in",
+              }).to(
+                next,
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.4,
+                  ease: "power2.out",
+                },
+                "-=0.2",
+              );
+
+              currentIndex = nextIndex;
+            }
+
+            setInterval(crossfadeToNext, 4000);
+          }
+        }
+        } catch (e) {
+          console.error("Hero Enhancements (Items 1 & 3) failed:", e);
+        }
 
         const scrollRevealObserver = new IntersectionObserver(
           (entries) => {
@@ -2745,22 +3142,26 @@
           }
         }
 
-        document.addEventListener("mousemove", (e) => {
-          const magnetics = document.querySelectorAll(".magnetic-hover");
-          magnetics.forEach((btn) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            const radius = 120;
-            if (Math.abs(x) < radius && Math.abs(y) < radius) {
-              btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.05)`;
-              btn.style.zIndex = "10";
-            } else {
-              btn.style.transform = "translate(0, 0) scale(1)";
-              btn.style.zIndex = "1";
-            }
+        try {
+          document.addEventListener("mousemove", function(e) {
+            var magnetics = document.querySelectorAll(".magnetic-hover");
+            magnetics.forEach(function(btn) {
+              var rect = btn.getBoundingClientRect();
+              var x = e.clientX - rect.left - rect.width / 2;
+              var y = e.clientY - rect.top - rect.height / 2;
+              var radius = 120;
+              if (Math.abs(x) < radius && Math.abs(y) < radius) {
+                btn.style.transform = "translate(" + (x * 0.2) + "px, " + (y * 0.2) + "px) scale(1.05)";
+                btn.style.zIndex = "10";
+              } else {
+                btn.style.transform = "translate(0, 0) scale(1)";
+                btn.style.zIndex = "1";
+              }
+            });
           });
-        });
+        } catch (error) {
+          console.error("Magnetic hover setup failed:", error);
+        }
       });
     </script>
   </body>
