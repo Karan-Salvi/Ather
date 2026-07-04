@@ -189,6 +189,22 @@
         box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
       }
 
+      /* Services card spotlight overlay — driven by --spot-x / --spot-y JS props */
+      .card-spotlight {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(
+          circle at var(--spot-x, 50%) var(--spot-y, 50%),
+          rgba(255, 255, 255, 0.08),
+          transparent 40%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 1;
+      }
+
       .marquee-container {
         position: relative;
         width: 100%;
@@ -597,26 +613,30 @@
       </div>
     </section>
     <!-- Services Bento Grid -->
-    <section class="py-section-gap container mx-auto px-gutter scroll-reveal">
+    <section id="services" class="py-section-gap container mx-auto px-gutter scroll-reveal">
       <div class="mb-20 max-w-2xl">
-        <h2 class="font-display-lg text-display-lg mb-6 leading-tight">
+        <h2 id="services-heading" class="font-display-lg text-display-lg mb-6 leading-tight">
           Engineered for <span class="text-white">Infinite</span> Scale.
         </h2>
-        <p class="font-body-lg text-body-lg text-on-surface-variant">
+        <p id="services-subtext" class="font-body-lg text-body-lg text-on-surface-variant" style="opacity:0;transform:translateY(20px)">
           Three pillars of neural architecture designed to transform technical
           debt into competitive advantage.
         </p>
       </div>
-      <div class="grid grid-cols-12 gap-8">
+      <div id="services-grid" class="grid grid-cols-12 gap-8" style="perspective:800px">
         <div
-          class="col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 relative overflow-hidden group hover:border-white/30 transition-all duration-700"
+          id="card-workflows"
+          class="stagger-item col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 relative overflow-hidden group hover:border-white/30 transition-all duration-700"
+          style="transform-style:preserve-3d"
         >
+          <div class="card-spotlight"></div>
           <div
             class="absolute -right-20 -bottom-20 w-96 h-96 bg-white/5 blur-[80px] rounded-full group-hover:bg-white/10 transition-all"
           ></div>
           <div class="relative z-10 flex flex-col justify-between h-full">
             <div>
               <span
+                id="icon-workflows"
                 class="material-symbols-outlined text-white mb-8"
                 style="font-size: 48px"
                 >hub</span
@@ -632,10 +652,12 @@
             </div>
             <div class="mt-20 flex gap-4">
               <span
+                id="pill-dynamic-routing"
                 class="px-4 py-2 glass-panel rounded-full font-label-sm text-label-sm text-on-surface-variant"
                 >Dynamic Routing</span
               >
               <span
+                id="pill-self-healing"
                 class="px-4 py-2 glass-panel rounded-full font-label-sm text-label-sm text-on-surface-variant"
                 >Self-Healing</span
               >
@@ -643,9 +665,13 @@
           </div>
         </div>
         <div
-          class="col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700"
+          id="card-neural"
+          class="stagger-item col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700 relative overflow-hidden"
+          style="transform-style:preserve-3d"
         >
+          <div class="card-spotlight"></div>
           <span
+            id="icon-neural"
             class="material-symbols-outlined text-outline-variant mb-8"
             style="font-size: 40px"
             >psychology</span
@@ -657,9 +683,13 @@
           </p>
         </div>
         <div
-          class="col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700"
+          id="card-scaling"
+          class="stagger-item col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700 relative overflow-hidden"
+          style="transform-style:preserve-3d"
         >
+          <div class="card-spotlight"></div>
           <span
+            id="icon-scaling"
             class="material-symbols-outlined text-outline-variant mb-8"
             style="font-size: 40px"
             >trending_up</span
@@ -673,8 +703,11 @@
           </p>
         </div>
         <div
-          class="col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 flex flex-col md:flex-row items-center gap-10"
+          id="card-power"
+          class="stagger-item col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden"
+          style="transform-style:preserve-3d"
         >
+          <div class="card-spotlight"></div>
           <div class="md:w-1/2">
             <h3 class="font-display-lg text-headline-md mb-4">
               Invisible Power
@@ -688,15 +721,16 @@
             class="md:w-1/2 h-40 bg-surface-container-high rounded-2xl border border-white/5 p-6 relative overflow-hidden"
           >
             <div
+              id="chart-bars"
               class="absolute inset-x-0 bottom-0 flex items-end gap-1 px-4 h-full"
             >
-              <div class="flex-1 bg-white/10 h-[20%] rounded-t"></div>
-              <div class="flex-1 bg-white/10 h-[45%] rounded-t"></div>
-              <div class="flex-1 bg-white/20 h-[30%] rounded-t"></div>
-              <div class="flex-1 bg-white/10 h-[70%] rounded-t"></div>
-              <div class="flex-1 bg-white/20 h-[50%] rounded-t"></div>
-              <div class="flex-1 bg-white/30 h-[90%] rounded-t"></div>
-              <div class="flex-1 bg-white/10 h-[60%] rounded-t"></div>
+              <div class="flex-1 bg-white/10 rounded-t" data-height="20%"></div>
+              <div class="flex-1 bg-white/10 rounded-t" data-height="45%"></div>
+              <div class="flex-1 bg-white/20 rounded-t" data-height="30%"></div>
+              <div class="flex-1 bg-white/10 rounded-t" data-height="70%"></div>
+              <div class="flex-1 bg-white/20 rounded-t" data-height="50%"></div>
+              <div class="flex-1 bg-white/30 rounded-t" data-height="90%"></div>
+              <div class="flex-1 bg-white/10 rounded-t" data-height="60%"></div>
             </div>
           </div>
         </div>
@@ -2036,6 +2070,195 @@
                 end: "bottom top",
                 scrub: 0.5,
                 invalidateOnRefresh: true,
+              },
+            });
+          }
+        }
+
+
+        // ═══════════════════════════════════════════════════════════════
+        // SERVICES BENTO GRID — All animations scoped to #services only
+        // ═══════════════════════════════════════════════════════════════
+        if (!prefersReducedMotion) {
+          const servicesSection = document.getElementById("services");
+          if (servicesSection) {
+
+            // ── 1. Heading entrance (scroll into view, fire once) ──────────────
+            ScrollTrigger.create({
+              trigger: servicesSection,
+              start: "top 85%",
+              once: true,
+              onEnter: () => {
+                // Animate subtext in with 150ms delay after heading would reveal
+                gsap.to("#services-subtext", {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.9,
+                  ease: "power2.out",
+                  delay: 0.15,
+                });
+              },
+            });
+
+            // ── 2 + 3. Card entrance stagger + icon bounces ────────────────────
+            // Initial hidden states — scoped to #services cards only
+            const serviceCards = servicesSection.querySelectorAll(".stagger-item");
+            gsap.set(serviceCards, { opacity: 0, y: 40 });
+
+            const iconIds = ["#icon-workflows", "#icon-neural", "#icon-scaling"];
+            iconIds.forEach((id) => {
+              gsap.set(id, { scale: 0.5, rotation: -15, opacity: 0 });
+            });
+
+            // Pill tags initial state
+            gsap.set(["#pill-dynamic-routing", "#pill-self-healing"], {
+              scale: 0.7,
+              opacity: 0,
+            });
+
+            ScrollTrigger.create({
+              trigger: servicesSection,
+              start: "top 85%",
+              once: true,
+              onEnter: () => {
+                // Cards stagger in: big card → Neural → Scaling → Power
+                const cardOrder = [
+                  "#card-workflows",
+                  "#card-neural",
+                  "#card-scaling",
+                  "#card-power",
+                ];
+                cardOrder.forEach((sel, i) => {
+                  const delay = i * 0.12;
+                  gsap.to(sel, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.9,
+                    ease: "power3.out",
+                    delay,
+                  });
+
+                  // Icon bounce: fires 200ms after its card starts
+                  const iconSel = iconIds[i]; // card-power has no icon (index 3)
+                  if (iconSel) {
+                    gsap.to(iconSel, {
+                      scale: 1,
+                      rotation: 0,
+                      opacity: 1,
+                      duration: 0.7,
+                      ease: "back.out(1.7)",
+                      delay: delay + 0.2,
+                    });
+                  }
+                });
+
+                // Pill tags: 500ms after the workflows card starts
+                gsap.to(["#pill-dynamic-routing", "#pill-self-healing"], {
+                  scale: 1,
+                  opacity: 1,
+                  duration: 0.6,
+                  ease: "back.out(2)",
+                  stagger: 0.08,
+                  delay: 0.5,
+                });
+              },
+            });
+
+            // ── 5. Bar chart — scroll-scrubbed height growth ───────────────────
+            const chartBars = document.querySelectorAll("#chart-bars > div");
+            const barTargets = [];
+            chartBars.forEach((bar) => {
+              const h = bar.getAttribute("data-height") || "0%";
+              barTargets.push(parseFloat(h));
+              gsap.set(bar, { height: "0%" });
+            });
+
+            const barTl = gsap.timeline({
+              scrollTrigger: {
+                trigger: servicesSection,
+                start: "top 70%",
+                end: "top 20%",
+                scrub: 0.6,
+              },
+            });
+
+            // Stagger bars across 85% of the scrub range (15% overlap at end)
+            const scrubSpan = 0.85;
+            const barStep = scrubSpan / (chartBars.length - 1);
+            chartBars.forEach((bar, i) => {
+              const pos = i * barStep;
+              barTl.to(
+                bar,
+                { height: `${barTargets[i]}%`, ease: "power1.inOut", duration: 0.4 },
+                pos,
+              );
+            });
+
+            // ── 6. Cursor-reactive tilt + spotlight on all four cards ──────────
+            serviceCards.forEach((card) => {
+              const spotlight = card.querySelector(".card-spotlight");
+
+              card.addEventListener("mouseenter", () => {
+                if (spotlight) spotlight.style.opacity = "1";
+              });
+
+              card.addEventListener("mousemove", (e) => {
+                const rect = card.getBoundingClientRect();
+                const relX = (e.clientX - rect.left) / rect.width;   // 0→1
+                const relY = (e.clientY - rect.top) / rect.height;   // 0→1
+                const normX = relX * 2 - 1;  // -1→1
+                const normY = relY * 2 - 1;  // -1→1
+
+                // Update spotlight position CSS vars
+                if (spotlight) {
+                  card.style.setProperty("--spot-x", `${relX * 100}%`);
+                  card.style.setProperty("--spot-y", `${relY * 100}%`);
+                }
+
+                // Tilt: cursor right → right edge tilts back (rotateY positive)
+                //       cursor top  → top tilts back (rotateX negative)
+                gsap.to(card, {
+                  rotateX: -normY * 6,
+                  rotateY: normX * 6,
+                  y: -6,
+                  duration: 0.4,
+                  ease: "power2.out",
+                  overwrite: "auto",
+                });
+              });
+
+              card.addEventListener("mouseleave", () => {
+                if (spotlight) spotlight.style.opacity = "0";
+                gsap.to(card, {
+                  rotateX: 0,
+                  rotateY: 0,
+                  y: 0,
+                  duration: 0.6,
+                  ease: "elastic.out(1, 0.4)",
+                  overwrite: "auto",
+                });
+              });
+            });
+
+            // ── 7. Subtle parallax — big card slower than small cards ──────────
+            gsap.to("#card-workflows", {
+              y: -20,
+              ease: "none",
+              scrollTrigger: {
+                trigger: servicesSection,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.6,
+              },
+            });
+            gsap.to(["#card-neural", "#card-scaling", "#card-power"], {
+              y: -40,
+              ease: "none",
+              scrollTrigger: {
+                trigger: servicesSection,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.6,
               },
             });
           }
