@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aether AI | Automated Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#000000",
+                        "surface": "#131313",
+                        "outline": "#8e9192",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary-fixed": "#1a1c1c",
+                        "on-primary-fixed-variant": "#454747",
+                        "on-tertiary": "#303030",
+                        "primary-container": "#e2e2e2",
+                        "surface-variant": "#353535",
+                        "primary-fixed-dim": "#c6c6c7",
+                        "secondary-container": "#464747",
+                        "primary": "#ffffff",
+                        "secondary-fixed": "#e3e2e2",
+                        "inverse-surface": "#e2e2e2",
+                        "inverse-on-surface": "#303030",
+                        "on-error": "#690005",
+                        "surface-tint": "#c6c6c7",
+                        "tertiary": "#ffffff",
+                        "surface-container": "#1f1f1f",
+                        "tertiary-container": "#e5e2e1",
+                        "on-primary-container": "#636565",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#b5b5b5",
+                        "on-tertiary-container": "#656464",
+                        "surface-bright": "#393939",
+                        "inverse-primary": "#5d5f5f",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "tertiary-fixed": "#e5e2e1",
+                        "outline-variant": "#444748",
+                        "on-surface": "#e2e2e2",
+                        "on-primary": "#2f3131",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "secondary": "#c7c6c6",
+                        "surface-dim": "#131313",
+                        "on-surface-variant": "#c4c7c8",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-low": "#1b1b1b",
+                        "on-background": "#e2e2e2",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-secondary": "#303031",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "primary-fixed": "#e2e2e2",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "surface-container-highest": "#353535"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "16px",
+                        "section-gap": "120px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Geist"],
+                        "label-sm": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-md": ["Geist"],
+                        "label-caps": ["JetBrains Mono"],
+                        "display-2xl": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "mono-code": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-caps": ["10px", {"lineHeight": "1", "letterSpacing": "0.2em", "fontWeight": "700"}],
+                        "display-2xl": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                        "mono-code": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #e2e2e2;
+            overflow-x: hidden;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .top-light-border {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .magnetic-hover {
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .luminous-glow {
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
+        }
+
+        .marquee-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 5rem;
+            padding: 0 2.5rem;
+            white-space: nowrap;
+            animation: marquee-scroll 40s linear infinite;
+        }
+
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee-scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .marquee-item {
+            opacity: 0.3;
+            transition: opacity 0.5s ease, filter 0.5s ease;
+            animation: opacity-pulse 8s ease-in-out infinite;
+        }
+
+        .marquee-item:hover {
+            opacity: 0.8;
+            filter: grayscale(1);
+        }
+
+        @keyframes opacity-pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .floating-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .timeline-line {
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
+            width: 2px;
+        }
+
+        .reveal-word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal-word.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+        .fade-in-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 1s cubic-bezier(0.34, 1.56, 0.64, 1), transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .scale-in.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 1s ease-out, transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .slide-in-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .glow-pulse {
+            animation: text-glow 3s ease-in-out infinite;
+        }
+        @keyframes text-glow {
+            0%, 100% { text-shadow: 0 0 0px rgba(255, 255, 255, 0); }
+            50% { text-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
+        }
+
+        .horizontal-scroll-wrapper {
+            display: flex;
+            gap: 3rem;
+            padding-bottom: 2rem;
+            will-change: transform;
+        }
+
+        .hero-bg-glow {
+            transition: transform 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="font-body-md selection:bg-white selection:text-black">
+<!-- Navbar -->
+<nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl rounded-full bg-surface/30 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex justify-between items-center px-8 py-3 z-50 -translate-y-20 opacity-0 transition-all duration-1000 ease-out" id="navbar">
+<div class="flex items-center gap-2">
+<img alt="Aether AI Logo" class="w-8 h-8 object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida/AP1WRLvOgsQBTx5OgCVMRKD1U_SqaJ-nTu8W53HVRhpBGNC8oD2PoS8eiFkTOOEm3ndG4wfy_P8562uNS1xeqBPj-hRWTGECqtbAKIJ7I3139oRRMDq8zRd1aOxggGgmJKMp65UoO45aZPOW5XYfVGNpnAgJn7xNXP3jmnJtKlXmBkTm40lPP7BlKVZRoG4qP6ymJvCJRrOhPGZO6miiCCgYEe1UYGfwEwXwM_51_ZizhD8ZdcVtz-tcqJFMHMQ"/>
+<span class="font-display-lg text-headline-md font-bold tracking-tight text-on-surface">Aether AI</span>
+</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-white font-medium font-body-md transition-all hover:scale-105 active:scale-95" href="#">Platform</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95" href="#">Workflows</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95" href="#">Solutions</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95" href="#">Pricing</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface font-body-md transition-all hover:scale-105 active:scale-95 px-4 py-2">Login</button>
+<button class="bg-white text-black font-medium px-6 py-2.5 rounded-full font-body-md hover:scale-105 active:scale-95 transition-all duration-300 luminous-glow">Get Started</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden" id="hero">
+<div class="absolute inset-0 z-0">
+<div class="hero-bg-glow absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-white/5 blur-[120px] rounded-full scale-0 opacity-0 transition-all duration-[2000ms]" id="glow-1"></div>
+<div class="hero-bg-glow absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-white/5 blur-[150px] rounded-full scale-0 opacity-0 transition-all duration-[2500ms]" id="glow-2"></div>
+</div>
+<div class="threejs-container absolute top-1/2 right-[10%] -translate-y-1/2 w-[600px] h-[600px] pointer-events-none z-0"></div>
+<div class="container mx-auto px-gutter relative z-10 grid grid-cols-12 gap-unit parallax-layer">
+<div class="col-span-12 text-center md:text-left flex flex-col justify-center">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 w-fit mb-8 mx-auto md:mx-0 opacity-0 transition-opacity duration-1000 delay-500" id="hero-badge">
+<span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Next-Gen Intelligence Architecture</span>
+</div>
+<h1 class="font-display-2xl text-display-2xl leading-[1.05] tracking-tighter mb-8 max-w-5xl" id="hero-headline">
+<span class="reveal-word">AUTOMATE</span> <span class="reveal-word text-outline-variant">/</span> <br/>
+<span class="reveal-word gradient-text italic font-light glow-pulse">INTELLIGENTLY</span>
+</h1>
+<div class="flex flex-col md:flex-row gap-6 items-center md:items-start">
+<p class="fade-in-up font-body-lg text-body-lg text-on-surface-variant max-w-xl delay-1000" id="hero-description">
+    Aether AI orchestrates complex enterprise workflows with invisible precision. Seamless integration, predictive scaling, and neural data processing at the speed of thought.
+</p>
+<div class="flex gap-4">
+<button class="scale-in bg-white text-black font-bold px-8 py-4 rounded-xl text-body-md hover:scale-105 transition-transform luminous-glow delay-[1200ms]" id="hero-btn-1">Deploy Now</button>
+<button class="scale-in glass-panel text-on-surface font-medium px-8 py-4 rounded-xl text-body-md hover:bg-white/10 transition-colors border border-white/20 delay-[1400ms]" id="hero-btn-2">Watch Demo</button>
+</div>
+</div>
+</div>
+<div class="slide-in-right absolute right-[5%] top-[20%] hidden xl:block floating-anim delay-[1600ms]" id="metric-card-1">
+<div class="glass-panel top-light-border p-8 rounded-3xl w-64 luminous-glow">
+<span class="material-symbols-outlined text-white mb-4" style="font-size: 32px;">speed</span>
+<div class="font-display-lg text-headline-md font-bold mb-1">20ms</div>
+<div class="font-body-md text-on-surface-variant">Global Latency</div>
+</div>
+</div>
+<div class="slide-in-right absolute right-[15%] bottom-[15%] hidden xl:block floating-anim delay-[1800ms]" id="metric-card-2" style="animation-delay: -3s;">
+<div class="glass-panel top-light-border p-8 rounded-3xl w-64 luminous-glow">
+<span class="material-symbols-outlined text-outline-variant mb-4" style="font-size: 32px;">verified_user</span>
+<div class="font-display-lg text-headline-md font-bold mb-1">99.9%</div>
+<div class="font-body-md text-on-surface-variant">Data Precision</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+<span class="font-label-sm text-[10px] uppercase tracking-widest text-on-surface-variant">Explore</span>
+<div class="w-[1px] h-12 bg-gradient-to-b from-white/30 to-transparent"></div>
+</div>
+</header>
+<!-- Trusted By Marquee -->
+<section class="py-20 border-y border-white/5 bg-surface-container-lowest/50 overflow-hidden">
+<div class="marquee-container">
+<div class="marquee-content">
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">QUANTUM CORE</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">NEXUS SYSTEMS</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">STRATOS INC</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">VOID LABS</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">ELEVATE DIGITAL</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">CYBERDYNE</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">NEURAL NET</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">ZENITH DATA</span>
+<!-- Duplicates -->
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">QUANTUM CORE</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">NEXUS SYSTEMS</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">STRATOS INC</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">VOID LABS</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">ELEVATE DIGITAL</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">CYBERDYNE</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">NEURAL NET</span>
+<span class="marquee-item font-display-lg text-headline-md font-bold grayscale brightness-200">ZENITH DATA</span>
+</div>
+</div>
+</section>
+<!-- Services Bento Grid -->
+<section class="py-section-gap container mx-auto px-gutter scroll-reveal">
+<div class="mb-20 max-w-2xl">
+<h2 class="font-display-lg text-display-lg mb-6 leading-tight">Engineered for <span class="text-white">Infinite</span> Scale.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Three pillars of neural architecture designed to transform technical debt into competitive advantage.</p>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<div class="col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 relative overflow-hidden group hover:border-white/30 transition-all duration-700">
+<div class="absolute -right-20 -bottom-20 w-96 h-96 bg-white/5 blur-[80px] rounded-full group-hover:bg-white/10 transition-all"></div>
+<div class="relative z-10 flex flex-col justify-between h-full">
+<div>
+<span class="material-symbols-outlined text-white mb-8" style="font-size: 48px;">hub</span>
+<h3 class="font-display-lg text-headline-md mb-4">Autonomous Workflows</h3>
+<p class="font-body-md text-on-surface-variant max-w-md">Self-healing pipelines that adapt to environment changes in real-time. Aether monitors, predicts, and fixes bottlenecks before they impact delivery.</p>
+</div>
+<div class="mt-20 flex gap-4">
+<span class="px-4 py-2 glass-panel rounded-full font-label-sm text-label-sm text-on-surface-variant">Dynamic Routing</span>
+<span class="px-4 py-2 glass-panel rounded-full font-label-sm text-label-sm text-on-surface-variant">Self-Healing</span>
+</div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700">
+<span class="material-symbols-outlined text-outline-variant mb-8" style="font-size: 40px;">psychology</span>
+<h3 class="font-display-lg text-headline-md mb-4">Neural Data</h3>
+<p class="font-body-md text-on-surface-variant">Transforming unstructured noise into structured gold through deep semantic layers.</p>
+</div>
+<div class="col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700">
+<span class="material-symbols-outlined text-outline-variant mb-8" style="font-size: 40px;">trending_up</span>
+<h3 class="font-display-lg text-headline-md mb-4">Predictive Scaling</h3>
+<p class="font-body-md text-on-surface-variant">Provision resources based on future traffic patterns, not past mistakes.</p>
+</div>
+<div class="col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 flex flex-col md:flex-row items-center gap-10">
+<div class="md:w-1/2">
+<h3 class="font-display-lg text-headline-md mb-4">Invisible Power</h3>
+<p class="font-body-md text-on-surface-variant">Infrastructure that feels like a utility. Silent, reliable, and omnipresent across your global stack.</p>
+</div>
+<div class="md:w-1/2 h-40 bg-surface-container-high rounded-2xl border border-white/5 p-6 relative overflow-hidden">
+<div class="absolute inset-x-0 bottom-0 flex items-end gap-1 px-4 h-full">
+<div class="flex-1 bg-white/10 h-[20%] rounded-t"></div>
+<div class="flex-1 bg-white/10 h-[45%] rounded-t"></div>
+<div class="flex-1 bg-white/20 h-[30%] rounded-t"></div>
+<div class="flex-1 bg-white/10 h-[70%] rounded-t"></div>
+<div class="flex-1 bg-white/20 h-[50%] rounded-t"></div>
+<div class="flex-1 bg-white/30 h-[90%] rounded-t"></div>
+<div class="flex-1 bg-white/10 h-[60%] rounded-t"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Workflow Timeline -->
+<section class="py-section-gap relative" id="workflow">
+<div class="container mx-auto px-gutter">
+<div class="text-center mb-24 sticky top-[15%] z-0">
+<h2 class="font-display-lg text-display-lg mb-6">How Aether <span class="italic font-light">Breathes</span></h2>
+<div class="w-24 h-1 bg-white mx-auto rounded-full"></div>
+</div>
+<div class="relative max-w-5xl mx-auto z-10">
+<div class="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 timeline-line hidden md:block"></div>
+<div class="space-y-64 py-20">
+<div class="flex flex-col md:flex-row items-center gap-12 group scroll-reveal-stagger">
+<div class="md:w-1/2 md:text-right">
+<h4 class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors">01. Neural Ingestion</h4>
+<p class="font-body-md text-on-surface-variant">Connect any data source. Our neural adapter sanitizes and contextualizes input in milliseconds.</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center z-10 luminous-glow ring-8 ring-surface-container">
+<span class="material-symbols-outlined text-black" style="font-variation-settings: 'FILL' 1;">input</span>
+</div>
+<div class="md:w-1/2"></div>
+</div>
+<div class="flex flex-col md:flex-row-reverse items-center gap-12 group scroll-reveal-stagger">
+<div class="md:w-1/2 text-left">
+<h4 class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors">02. Atomic Processing</h4>
+<p class="font-body-md text-on-surface-variant">Workflows are broken down into atomic tasks and executed across our global edge network.</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center z-10 luminous-glow ring-8 ring-surface-container">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">settings_slow_motion</span>
+</div>
+<div class="md:w-1/2"></div>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-12 group scroll-reveal-stagger">
+<div class="md:w-1/2 md:text-right">
+<h4 class="font-display-lg text-headline-md mb-4 group-hover:text-white transition-colors">03. Predictive Output</h4>
+<p class="font-body-md text-on-surface-variant">Results are delivered with deep analytics and suggested next actions based on historical success.</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center z-10 luminous-glow ring-8 ring-surface-container">
+<span class="material-symbols-outlined text-black" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="md:w-1/2"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Dashboard Showcase (The Control Center) -->
+<section class="py-section-gap scroll-reveal bg-black" id="control-center">
+<div class="container mx-auto px-gutter">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left Content Column -->
+<div class="lg:col-span-4 flex flex-col items-start text-left">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-8 tracking-[0.25em] uppercase opacity-70">The Control Center</div>
+<h2 class="font-display-lg text-[64px] font-bold leading-[1.05] tracking-tighter mb-10 text-white">
+        Orchestrate from a <br/>single glass pane.
+</h2>
+<ul class="space-y-6 mb-12">
+<li class="flex items-center gap-4 group">
+<span class="material-symbols-outlined text-white text-[24px]" style="font-variation-settings: 'FILL' 0, 'wght' 300;">check_circle</span>
+<span class="font-body-md text-[18px] text-on-surface-variant group-hover:text-white transition-colors">Real-time throughput monitoring</span>
+</li>
+<li class="flex items-center gap-4 group">
+<span class="material-symbols-outlined text-white text-[24px]" style="font-variation-settings: 'FILL' 0, 'wght' 300;">check_circle</span>
+<span class="font-body-md text-[18px] text-on-surface-variant group-hover:text-white transition-colors">One-click deployment rollbacks</span>
+</li>
+<li class="flex items-center gap-4 group">
+<span class="material-symbols-outlined text-white text-[24px]" style="font-variation-settings: 'FILL' 0, 'wght' 300;">check_circle</span>
+<span class="font-body-md text-[18px] text-on-surface-variant group-hover:text-white transition-colors">AI-suggested optimization paths</span>
+</li>
+</ul>
+<button class="magnetic-hover bg-white text-black font-bold px-10 py-4 rounded-xl text-body-md hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all">Explore Dashboard</button>
+</div>
+<!-- Right Dashboard Column -->
+<div class="lg:col-span-8 relative">
+<div class="dashboard-shell bg-[#0a0a0a] rounded-[32px] border border-white/10 p-4 md:p-6 shadow-2xl relative overflow-hidden">
+<!-- Dashboard Top Bar -->
+<div class="flex items-center justify-between border-b border-white/5 pb-4 mb-8">
+<div class="flex gap-2.5">
+<div class="w-3 h-3 rounded-full bg-white/20"></div>
+<div class="w-3 h-3 rounded-full bg-white/20"></div>
+<div class="w-3 h-3 rounded-full bg-white/20"></div>
+</div>
+<div class="bg-white/5 px-6 py-1.5 rounded-lg border border-white/5 text-[12px] text-on-surface-variant font-mono-code tracking-tight">aether.sh/dashboard/v4</div>
+<div class="w-12"></div>
+</div>
+<!-- Dashboard Content Grid -->
+<div class="grid grid-cols-12 gap-6 h-[480px]">
+<!-- Left Sub-modules -->
+<div class="col-span-4 space-y-6">
+<div class="glass-panel border-white/10 rounded-2xl p-6 h-[180px] flex flex-col justify-between">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest">Network Health</div>
+<div class="w-full h-20 bg-white/5 rounded-lg relative overflow-hidden border border-white/5">
+<div class="absolute inset-y-0 left-0 bg-white/20 w-3/4 animate-pulse"></div>
+</div>
+</div>
+<div class="glass-panel border-white/10 rounded-2xl p-6 flex-1 h-[200px]">
+<div class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest mb-8">Active Models</div>
+<div class="space-y-4">
+<div class="h-2 w-full bg-white/10 rounded-full"></div>
+<div class="h-2 w-4/5 bg-white/10 rounded-full opacity-60"></div>
+<div class="h-2 w-2/3 bg-white/10 rounded-full opacity-30"></div>
+<div class="h-2 w-3/4 bg-white/10 rounded-full opacity-10"></div>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="col-span-8 glass-panel border-white/10 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-white/[0.02] to-transparent">
+<div class="relative group">
+<!-- Glow and Central Node -->
+<div class="w-64 h-64 border border-white/10 rounded-full animate-[spin_20s_linear_infinite] flex items-center justify-center">
+<div class="w-48 h-48 border border-white/5 rounded-full"></div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-32 h-32 bg-white/10 rounded-full blur-[60px] animate-pulse"></div>
+<span class="material-symbols-outlined text-white text-6xl group-hover:scale-110 transition-transform duration-700" style="font-variation-settings: 'FILL' 1, 'wght' 200;">flare</span>
+</div>
+</div>
+<!-- AI Insight Card Floating -->
+<div class="absolute right-6 top-1/2 -translate-y-1/2 glass-panel p-6 rounded-2xl border-white/20 luminous-glow shadow-2xl max-w-[240px] z-20 backdrop-blur-2xl">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-2.5 h-2.5 rounded-full bg-white/60 animate-pulse"></div>
+<span class="font-label-caps text-[10px] text-white tracking-widest">AI INSIGHT</span>
+</div>
+<p class="font-mono-code text-[12px] leading-relaxed text-on-surface-variant">Optimize node clusters in Frankfurt for 12% lower cost.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Statistics -->
+<section class="py-section-gap container mx-auto px-gutter scroll-reveal">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
+<div class="p-8">
+<div class="font-display-2xl text-white text-display-2xl mb-4">400M+</div>
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Daily Requests</div>
+</div>
+<div class="p-8">
+<div class="font-display-2xl text-white text-display-2xl mb-4">120+</div>
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Data Sources</div>
+</div>
+<div class="p-8">
+<div class="font-display-2xl text-white text-display-2xl mb-4">99.99</div>
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Uptime SLA</div>
+</div>
+<div class="p-8">
+<div class="font-display-2xl text-on-surface-variant text-display-2xl mb-4">2.4s</div>
+<div class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Setup Time</div>
+</div>
+</div>
+</section>
+<!-- Case Studies -->
+<section class="py-section-gap bg-background overflow-hidden" id="cases-section">
+<div class="container mx-auto px-gutter mb-16">
+<div class="flex justify-between items-end">
+<h2 class="font-display-lg text-display-lg text-white">Success in <br/><span class="text-on-surface-variant">Motion.</span></h2>
+<button class="font-body-md text-white border-b border-white hover:opacity-70 transition-all">View All Archive</button>
+</div>
+</div>
+<div class="px-gutter" id="horizontal-container">
+<div class="horizontal-scroll-wrapper" id="horizontal-scroll">
+<div class="min-w-[80vw] md:min-w-[45vw] group cursor-pointer">
+<div class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8">
+<div class="absolute inset-0 bg-black opacity-60 group-hover:opacity-20 transition-opacity duration-700"></div>
+<div class="w-full h-full bg-cover bg-center grayscale transition-transform duration-700 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDBUhPAcUctaFcNGYfrlFHBo_Kjr_hr5rPavateDmltaBFs8-88bE1E6m84Le8bSotMK2LpCoUlEwjqsXcSx9edoYAQKrEKz2ksz_cVhkIw5RTxY5qaGnmc5ocq7fi2fOFeYjkjTIhi7T2Xu3V3ds13aYr0s78VA9t8X0keU7r1CB2JawOj4m1ztGjIUiA1uDrNvQVJ9KiObhTY_nibn5h-fqEsaMykwhE6M7jPwa_ejo15-EBrbw8h')"></div>
+<div class="absolute top-6 left-6 flex gap-2">
+<span class="px-4 py-1 glass-panel rounded-full font-label-sm text-label-sm text-white">Enterprise</span>
+<span class="px-4 py-1 glass-panel rounded-full font-label-sm text-label-sm text-white">Automation</span>
+</div>
+</div>
+<h3 class="font-display-lg text-headline-md mb-2 text-white group-hover:text-on-surface-variant transition-colors">Nexus Energy: Grid Optimization</h3>
+<p class="font-body-md text-on-surface-variant">How Aether reduced energy waste by 34% using predictive neural nodes across a national power grid.</p>
+</div>
+<div class="min-w-[80vw] md:min-w-[45vw] group cursor-pointer">
+<div class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8">
+<div class="absolute inset-0 bg-black opacity-60 group-hover:opacity-20 transition-opacity duration-700"></div>
+<div class="w-full h-full bg-cover bg-center grayscale transition-transform duration-700 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAHpbEsDnmEA4bumAswXHWmcnOTS0zGeN4oAIchnPmAip82tVsm1MH4Ojp_06NXPsaaiQ_2sJCqb0i02-nDn-0JrXVN4TOShEI1IosuoOPEWGGEgtrMU677UUYFya6kja5MP3fjhdq6y7bcC4sb8hYloUlilCPIvmG7_Wz3Y0zKbIr2X3LR1SOYgpk8NqJ9E0yBV8x3j-FeG6MP02vl1VPDw5ysbQshRZPm80QsjUfTfTsjGS555snn')"></div>
+<div class="absolute top-6 left-6 flex gap-2">
+<span class="px-4 py-1 glass-panel rounded-full font-label-sm text-label-sm text-white">Healthcare</span>
+<span class="px-4 py-1 glass-panel rounded-full font-label-sm text-label-sm text-white">Big Data</span>
+</div>
+</div>
+<h3 class="font-display-lg text-headline-md mb-2 text-white group-hover:text-on-surface-variant transition-colors">BioSynthetix: Rapid Drug Discovery</h3>
+<p class="font-body-md text-on-surface-variant">Accelerating molecular simulation workflows from months to days using autonomous atomic processing.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-section-gap scroll-reveal">
+<div class="container mx-auto px-gutter">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="glass-panel top-light-border p-12 rounded-[40px] relative">
+<span class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8">“</span>
+<p class="font-body-lg text-white italic mb-10 relative z-10 leading-relaxed">
+                        Aether AI didn't just improve our workflow; it fundamentally redefined how we approach data architecture. The 'invisible' part isn't just marketing—it really just works.
+                    </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high border border-white/10"></div>
+<div>
+<div class="font-headline-md text-body-md font-bold text-white">Sarah Chen</div>
+<div class="font-label-sm text-[12px] text-on-surface-variant">CTO, Nexus Systems</div>
+</div>
+</div>
+</div>
+<div class="glass-panel top-light-border p-12 rounded-[40px] relative md:mt-12">
+<span class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8">“</span>
+<p class="font-body-lg text-white italic mb-10 relative z-10 leading-relaxed">
+                        The latency we achieved with their Neural Processing nodes allowed us to launch real-time features we previously thought were impossible.
+                    </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high border border-white/10"></div>
+<div>
+<div class="font-headline-md text-body-md font-bold text-white">Marcus Thorne</div>
+<div class="font-label-sm text-[12px] text-on-surface-variant">Lead Architect, Stratos</div>
+</div>
+</div>
+</div>
+<div class="glass-panel top-light-border p-12 rounded-[40px] relative">
+<span class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8">“</span>
+<p class="font-body-lg text-white italic mb-10 relative z-10 leading-relaxed">
+                        Setting up Aether was faster than setting up a basic CRM. It’s the first time an enterprise tool has felt like it was built for elite humans.
+                    </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high border border-white/10"></div>
+<div>
+<div class="font-headline-md text-body-md font-bold text-white">Elena Rodriguez</div>
+<div class="font-label-sm text-[12px] text-on-surface-variant">Director of Innovation, Elevate</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing -->
+<section class="py-section-gap bg-surface-container-lowest scroll-reveal">
+<div class="container mx-auto px-gutter">
+<div class="text-center mb-16">
+<h2 class="font-display-lg text-display-lg mb-4 text-white">Select Your <span class="text-on-surface-variant">Tier</span></h2>
+<p class="font-body-md text-on-surface-variant">Scale precisely as you grow. No hidden fees, only power.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+<div class="glass-panel top-light-border p-10 rounded-[40px] hover:scale-105 transition-transform duration-500">
+<div class="font-label-sm text-label-sm mb-4 text-on-surface-variant uppercase tracking-widest">Growth</div>
+<div class="font-display-lg text-headline-md mb-6 text-white">$499 <span class="text-body-md font-normal opacity-50">/mo</span></div>
+<ul class="space-y-4 mb-10 text-on-surface-variant font-body-md">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> 1M Monthly Requests</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> Standard Neural Ingestion</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> 24/5 Community Support</li>
+</ul>
+<button class="w-full py-4 rounded-xl border border-white/20 text-white font-bold hover:bg-white/5 transition-colors">Start Trial</button>
+</div>
+<div class="glass-panel border-white/40 bg-white/5 p-10 rounded-[40px] scale-110 relative z-10 luminous-glow">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Most Popular</div>
+<div class="font-label-sm text-label-sm mb-4 text-white uppercase tracking-widest">Enterprise</div>
+<div class="font-display-lg text-headline-md mb-6 text-white">$2,499 <span class="text-body-md font-normal opacity-50">/mo</span></div>
+<ul class="space-y-4 mb-10 text-white font-body-md">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> Unlimited Requests</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> Full Neural Suite</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> 24/7 Priority Concierge</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> Custom Model Training</li>
+</ul>
+<button class="w-full py-4 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition-transform">Get Started</button>
+</div>
+<div class="glass-panel top-light-border p-10 rounded-[40px] hover:scale-105 transition-transform duration-500">
+<div class="font-label-sm text-label-sm mb-4 text-on-surface-variant uppercase tracking-widest">Government</div>
+<div class="font-display-lg text-headline-md mb-6 text-white">Custom</div>
+<ul class="space-y-4 mb-10 text-on-surface-variant font-body-md">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> Air-gapped Deployment</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> Dedicated GPU Clusters</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-white text-sm">check</span> On-site Consultation</li>
+</ul>
+<button class="w-full py-4 rounded-xl border border-white/20 text-white font-bold hover:bg-white/5 transition-colors">Contact Sales</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Massive CTA -->
+<section class="py-[200px] relative overflow-hidden text-center scroll-reveal">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[600px] bg-white/10 blur-[150px] rounded-full"></div>
+<div class="container mx-auto px-gutter relative z-10">
+<h2 class="font-display-2xl text-display-2xl mb-12 tracking-tighter max-w-4xl mx-auto text-white">Ready for the <br/><span class="gradient-text italic font-light">FUTURE?</span></h2>
+<div class="flex flex-col md:flex-row items-center justify-center gap-8">
+<button class="bg-white text-black font-bold px-16 py-8 rounded-2xl text-headline-md hover:scale-110 transition-all duration-500 shadow-[0_0_60px_rgba(255,255,255,0.2)]">Initialize Integration</button>
+</div>
+<p class="mt-12 font-body-md text-on-surface-variant opacity-60">Join over 2,000 teams scaling on Aether AI</p>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-black w-full py-20 px-gutter border-t border-white/5 scroll-reveal">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end w-full max-w-7xl mx-auto space-y-stack-md">
+<div>
+<div class="font-display-2xl text-display-2xl opacity-10 font-bold uppercase tracking-tighter text-white mb-8">AETHER</div>
+<div class="font-body-md text-on-surface-variant mb-4">© 2024 Aether AI. Engineered for Invisible Power.</div>
+</div>
+<div class="flex gap-12">
+<div class="flex flex-col gap-3">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Platform</span>
+<a class="font-body-md text-white hover:opacity-70 transition-colors" href="#">Documentation</a>
+<a class="font-body-md text-on-surface-variant hover:text-white transition-colors" href="#">Changelog</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Legal</span>
+<a class="font-body-md text-on-surface-variant hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-md text-on-surface-variant hover:text-white transition-colors" href="#">Status</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    (function initThreeJS() {
+        const container = document.querySelector('.threejs-container');
+        if (!container) return;
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+        camera.position.z = 5;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const coreGroup = new THREE.Group();
+        scene.add(coreGroup);
+
+        const outerGeo = new THREE.SphereGeometry(2, 32, 32);
+        const outerMat = new THREE.MeshPhongMaterial({
+            color: 0x888888,
+            transparent: true,
+            opacity: 0.1,
+            wireframe: true
+        });
+        const outerSphere = new THREE.Mesh(outerGeo, outerMat);
+        coreGroup.add(outerSphere);
+
+        const innerGeo = new THREE.IcosahedronGeometry(1, 1);
+        const innerMat = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            emissive: 0xffffff,
+            emissiveIntensity: 0.5,
+            metalness: 0.9,
+            roughness: 0.1
+        });
+        const innerCore = new THREE.Mesh(innerGeo, innerMat);
+        coreGroup.add(innerCore);
+
+        const ringGeo = new THREE.TorusGeometry(2.5, 0.01, 16, 100);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.2 });
+        const ring1 = new THREE.Mesh(ringGeo, ringMat);
+        const ring2 = new THREE.Mesh(ringGeo, ringMat);
+        ring2.rotation.x = Math.PI / 2;
+        coreGroup.add(ring1, ring2);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 1, 10);
+        pointLight.position.set(5, 5, 5);
+        scene.add(pointLight);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            coreGroup.rotation.y += 0.002;
+            coreGroup.rotation.x += 0.001;
+            innerCore.rotation.y -= 0.005;
+            ring1.rotation.z += 0.003;
+            ring2.rotation.z -= 0.003;
+            coreGroup.position.y = Math.sin(Date.now() * 0.0008) * 0.1;
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            const newWidth = container.clientWidth;
+            const newHeight = container.clientHeight;
+            camera.aspect = newWidth / newHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(newWidth, newHeight);
+        });
+
+        animate();
+    })();
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            const nav = document.getElementById('navbar');
+            nav.classList.remove('-translate-y-20', 'opacity-0');
+            nav.classList.add('translate-y-0', 'opacity-100');
+        }, 100);
+
+        const headline = document.getElementById('hero-headline');
+        const words = headline.querySelectorAll('.reveal-word');
+        words.forEach((word, i) => {
+            setTimeout(() => word.classList.add('active'), 400 + (i * 150));
+        });
+
+        const entrances = [
+            { id: 'hero-badge', class: 'opacity-100' },
+            { id: 'hero-description', class: 'active' },
+            { id: 'hero-btn-1', class: 'active' },
+            { id: 'hero-btn-2', class: 'active' },
+            { id: 'metric-card-1', class: 'active' },
+            { id: 'metric-card-2', class: 'active' }
+        ];
+        entrances.forEach(entry => {
+            const el = document.getElementById(entry.id);
+            if (el) setTimeout(() => el.classList.add(entry.class), 100);
+        });
+
+        setTimeout(() => {
+            document.getElementById('glow-1').classList.remove('scale-0', 'opacity-0');
+            document.getElementById('glow-1').classList.add('scale-100', 'opacity-100');
+            document.getElementById('glow-2').classList.remove('scale-0', 'opacity-0');
+            document.getElementById('glow-2').classList.add('scale-100', 'opacity-100');
+        }, 300);
+
+        const scrollRevealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-reveal, .scroll-reveal-stagger').forEach(el => {
+            el.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            scrollRevealObserver.observe(el);
+        });
+
+        const horizontalScroll = document.getElementById('horizontal-scroll');
+        const casesSection = document.getElementById('cases-section');
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        const bgGlows = document.querySelectorAll('.hero-bg-glow');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            
+            if (scrolled < 1200) {
+                parallaxLayers.forEach(layer => {
+                    layer.style.transform = `translateY(${scrolled * 0.2}px) scale(${1 - (scrolled * 0.0001)})`;
+                });
+                bgGlows.forEach((glow, i) => {
+                    const drift = (i === 0) ? -0.05 : 0.04;
+                    glow.style.transform = `translate(${scrolled * drift}px, ${scrolled * Math.abs(drift) * 0.5}px)`;
+                });
+            }
+
+            const rect = casesSection.getBoundingClientRect();
+            const viewHeight = window.innerHeight;
+            if (rect.top < viewHeight && rect.bottom > 0) {
+                const scrollProgress = (viewHeight - rect.top) / (viewHeight + rect.height);
+                const maxTranslate = horizontalScroll.scrollWidth - window.innerWidth + 48;
+                const moveX = Math.min(maxTranslate, Math.max(0, scrollProgress * maxTranslate * 1.5));
+                horizontalScroll.style.transform = `translateX(-${moveX}px)`;
+            }
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            const magnetics = document.querySelectorAll('.magnetic-hover');
+            magnetics.forEach(btn => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const radius = 120;
+                if (Math.abs(x) < radius && Math.abs(y) < radius) {
+                    btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.05)`;
+                    btn.style.zIndex = "10";
+                } else {
+                    btn.style.transform = 'translate(0, 0) scale(1)';
+                    btn.style.zIndex = "1";
+                }
+            });
+        });
+    });
+</script>
+</body></html>
