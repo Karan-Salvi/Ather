@@ -183,8 +183,90 @@
         background-color: #000000;
         color: #e2e2e2;
         width: 100%;
+        max-width: 100%;
         margin: 0;
         min-height: 100%;
+      }
+
+      /* ── Navbar + mobile menu ─────────────────────────────────────── */
+      #navbar-wrapper {
+        width: min(100%, calc(100vw - 2rem));
+        max-width: 80rem;
+      }
+
+      #navbar {
+        overflow: hidden;
+        max-width: 100%;
+      }
+
+      .navbar-mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        flex-shrink: 0;
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        color: #e2e2e2;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .navbar-mobile-toggle:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .navbar-mobile-menu {
+        display: none;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+        padding: 1rem;
+        border-radius: 1.25rem;
+        background: rgba(19, 19, 19, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      }
+
+      .navbar-mobile-menu.is-open {
+        display: flex;
+      }
+
+      .navbar-mobile-menu a {
+        display: block;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        color: #c4c7c8;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .navbar-mobile-menu a:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+      }
+
+      .navbar-mobile-menu-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      body.navbar-menu-open {
+        overflow: hidden;
+      }
+
+      @media (min-width: 768px) {
+        .navbar-mobile-toggle,
+        .navbar-mobile-menu {
+          display: none !important;
+        }
       }
 
       .glass-panel {
@@ -450,41 +532,48 @@
         font-weight: 700;
       }
 
-      /* ── Mobile Timeline — two-column flex: [icon lane] [text lane] ── */
+      /* ── Mobile Timeline — flex icon column + text column (no overlap) ── */
       @media (max-width: 767px) {
-        /* Outer step row: always horizontal (icon left, text right) */
         .timeline-step {
-          display: flex !important;
-          flex-direction: row !important;
-          align-items: flex-start !important;
-          gap: 1rem !important;
-          padding-left: 0 !important;
+          display: block !important;
           position: relative;
+          padding-left: 0 !important;
         }
-        /* Icon lane: fixed 44px column, stacks icon above the connecting line */
-        .timeline-step-icon-lane {
+
+        .timeline-step-mobile-row {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+          gap: 20px;
+          width: 100%;
+        }
+
+        .timeline-step-icon-col {
           display: flex;
           flex-direction: column;
           align-items: center;
           flex-shrink: 0;
-          width: 44px;
+          width: 48px;
+          position: relative;
+          z-index: 1;
         }
-        /* Text lane: fills remaining width */
+
+        .timeline-step-text-col,
         .timeline-step .step-content {
           text-align: left !important;
           flex: 1 1 0;
           min-width: 0;
-          padding-top: 0.6rem; /* vertically align first line with icon center */
-          order: unset !important;
+          padding-top: 0.75rem;
         }
-        /* Hide the old step-node placement — the new icon-lane div owns it */
-        .timeline-step > .step-node {
+
+        .timeline-step > .step-node,
+        .timeline-step > .md\:w-1\/2:last-child {
           display: none !important;
         }
-        /* Icon circle in the lane */
+
         .timeline-step-icon {
-          width: 40px;
-          height: 40px;
+          width: 48px;
+          height: 48px;
           border-radius: 9999px;
           background: #1b1c1c;
           color: #8e9192;
@@ -493,29 +582,35 @@
           justify-content: center;
           flex-shrink: 0;
           position: relative;
-          z-index: 10;
-          box-shadow: 0 0 0 6px #1f1f1f; /* ring effect */
+          z-index: 2;
+          box-shadow: 0 0 0 6px #1f1f1f;
         }
-        /* Connector line below the icon, running to next step */
+
         .timeline-step-connector {
           flex: 1;
           width: 2px;
           min-height: 2rem;
           background: rgba(255, 255, 255, 0.12);
-          margin-top: 2px;
+          margin-top: 4px;
+          position: relative;
+          z-index: 0;
         }
-        /* No connector after last step */
+
         .timeline-step:last-child .timeline-step-connector {
           display: none;
         }
-        /* Empty desktop spacer column — hide on mobile */
-        .timeline-step > .md\:w-1\/2:last-child {
+      }
+
+      @media (min-width: 768px) {
+        .timeline-step-mobile-row {
+          display: contents;
+        }
+
+        .timeline-step-icon-col,
+        .timeline-step-icon-lane,
+        .timeline-step-connector {
           display: none !important;
         }
-      }
-      @media (min-width: 768px) {
-        .timeline-step-icon-lane { display: none !important; }
-        .timeline-step-connector { display: none !important; }
       }
 
       /* Dashboard inner grid responsive */
@@ -696,57 +791,97 @@
     <!-- ── End Loading Intro ──────────────────────────────────────────────── -->
 
     <!-- Navbar -->
-    <nav
-      class="fixed top-3 sm:top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] sm:w-[90%] max-w-7xl rounded-full bg-surface/30 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex justify-between items-center px-4 sm:px-8 py-3 z-50 -translate-y-20 opacity-0 transition-all duration-1000 ease-out"
-      id="navbar"
+    <div
+      class="fixed top-3 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] sm:w-[90%] max-w-7xl px-[max(0px,env(safe-area-inset-left))]"
+      id="navbar-wrapper"
     >
-      <div class="flex items-center gap-2">
-        <img
-          alt="Aether AI Logo"
-          class="w-8 h-8 object-contain brightness-0 invert"
-          src="favicon.png"
-        />
-        <span
-          class="font-display-lg text-headline-md font-bold tracking-tight text-on-surface"
-          >Aether AI</span
-        >
-      </div>
-      <div class="hidden md:flex items-center gap-10">
-        <a
-          class="text-white font-medium font-body-md transition-all hover:scale-105 active:scale-95"
-          href="#"
-          >Platform</a
-        >
-        <a
-          class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95"
-          href="#"
-          >Workflows</a
-        >
-        <a
-          class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95"
-          href="#"
-          >Solutions</a
-        >
-        <a
-          class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95"
-          href="#"
-          >Pricing</a
-        >
-      </div>
-      <!-- Hide Login on smallest screens to prevent overflow -->
-      <div class="flex items-center gap-2 sm:gap-4">
+      <nav
+        class="w-full rounded-full bg-surface/30 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex justify-between items-center px-4 sm:px-8 py-3 -translate-y-20 opacity-0 transition-all duration-1000 ease-out min-w-0"
+        id="navbar"
+      >
+        <div class="flex items-center gap-2 min-w-0 shrink">
+          <img
+            alt="Aether AI Logo"
+            class="w-8 h-8 shrink-0 object-contain brightness-0 invert"
+            src="favicon.png"
+          />
+          <span
+            class="hidden sm:inline font-display-lg text-headline-md font-bold tracking-tight text-on-surface truncate"
+            >Aether AI</span
+          >
+        </div>
+        <div class="hidden md:flex items-center gap-10 navbar-desktop-links">
+          <a
+            class="text-white font-medium font-body-md transition-all hover:scale-105 active:scale-95"
+            href="#"
+            >Platform</a
+          >
+          <a
+            class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95"
+            href="#"
+            >Workflows</a
+          >
+          <a
+            class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95"
+            href="#"
+            >Solutions</a
+          >
+          <a
+            class="text-on-surface-variant hover:text-on-surface transition-colors font-body-md hover:scale-105 active:scale-95"
+            href="#"
+            >Pricing</a
+          >
+        </div>
+        <div class="hidden md:flex items-center gap-2 sm:gap-4 shrink-0 navbar-desktop-actions">
+          <button
+            class="text-on-surface-variant hover:text-on-surface font-body-md transition-all hover:scale-105 active:scale-95 px-4 py-2"
+          >
+            Login
+          </button>
+          <button
+            class="bg-white text-black font-medium px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-body-md hover:scale-105 active:scale-95 transition-all duration-300 luminous-glow text-sm sm:text-base"
+          >
+            Get Started
+          </button>
+        </div>
         <button
-          class="hidden sm:block text-on-surface-variant hover:text-on-surface font-body-md transition-all hover:scale-105 active:scale-95 px-4 py-2"
+          type="button"
+          class="navbar-mobile-toggle md:hidden"
+          id="navbar-mobile-toggle"
+          aria-expanded="false"
+          aria-controls="navbar-mobile-menu"
+          aria-label="Open navigation menu"
         >
-          Login
+          <span
+            class="material-symbols-outlined text-[22px]"
+            id="navbar-menu-icon"
+            >menu</span
+          >
         </button>
-        <button
-          class="bg-white text-black font-medium px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-body-md hover:scale-105 active:scale-95 transition-all duration-300 luminous-glow text-sm sm:text-base"
-        >
-          Get Started
-        </button>
+      </nav>
+      <div
+        class="navbar-mobile-menu md:hidden"
+        id="navbar-mobile-menu"
+        aria-hidden="true"
+      >
+        <a href="#">Platform</a>
+        <a href="#">Workflows</a>
+        <a href="#">Solutions</a>
+        <a href="#">Pricing</a>
+        <div class="navbar-mobile-menu-actions">
+          <button
+            class="w-full text-on-surface-variant hover:text-on-surface font-body-md py-3 px-4 rounded-xl border border-white/10 transition-colors"
+          >
+            Login
+          </button>
+          <button
+            class="w-full bg-white text-black font-medium py-3 px-4 rounded-full font-body-md luminous-glow transition-transform active:scale-95"
+          >
+            Get Started
+          </button>
+        </div>
       </div>
-    </nav>
+    </div>
     <!-- Hero Section -->
     <header
       class="relative min-h-[100dvh] flex items-center justify-center pt-24 pb-16 overflow-hidden"
@@ -1278,28 +1413,30 @@
             <div
               class="flex flex-col md:flex-row items-center gap-12 group timeline-step"
             >
-              <!-- Mobile only: icon lane with connector line -->
-              <div class="timeline-step-icon-lane">
-                <div class="timeline-step-icon">
-                  <span
-                    class="material-symbols-outlined text-[18px]"
-                    style="font-variation-settings: &quot;FILL&quot; 1"
-                    >input</span
-                  >
+              <div class="timeline-step-mobile-row">
+                <div class="timeline-step-icon-col timeline-step-icon-lane">
+                  <div class="timeline-step-icon">
+                    <span
+                      class="material-symbols-outlined text-[18px]"
+                      style="font-variation-settings: &quot;FILL&quot; 1"
+                      >input</span
+                    >
+                  </div>
+                  <div class="timeline-step-connector"></div>
                 </div>
-                <div class="timeline-step-connector"></div>
-              </div>
-              <!-- Text (desktop: right-aligned, mobile: left) -->
-              <div class="md:w-1/2 md:text-right step-content">
-                <h4
-                  class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
+                <div
+                  class="timeline-step-text-col md:w-1/2 md:text-right step-content"
                 >
-                  01. Neural Ingestion
-                </h4>
-                <p class="font-body-md text-on-surface-variant">
-                  Connect any data source. Our neural adapter sanitizes and
-                  contextualizes input in milliseconds.
-                </p>
+                  <h4
+                    class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
+                  >
+                    01. Neural Ingestion
+                  </h4>
+                  <p class="font-body-md text-on-surface-variant">
+                    Connect any data source. Our neural adapter sanitizes and
+                    contextualizes input in milliseconds.
+                  </p>
+                </div>
               </div>
               <!-- Desktop: centered icon node -->
               <div
@@ -1317,28 +1454,28 @@
             <div
               class="flex flex-col md:flex-row-reverse items-center gap-12 group timeline-step"
             >
-              <!-- Mobile only: icon lane with connector line -->
-              <div class="timeline-step-icon-lane">
-                <div class="timeline-step-icon">
-                  <span
-                    class="material-symbols-outlined text-[18px]"
-                    style="font-variation-settings: &quot;FILL&quot; 1"
-                    >settings_slow_motion</span
-                  >
+              <div class="timeline-step-mobile-row">
+                <div class="timeline-step-icon-col timeline-step-icon-lane">
+                  <div class="timeline-step-icon">
+                    <span
+                      class="material-symbols-outlined text-[18px]"
+                      style="font-variation-settings: &quot;FILL&quot; 1"
+                      >settings_slow_motion</span
+                    >
+                  </div>
+                  <div class="timeline-step-connector"></div>
                 </div>
-                <div class="timeline-step-connector"></div>
-              </div>
-              <!-- Text -->
-              <div class="md:w-1/2 text-left step-content">
-                <h4
-                  class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
-                >
-                  02. Atomic Processing
-                </h4>
-                <p class="font-body-md text-on-surface-variant">
-                  Workflows are broken down into atomic tasks and executed
-                  across our global edge network.
-                </p>
+                <div class="timeline-step-text-col md:w-1/2 text-left step-content">
+                  <h4
+                    class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
+                  >
+                    02. Atomic Processing
+                  </h4>
+                  <p class="font-body-md text-on-surface-variant">
+                    Workflows are broken down into atomic tasks and executed
+                    across our global edge network.
+                  </p>
+                </div>
               </div>
               <!-- Desktop icon -->
               <div
@@ -1356,28 +1493,29 @@
             <div
               class="flex flex-col md:flex-row items-center gap-12 group timeline-step"
             >
-              <!-- Mobile only: icon lane (no connector — last step) -->
-              <div class="timeline-step-icon-lane">
-                <div class="timeline-step-icon">
-                  <span
-                    class="material-symbols-outlined text-[18px]"
-                    style="font-variation-settings: &quot;FILL&quot; 1"
-                    >auto_awesome</span
-                  >
+              <div class="timeline-step-mobile-row">
+                <div class="timeline-step-icon-col timeline-step-icon-lane">
+                  <div class="timeline-step-icon">
+                    <span
+                      class="material-symbols-outlined text-[18px]"
+                      style="font-variation-settings: &quot;FILL&quot; 1"
+                      >auto_awesome</span
+                    >
+                  </div>
                 </div>
-                <!-- No connector div here: last step -->
-              </div>
-              <!-- Text -->
-              <div class="md:w-1/2 md:text-right step-content">
-                <h4
-                  class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
+                <div
+                  class="timeline-step-text-col md:w-1/2 md:text-right step-content"
                 >
-                  03. Predictive Output
-                </h4>
-                <p class="font-body-md text-on-surface-variant">
-                  Results are delivered with deep analytics and suggested next
-                  actions based on historical success.
-                </p>
+                  <h4
+                    class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
+                  >
+                    03. Predictive Output
+                  </h4>
+                  <p class="font-body-md text-on-surface-variant">
+                    Results are delivered with deep analytics and suggested next
+                    actions based on historical success.
+                  </p>
+                </div>
               </div>
               <!-- Desktop icon -->
               <div
@@ -1460,7 +1598,7 @@
               </li>
             </ul>
             <button
-              class="magnetic-hover bg-white text-black font-bold px-10 py-4 rounded-xl text-body-md hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all"
+              class="magnetic-hover bg-white text-black font-bold px-6 sm:px-10 py-3 sm:py-4 rounded-xl text-body-md hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all max-w-full"
             >
               Explore Dashboard
             </button>
@@ -1540,16 +1678,16 @@
                 <!-- Main Content Area -->
                 <div
                   id="panel-radar"
-                  class="glass-panel border-white/10 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-white/[0.02] to-transparent min-h-[280px] sm:min-h-0"
+                  class="glass-panel border-white/10 rounded-2xl flex flex-col md:block items-center justify-center relative bg-gradient-to-br from-white/[0.02] to-transparent min-h-[280px] sm:min-h-0 py-6 md:py-0"
                 >
-                  <div class="relative group">
+                  <div class="relative group shrink-0">
                     <!-- Glow and Central Node -->
                     <div
                       id="radar-rings"
-                      class="w-64 h-64 border border-white/10 rounded-full animate-[spin_20s_linear_infinite] flex items-center justify-center"
+                      class="w-48 h-48 sm:w-64 sm:h-64 max-w-full aspect-square border border-white/10 rounded-full animate-[spin_20s_linear_infinite] flex items-center justify-center mx-auto"
                     >
                       <div
-                        class="w-48 h-48 border border-white/5 rounded-full"
+                        class="w-36 h-36 sm:w-48 sm:h-48 border border-white/5 rounded-full"
                       ></div>
                     </div>
                     <div
@@ -1572,7 +1710,7 @@
                   <!-- AI Insight Card Floating -->
                   <div
                     id="card-ai-insight"
-                    class="absolute right-6 top-1/2 -translate-y-1/2 glass-panel p-6 rounded-2xl border-white/20 luminous-glow shadow-2xl max-w-[240px] z-20 backdrop-blur-2xl"
+                    class="relative md:absolute md:right-6 md:top-1/2 md:-translate-y-1/2 mt-4 md:mt-0 glass-panel p-6 rounded-2xl border-white/20 luminous-glow shadow-2xl w-full max-w-[240px] mx-auto md:mx-0 z-20 backdrop-blur-2xl shrink-0"
                   >
                     <div class="flex items-center gap-3 mb-3">
                       <div
@@ -1897,10 +2035,10 @@
     </section>
     <!-- Testimonials -->
     <section class="py-section-gap scroll-reveal">
-      <div class="container mx-auto px-gutter">
+      <div class="container mx-auto px-4 sm:px-gutter">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div
-            class="glass-panel top-light-border p-12 rounded-[40px] relative"
+            class="glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative"
           >
             <span
               class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8"
@@ -1928,7 +2066,7 @@
             </div>
           </div>
           <div
-            class="glass-panel top-light-border p-12 rounded-[40px] relative md:mt-12"
+            class="glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative md:mt-12"
           >
             <span
               class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8"
@@ -1956,7 +2094,7 @@
             </div>
           </div>
           <div
-            class="glass-panel top-light-border p-12 rounded-[40px] relative"
+            class="glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative"
           >
             <span
               class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8"
@@ -1988,7 +2126,7 @@
     </section>
     <!-- Pricing -->
     <section class="py-section-gap bg-surface-container-lowest scroll-reveal">
-      <div class="container mx-auto px-gutter">
+      <div class="container mx-auto px-4 sm:px-gutter">
         <div class="text-center mb-16">
           <h2 class="font-display-lg text-display-lg mb-4 text-white">
             Select Your <span class="text-on-surface-variant">Tier</span>
@@ -2134,7 +2272,7 @@
       <div
         class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[600px] bg-white/10 blur-[150px] rounded-full"
       ></div>
-      <div class="container mx-auto px-gutter relative z-10">
+      <div class="container mx-auto px-4 sm:px-gutter relative z-10">
         <h2
           class="font-display-2xl text-display-2xl mb-12 tracking-tighter max-w-4xl mx-auto text-white"
         >
@@ -2146,7 +2284,7 @@
           class="flex flex-col md:flex-row items-center justify-center gap-8"
         >
           <button
-            class="bg-white text-black font-bold px-16 py-8 rounded-2xl text-headline-md hover:scale-110 transition-all duration-500 shadow-[0_0_60px_rgba(255,255,255,0.2)]"
+            class="bg-white text-black font-bold px-8 sm:px-16 py-5 sm:py-8 rounded-2xl text-headline-md hover:scale-110 transition-all duration-500 shadow-[0_0_60px_rgba(255,255,255,0.2)] max-w-full"
           >
             Initialize Integration
           </button>
@@ -2158,7 +2296,7 @@
     </section>
     <!-- Footer -->
     <footer
-      class="bg-black w-full py-20 px-gutter border-t border-white/5 scroll-reveal"
+      class="bg-black w-full py-20 px-4 sm:px-gutter border-t border-white/5 scroll-reveal"
     >
       <div
         class="flex flex-col md:flex-row justify-between items-start md:items-end w-full max-w-7xl mx-auto space-y-stack-md"
@@ -2371,6 +2509,52 @@
       })();
 
       document.addEventListener("DOMContentLoaded", () => {
+        // ── Mobile navbar hamburger ───────────────────────────────────────────
+        function initNavbarMobile() {
+          const toggle = document.getElementById("navbar-mobile-toggle");
+          const menu = document.getElementById("navbar-mobile-menu");
+          const icon = document.getElementById("navbar-menu-icon");
+          if (!toggle || !menu || !icon) return;
+
+          function setMenuOpen(open) {
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            toggle.setAttribute(
+              "aria-label",
+              open ? "Close navigation menu" : "Open navigation menu",
+            );
+            menu.setAttribute("aria-hidden", open ? "false" : "true");
+            menu.classList.toggle("is-open", open);
+            document.body.classList.toggle("navbar-menu-open", open);
+            icon.textContent = open ? "close" : "menu";
+          }
+
+          toggle.addEventListener("click", () => {
+            setMenuOpen(!menu.classList.contains("is-open"));
+          });
+
+          menu.querySelectorAll("a, button").forEach((el) => {
+            el.addEventListener("click", () => setMenuOpen(false));
+          });
+
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && menu.classList.contains("is-open")) {
+              setMenuOpen(false);
+            }
+          });
+
+          document.addEventListener("click", (e) => {
+            if (
+              menu.classList.contains("is-open") &&
+              !menu.contains(e.target) &&
+              !toggle.contains(e.target)
+            ) {
+              setMenuOpen(false);
+            }
+          });
+        }
+
+        initNavbarMobile();
+
         // ── Hero entrance — called by loader on completion ─────────────────────
         function initHeroEntrance() {
           setTimeout(() => {
@@ -3106,57 +3290,89 @@
 
         // Workflow Timeline scroll-linked animation
         if (!prefersReducedMotion) {
-          // Animate connector line height on scroll through the section
-          gsap.to("#timeline-scroll-line", {
-            height: "100%",
-            ease: "none",
-            scrollTrigger: {
-              trigger: "#workflow",
-              start: "top 35%",
-              end: "bottom 65%",
-              scrub: 0.5,
-            },
-          });
-
-          // Animate steps and nodes individually as they scroll into view
-          const steps = document.querySelectorAll(".timeline-step");
-          steps.forEach((step) => {
-            const node = step.querySelector(".step-node");
-            const content = step.querySelector(".step-content");
-            const isRightSide = step.classList.contains("md:flex-row-reverse");
-            const startX = isRightSide ? 30 : -30;
-
-            // Set initial states explicitly
-            gsap.set(content, { opacity: 0.1, x: startX });
-            gsap.set(node, {
-              backgroundColor: "#1b1c1c",
-              color: "#8e9192",
-              boxShadow: "0 0 0px rgba(255, 255, 255, 0)",
-            });
-
-            // Timeline for step activation
-            const stepTl = gsap.timeline({
-              scrollTrigger: {
-                trigger: step,
-                start: "top 60%",
-                end: "top 25%",
-                scrub: 0.5,
-              },
-            });
-
-            stepTl
-              .to(content, { opacity: 1, x: 0, ease: "none", duration: 1 })
-              .to(
-                node,
-                {
-                  backgroundColor: "#ffffff",
-                  color: "#000000",
-                  boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)",
-                  ease: "none",
-                  duration: 0.8,
+          ScrollTrigger.matchMedia({
+            "(min-width: 768px)": function () {
+              gsap.to("#timeline-scroll-line", {
+                height: "100%",
+                ease: "none",
+                scrollTrigger: {
+                  trigger: "#workflow",
+                  start: "top 35%",
+                  end: "bottom 65%",
+                  scrub: 0.5,
                 },
-                "<",
-              );
+              });
+
+              document.querySelectorAll(".timeline-step").forEach((step) => {
+                const node = step.querySelector(".step-node");
+                const content = step.querySelector(".step-content");
+                const isRightSide =
+                  step.classList.contains("md:flex-row-reverse");
+                const startX = isRightSide ? 30 : -30;
+
+                gsap.set(content, { opacity: 0.1, x: startX });
+                gsap.set(node, {
+                  backgroundColor: "#1b1c1c",
+                  color: "#8e9192",
+                  boxShadow: "0 0 0px rgba(255, 255, 255, 0)",
+                });
+
+                const stepTl = gsap.timeline({
+                  scrollTrigger: {
+                    trigger: step,
+                    start: "top 60%",
+                    end: "top 25%",
+                    scrub: 0.5,
+                  },
+                });
+
+                stepTl
+                  .to(content, { opacity: 1, x: 0, ease: "none", duration: 1 })
+                  .to(
+                    node,
+                    {
+                      backgroundColor: "#ffffff",
+                      color: "#000000",
+                      boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)",
+                      ease: "none",
+                      duration: 0.8,
+                    },
+                    "<",
+                  );
+              });
+            },
+
+            "(max-width: 767px)": function () {
+              document.querySelectorAll(".timeline-step").forEach((step) => {
+                const content = step.querySelector(".step-content");
+                const mobileIcon = step.querySelector(".timeline-step-icon");
+
+                gsap.set(content, { opacity: 1, x: 0, clearProps: "transform" });
+
+                if (mobileIcon) {
+                  gsap.fromTo(
+                    mobileIcon,
+                    {
+                      backgroundColor: "#1b1c1c",
+                      color: "#8e9192",
+                      boxShadow: "0 0 0 6px #1f1f1f",
+                    },
+                    {
+                      backgroundColor: "#ffffff",
+                      color: "#000000",
+                      boxShadow: "0 0 0 6px #1f1f1f, 0 0 20px rgba(255,255,255,0.3)",
+                      ease: "none",
+                      scrollTrigger: {
+                        trigger: step,
+                        start: "top 75%",
+                        end: "top 45%",
+                        scrub: 0.5,
+                      },
+                    },
+                  );
+                }
+              });
+            },
           });
         }
 
@@ -3209,6 +3425,7 @@
         }
 
         initScrollLinkedLogoStrip();
+        ScrollTrigger.refresh();
 
         // ═══════════════════════════════════════════════════════════════
         // SERVICES BENTO GRID — All animations scoped to #services only
