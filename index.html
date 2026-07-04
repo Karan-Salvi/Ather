@@ -3329,91 +3329,64 @@
           ScrollTrigger.refresh();
         });
 
-        // Workflow Timeline scroll-linked animation
-        if (!prefersReducedMotion) {
-          ScrollTrigger.matchMedia({
-            "(min-width: 768px)": function () {
-              gsap.to("#timeline-scroll-line", {
-                height: "100%",
-                ease: "none",
-                scrollTrigger: {
-                  trigger: "#workflow",
-                  start: "top 35%",
-                  end: "bottom 65%",
-                  scrub: 0.5,
+        // Workflow Timeline scroll-linked animation (all viewports)
+        if (!prefersReducedMotion && document.getElementById("workflow")) {
+          gsap.to("#timeline-scroll-line", {
+            height: "100%",
+            ease: "none",
+            scrollTrigger: {
+              trigger: "#workflow",
+              start: "top 35%",
+              end: "bottom 65%",
+              scrub: 0.5,
+            },
+          });
+
+          document.querySelectorAll(".timeline-step").forEach((step) => {
+            const node = step.querySelector(".step-node");
+            const mobileIcon = step.querySelector(".timeline-step-icon");
+            const iconTargets = [node, mobileIcon].filter(Boolean);
+            const content = step.querySelector(".step-content");
+            const isRightSide =
+              step.classList.contains("md:flex-row-reverse");
+            const startX = isRightSide ? 30 : -30;
+
+            gsap.set(content, { opacity: 0.1, x: startX });
+            iconTargets.forEach((icon) => {
+              gsap.set(icon, {
+                backgroundColor: "#1b1c1c",
+                color: "#8e9192",
+                boxShadow: icon.classList.contains("timeline-step-icon")
+                  ? "0 0 0 6px #1f1f1f"
+                  : "0 0 0px rgba(255, 255, 255, 0)",
+              });
+            });
+
+            const stepTl = gsap.timeline({
+              scrollTrigger: {
+                trigger: step,
+                start: "top 60%",
+                end: "top 25%",
+                scrub: 0.5,
+              },
+            });
+
+            stepTl
+              .to(content, { opacity: 1, x: 0, ease: "none", duration: 1 })
+              .to(
+                iconTargets,
+                {
+                  backgroundColor: "#ffffff",
+                  color: "#000000",
+                  boxShadow: (i, el) =>
+                    el.classList.contains("timeline-step-icon")
+                      ? "0 0 0 6px #1f1f1f, 0 0 20px rgba(255,255,255,0.3)"
+                      : "0 0 25px rgba(255, 255, 255, 0.4)",
+                  ease: "none",
+                  duration: 0.8,
                 },
-              });
-
-              document.querySelectorAll(".timeline-step").forEach((step) => {
-                const node = step.querySelector(".step-node");
-                const content = step.querySelector(".step-content");
-                const isRightSide =
-                  step.classList.contains("md:flex-row-reverse");
-                const startX = isRightSide ? 30 : -30;
-
-                gsap.set(content, { opacity: 0.1, x: startX });
-                gsap.set(node, {
-                  backgroundColor: "#1b1c1c",
-                  color: "#8e9192",
-                  boxShadow: "0 0 0px rgba(255, 255, 255, 0)",
-                });
-
-                const stepTl = gsap.timeline({
-                  scrollTrigger: {
-                    trigger: step,
-                    start: "top 60%",
-                    end: "top 25%",
-                    scrub: 0.5,
-                  },
-                });
-
-                stepTl
-                  .to(content, { opacity: 1, x: 0, ease: "none", duration: 1 })
-                  .to(
-                    node,
-                    {
-                      backgroundColor: "#ffffff",
-                      color: "#000000",
-                      boxShadow: "0 0 25px rgba(255, 255, 255, 0.4)",
-                      ease: "none",
-                      duration: 0.8,
-                    },
-                    "<",
-                  );
-              });
-            },
-
-            "(max-width: 767px)": function () {
-              document.querySelectorAll(".timeline-step").forEach((step) => {
-                const content = step.querySelector(".step-content");
-                const mobileIcon = step.querySelector(".timeline-step-icon");
-
-                gsap.set(content, { opacity: 1, x: 0, clearProps: "transform" });
-
-                if (mobileIcon) {
-                  gsap.fromTo(
-                    mobileIcon,
-                    {
-                      backgroundColor: "#1b1c1c",
-                      color: "#8e9192",
-                      boxShadow: "0 0 0 6px #1f1f1f",
-                    },
-                    {
-                      backgroundColor: "#ffffff",
-                      color: "#000000",
-                      boxShadow: "0 0 0 6px #1f1f1f, 0 0 20px rgba(255,255,255,0.3)",
-                      ease: "none",
-                      scrollTrigger: {
-                        trigger: step,
-                        start: "top 75%",
-                        end: "top 45%",
-                        scrub: 0.5,
-                      },
-                    },
-                  );
-                }
-              });
-            },
+                "<",
+              );
           });
         }
 
