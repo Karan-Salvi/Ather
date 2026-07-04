@@ -162,10 +162,23 @@
       };
     </script>
     <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        overflow-x: hidden;
+        max-width: 100vw;
+      }
+
       body {
         background-color: #000000;
         color: #e2e2e2;
         overflow-x: hidden;
+        max-width: 100vw;
+        width: 100%;
       }
 
       .glass-panel {
@@ -399,6 +412,95 @@
           animation: none;
         }
       }
+
+      /* ── RESPONSIVE UTILITIES ─────────────────────────────────────── */
+
+      /* Fluid section vertical padding */
+      .section-pad {
+        padding-top: clamp(3rem, 8vw, 7.5rem);
+        padding-bottom: clamp(3rem, 8vw, 7.5rem);
+      }
+
+      /* Fluid hero headline */
+      .hero-headline-fluid {
+        font-size: clamp(2.4rem, 8vw, 4.5rem);
+        line-height: 1.06;
+        letter-spacing: -0.04em;
+        font-weight: 700;
+      }
+
+      /* Fluid display heading (sections) */
+      .display-fluid {
+        font-size: clamp(2rem, 5vw, 4rem);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        font-weight: 700;
+      }
+
+      /* Mobile timeline — left-aligned single column */
+      @media (max-width: 767px) {
+        .timeline-step {
+          flex-direction: column !important;
+          align-items: flex-start !important;
+          gap: 1rem !important;
+          padding-left: 2.5rem;
+          position: relative;
+        }
+        .timeline-step .step-content {
+          text-align: left !important;
+          width: 100% !important;
+          order: 2;
+        }
+        .timeline-step .step-node {
+          order: 1;
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+        /* Mobile left rail */
+        .timeline-mobile-rail {
+          display: block;
+          position: absolute;
+          left: 1.4rem;
+          top: 0;
+          bottom: 0;
+          width: 2px;
+          background: rgba(255,255,255,0.1);
+        }
+      }
+      @media (min-width: 768px) {
+        .timeline-mobile-rail { display: none; }
+      }
+
+      /* Dashboard inner grid responsive */
+      .dashboard-inner {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        height: auto;
+      }
+      @media (min-width: 640px) {
+        .dashboard-inner {
+          grid-template-columns: 1fr 2fr;
+          height: 480px;
+        }
+      }
+
+      /* Case studies horizontal scroll — touch-enabled on mobile */
+      #horizontal-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      #horizontal-container::-webkit-scrollbar {
+        display: none;
+      }
+      /* Restore GSAP-controlled state on desktop (overflow hidden via GSAP/parent) */
+      @media (min-width: 1024px) {
+        #horizontal-container {
+          overflow-x: hidden;
+        }
+      }
     </style>
   </head>
   <body class="font-body-md selection:bg-white selection:text-black">
@@ -546,7 +648,7 @@
 
     <!-- Navbar -->
     <nav
-      class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl rounded-full bg-surface/30 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex justify-between items-center px-8 py-3 z-50 -translate-y-20 opacity-0 transition-all duration-1000 ease-out"
+      class="fixed top-3 sm:top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] sm:w-[90%] max-w-7xl rounded-full bg-surface/30 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex justify-between items-center px-4 sm:px-8 py-3 z-50 -translate-y-20 opacity-0 transition-all duration-1000 ease-out"
       id="navbar"
     >
       <div class="flex items-center gap-2">
@@ -582,14 +684,15 @@
           >Pricing</a
         >
       </div>
-      <div class="flex items-center gap-4">
+      <!-- Hide Login on smallest screens to prevent overflow -->
+      <div class="flex items-center gap-2 sm:gap-4">
         <button
-          class="text-on-surface-variant hover:text-on-surface font-body-md transition-all hover:scale-105 active:scale-95 px-4 py-2"
+          class="hidden sm:block text-on-surface-variant hover:text-on-surface font-body-md transition-all hover:scale-105 active:scale-95 px-4 py-2"
         >
           Login
         </button>
         <button
-          class="bg-white text-black font-medium px-6 py-2.5 rounded-full font-body-md hover:scale-105 active:scale-95 transition-all duration-300 luminous-glow"
+          class="bg-white text-black font-medium px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-body-md hover:scale-105 active:scale-95 transition-all duration-300 luminous-glow text-sm sm:text-base"
         >
           Get Started
         </button>
@@ -597,27 +700,30 @@
     </nav>
     <!-- Hero Section -->
     <header
-      class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden"
+      class="relative min-h-[100dvh] flex items-center justify-center pt-24 pb-16 overflow-hidden"
       id="hero"
     >
       <div class="absolute inset-0 z-0">
         <div
-          class="hero-bg-glow absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-white/5 blur-[120px] rounded-full scale-0 opacity-0 transition-all duration-[2000ms]"
+          class="hero-bg-glow absolute top-1/4 left-1/4 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-white/5 blur-[120px] rounded-full scale-0 opacity-0 transition-all duration-[2000ms]"
           id="glow-1"
         ></div>
         <div
-          class="hero-bg-glow absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-white/5 blur-[150px] rounded-full scale-0 opacity-0 transition-all duration-[2500ms]"
+          class="hero-bg-glow absolute bottom-1/4 right-1/4 w-[350px] h-[350px] md:w-[600px] md:h-[600px] bg-white/5 blur-[150px] rounded-full scale-0 opacity-0 transition-all duration-[2500ms]"
           id="glow-2"
         ></div>
       </div>
+      <!-- 3D Sphere: proportionally scaled, clipped to hero bounds -->
       <div
-        class="threejs-container absolute top-1/2 right-[10%] -translate-y-1/2 w-[600px] h-[600px] pointer-events-none z-0"
+        class="threejs-container absolute top-1/2 right-0 lg:right-[5%] -translate-y-1/2 pointer-events-none z-0 overflow-hidden"
+        style="width: clamp(180px, 35vw, 600px); height: clamp(180px, 35vw, 600px); opacity: 0.35;"
+        id="threejs-sphere"
       ></div>
       <div
-        class="container mx-auto px-gutter relative z-10 grid grid-cols-12 gap-unit parallax-layer"
+        class="container mx-auto px-4 sm:px-6 lg:px-gutter relative z-10 grid grid-cols-12 gap-unit parallax-layer"
       >
         <div
-          class="col-span-12 text-center md:text-left flex flex-col justify-center items-center md:items-start gap-8 z-10"
+          class="col-span-12 lg:col-span-7 text-center md:text-left flex flex-col justify-center items-center md:items-start gap-6 md:gap-8 z-10"
         >
           <!-- Item 3: Live status ticker pill - crossfades between status messages -->
           <div
@@ -647,7 +753,7 @@
             </div>
           </div>
           <h1
-            class="font-display-2xl text-display-2xl leading-[1.05] tracking-tighter max-w-5xl"
+            class="hero-headline-fluid max-w-5xl"
             id="hero-headline"
           >
             <span class="reveal-word">AUTOMATE</span>
@@ -700,7 +806,7 @@
             class="flex flex-col gap-4 items-center md:items-start mt-2"
             id="hero-btns"
           >
-            <div class="flex flex-wrap gap-4 relative z-20 justify-center md:justify-start">
+            <div class="flex flex-wrap gap-3 md:gap-4 relative z-20 justify-center md:justify-start">
               <button
                 class="scale-in bg-white text-black font-bold px-8 py-4 rounded-xl text-body-md hover:scale-105 transition-transform luminous-glow delay-[1200ms]"
                 id="hero-btn-1"
@@ -845,7 +951,7 @@
     </header>
     <!-- Trusted By Marquee -->
     <section
-      class="py-20 border-y border-white/5 bg-surface-container-lowest/50 overflow-hidden"
+      class="py-10 md:py-20 border-y border-white/5 bg-surface-container-lowest/50 overflow-hidden"
     >
       <div class="marquee-container">
         <div class="marquee-content">
@@ -919,7 +1025,7 @@
     </section>
     <section
       id="services"
-      class="py-section-gap container mx-auto px-gutter scroll-reveal relative"
+      class="section-pad container mx-auto px-4 sm:px-6 lg:px-gutter scroll-reveal relative"
     >
       <!-- Background Parallax Glow -->
       <div
@@ -949,7 +1055,7 @@
       >
         <div
           id="card-workflows"
-          class="stagger-item col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 relative overflow-hidden group hover:border-white/30 transition-all duration-700"
+          class="stagger-item col-span-12 md:col-span-8 glass-panel top-light-border rounded-[24px] md:rounded-[40px] p-6 md:p-12 relative overflow-hidden group hover:border-white/30 transition-all duration-700"
           style="transform-style: preserve-3d"
         >
           <div class="card-spotlight"></div>
@@ -973,7 +1079,7 @@
                 before they impact delivery.
               </p>
             </div>
-            <div class="mt-20 flex gap-4">
+            <div class="mt-8 md:mt-20 flex flex-wrap gap-3 md:gap-4">
               <span
                 id="pill-dynamic-routing"
                 class="px-4 py-2 glass-panel rounded-full font-label-sm text-label-sm text-on-surface-variant"
@@ -989,7 +1095,7 @@
         </div>
         <div
           id="card-neural"
-          class="stagger-item col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700 relative overflow-hidden"
+          class="stagger-item col-span-12 sm:col-span-6 md:col-span-4 glass-panel top-light-border rounded-[24px] md:rounded-[40px] p-6 md:p-10 hover:border-white/30 transition-all duration-700 relative overflow-hidden"
           style="transform-style: preserve-3d"
         >
           <div class="card-spotlight"></div>
@@ -1007,7 +1113,7 @@
         </div>
         <div
           id="card-scaling"
-          class="stagger-item col-span-12 md:col-span-4 glass-panel top-light-border rounded-[40px] p-10 hover:border-white/30 transition-all duration-700 relative overflow-hidden"
+          class="stagger-item col-span-12 sm:col-span-6 md:col-span-4 glass-panel top-light-border rounded-[24px] md:rounded-[40px] p-6 md:p-10 hover:border-white/30 transition-all duration-700 relative overflow-hidden"
           style="transform-style: preserve-3d"
         >
           <div class="card-spotlight"></div>
@@ -1027,7 +1133,7 @@
         </div>
         <div
           id="card-power"
-          class="stagger-item col-span-12 md:col-span-8 glass-panel top-light-border rounded-[40px] p-12 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden"
+          class="stagger-item col-span-12 md:col-span-8 glass-panel top-light-border rounded-[24px] md:rounded-[40px] p-6 md:p-12 flex flex-col md:flex-row items-center gap-6 md:gap-10 relative overflow-hidden"
           style="transform-style: preserve-3d"
         >
           <div class="card-spotlight"></div>
@@ -1060,15 +1166,19 @@
       </div>
     </section>
     <!-- Workflow Timeline -->
-    <section class="py-section-gap relative" id="workflow">
-      <div class="container mx-auto px-gutter">
-        <div class="text-center mb-24 sticky top-[15%] z-0">
-          <h2 class="font-display-lg text-display-lg mb-6">
+    <section class="section-pad relative" id="workflow">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-gutter">
+        <!-- Heading: static (not sticky) so it doesn't overlap steps -->
+        <div class="text-center mb-12 md:mb-20">
+          <h2 class="display-fluid mb-6">
             How Aether <span class="italic font-light">Breathes</span>
           </h2>
           <div class="w-24 h-1 bg-white mx-auto rounded-full"></div>
         </div>
         <div class="relative max-w-5xl mx-auto z-10">
+          <!-- Mobile left rail (hidden on md+) -->
+          <div class="timeline-mobile-rail"></div>
+          <!-- Desktop center line (hidden on mobile) -->
           <div
             class="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-[2px] bg-white/10 hidden md:block"
           >
@@ -1077,7 +1187,7 @@
               class="w-full bg-gradient-to-b from-white to-white/40 h-0 origin-top"
             ></div>
           </div>
-          <div class="space-y-64 py-20">
+          <div class="space-y-16 md:space-y-48 py-6 md:py-20">
             <div
               class="flex flex-col md:flex-row items-center gap-12 group timeline-step"
             >
@@ -1158,9 +1268,9 @@
       </div>
     </section>
     <!-- Dashboard Showcase (The Control Center) -->
-    <section class="py-section-gap bg-black" id="dashboard-pin">
-      <div class="container mx-auto px-gutter">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <section class="section-pad bg-black" id="dashboard-pin">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-gutter">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start lg:items-center">
           <!-- Left Content Column -->
           <div class="lg:col-span-4 flex flex-col items-start text-left">
             <div
@@ -1169,7 +1279,8 @@
               The Control Center
             </div>
             <h2
-              class="font-display-lg text-[64px] font-bold leading-[1.05] tracking-tighter mb-10 text-white"
+              class="font-display-lg font-bold leading-[1.05] tracking-tighter mb-6 md:mb-10 text-white"
+              style="font-size: clamp(1.8rem, 4vw, 4rem)"
             >
               Orchestrate from a <br />single glass pane.
             </h2>
@@ -1248,9 +1359,9 @@
                 <div class="w-12"></div>
               </div>
               <!-- Dashboard Content Grid -->
-              <div class="grid grid-cols-12 gap-6 h-[480px]">
+              <div class="dashboard-inner">
                 <!-- Left Sub-modules -->
-                <div class="col-span-4 space-y-6">
+                <div class="space-y-4 md:space-y-6">
                   <div
                     id="card-network-health"
                     class="glass-panel border-white/10 rounded-2xl p-6 h-[180px] flex flex-col justify-between"
@@ -1301,7 +1412,7 @@
                 <!-- Main Content Area -->
                 <div
                   id="panel-radar"
-                  class="col-span-8 glass-panel border-white/10 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-white/[0.02] to-transparent"
+                  class="glass-panel border-white/10 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-white/[0.02] to-transparent min-h-[280px] sm:min-h-0"
                 >
                   <div class="relative group">
                     <!-- Glow and Central Node -->
@@ -1361,12 +1472,13 @@
     <!-- Statistics -->
     <section
       id="stats-section"
-      class="py-section-gap container mx-auto px-gutter scroll-reveal"
+      class="section-pad container mx-auto px-4 sm:px-6 lg:px-gutter scroll-reveal"
     >
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
-        <div class="p-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 text-center">
+        <div class="p-4 md:p-8">
           <div
-            class="font-display-2xl text-white text-display-2xl mb-4 counter"
+            class="font-display-2xl text-white mb-4 counter"
+            style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
             data-target="400"
             data-suffix="M+"
           >
@@ -1380,7 +1492,8 @@
         </div>
         <div class="p-8">
           <div
-            class="font-display-2xl text-white text-display-2xl mb-4 counter"
+            class="font-display-2xl text-white mb-4 counter"
+            style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
             data-target="120"
             data-suffix="+"
           >
@@ -1394,7 +1507,8 @@
         </div>
         <div class="p-8">
           <div
-            class="font-display-2xl text-white text-display-2xl mb-4 counter"
+            class="font-display-2xl text-white mb-4 counter"
+            style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
             data-target="99.99"
             data-decimals="2"
             data-suffix="%"
@@ -1409,7 +1523,8 @@
         </div>
         <div class="p-8">
           <div
-            class="font-display-2xl text-on-surface-variant text-display-2xl mb-4 counter"
+            class="font-display-2xl text-on-surface-variant mb-4 counter"
+            style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
             data-target="2.4"
             data-decimals="1"
             data-suffix="s"
@@ -1426,11 +1541,11 @@
     </section>
     <!-- Case Studies -->
     <section
-      class="py-section-gap bg-background overflow-hidden"
+      class="section-pad bg-background"
       id="cases-section"
     >
-      <div class="container mx-auto px-gutter mb-16">
-        <div class="flex justify-between items-end">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-gutter mb-8 md:mb-16">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
           <h2 class="font-display-lg text-display-lg text-white">
             Success in <br /><span class="text-on-surface-variant"
               >Motion.</span
@@ -1443,9 +1558,9 @@
           </button>
         </div>
       </div>
-      <div class="px-gutter" id="horizontal-container">
+      <div class="px-4 sm:px-6 lg:px-gutter" id="horizontal-container">
         <div class="horizontal-scroll-wrapper" id="horizontal-scroll">
-          <div class="min-w-[80vw] md:min-w-[45vw] group cursor-pointer">
+          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -1479,7 +1594,7 @@
               nodes across a national power grid.
             </p>
           </div>
-          <div class="min-w-[80vw] md:min-w-[45vw] group cursor-pointer">
+          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -1513,7 +1628,7 @@
               using autonomous atomic processing.
             </p>
           </div>
-          <div class="min-w-[80vw] md:min-w-[45vw] group cursor-pointer">
+          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -1547,7 +1662,7 @@
               anomaly detection at the edge.
             </p>
           </div>
-          <div class="min-w-[80vw] md:min-w-[45vw] group cursor-pointer">
+          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -1581,7 +1696,7 @@
               packet loss and predictive failure alerting.
             </p>
           </div>
-          <div class="min-w-[80vw] md:min-w-[45vw] group cursor-pointer">
+          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -1615,7 +1730,7 @@
               spatial predictive models.
             </p>
           </div>
-          <div class="min-w-[80vw] md:min-w-[45vw] group cursor-pointer">
+          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
