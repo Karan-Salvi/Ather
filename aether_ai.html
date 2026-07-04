@@ -7,6 +7,8 @@
     <title>Aether AI | Automated Intelligence</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap"
       rel="stylesheet"
@@ -807,7 +809,7 @@
       </div>
     </section>
     <!-- Dashboard Showcase (The Control Center) -->
-    <section class="py-section-gap scroll-reveal bg-black" id="control-center">
+    <section class="py-section-gap scroll-reveal bg-black" id="dashboard-pin">
       <div class="container mx-auto px-gutter">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <!-- Left Content Column -->
@@ -823,9 +825,9 @@
               Orchestrate from a <br />single glass pane.
             </h2>
             <ul class="space-y-6 mb-12">
-              <li class="flex items-center gap-4 group">
+              <li class="flex items-center gap-4 group pin-bullet">
                 <span
-                  class="material-symbols-outlined text-white text-[24px]"
+                  class="material-symbols-outlined text-white text-[24px] check-icon"
                   style="
                     font-variation-settings:
                       &quot;FILL&quot; 0,
@@ -838,9 +840,9 @@
                   >Real-time throughput monitoring</span
                 >
               </li>
-              <li class="flex items-center gap-4 group">
+              <li class="flex items-center gap-4 group pin-bullet">
                 <span
-                  class="material-symbols-outlined text-white text-[24px]"
+                  class="material-symbols-outlined text-white text-[24px] check-icon"
                   style="
                     font-variation-settings:
                       &quot;FILL&quot; 0,
@@ -853,9 +855,9 @@
                   >One-click deployment rollbacks</span
                 >
               </li>
-              <li class="flex items-center gap-4 group">
+              <li class="flex items-center gap-4 group pin-bullet">
                 <span
-                  class="material-symbols-outlined text-white text-[24px]"
+                  class="material-symbols-outlined text-white text-[24px] check-icon"
                   style="
                     font-variation-settings:
                       &quot;FILL&quot; 0,
@@ -901,6 +903,7 @@
                 <!-- Left Sub-modules -->
                 <div class="col-span-4 space-y-6">
                   <div
+                    id="card-network-health"
                     class="glass-panel border-white/10 rounded-2xl p-6 h-[180px] flex flex-col justify-between"
                   >
                     <div
@@ -912,11 +915,13 @@
                       class="w-full h-20 bg-white/5 rounded-lg relative overflow-hidden border border-white/5"
                     >
                       <div
+                        id="bar-network-health"
                         class="absolute inset-y-0 left-0 bg-white/20 w-3/4 animate-pulse"
                       ></div>
                     </div>
                   </div>
                   <div
+                    id="card-active-models"
                     class="glass-panel border-white/10 rounded-2xl p-6 flex-1 h-[200px]"
                   >
                     <div
@@ -925,14 +930,17 @@
                       Active Models
                     </div>
                     <div class="space-y-4">
-                      <div class="h-2 w-full bg-white/10 rounded-full"></div>
+                      <div id="active-model-bar-1" class="h-2 w-full bg-white/10 rounded-full"></div>
                       <div
+                        id="active-model-bar-2"
                         class="h-2 w-4/5 bg-white/10 rounded-full opacity-60"
                       ></div>
                       <div
+                        id="active-model-bar-3"
                         class="h-2 w-2/3 bg-white/10 rounded-full opacity-30"
                       ></div>
                       <div
+                        id="active-model-bar-4"
                         class="h-2 w-3/4 bg-white/10 rounded-full opacity-10"
                       ></div>
                     </div>
@@ -940,11 +948,13 @@
                 </div>
                 <!-- Main Content Area -->
                 <div
+                  id="panel-radar"
                   class="col-span-8 glass-panel border-white/10 rounded-2xl flex items-center justify-center relative bg-gradient-to-br from-white/[0.02] to-transparent"
                 >
                   <div class="relative group">
                     <!-- Glow and Central Node -->
                     <div
+                      id="radar-rings"
                       class="w-64 h-64 border border-white/10 rounded-full animate-[spin_20s_linear_infinite] flex items-center justify-center"
                     >
                       <div
@@ -970,11 +980,13 @@
                   </div>
                   <!-- AI Insight Card Floating -->
                   <div
+                    id="card-ai-insight"
                     class="absolute right-6 top-1/2 -translate-y-1/2 glass-panel p-6 rounded-2xl border-white/20 luminous-glow shadow-2xl max-w-[240px] z-20 backdrop-blur-2xl"
                   >
                     <div class="flex items-center gap-3 mb-3">
                       <div
-                        class="w-2.5 h-2.5 rounded-full bg-white/60 animate-pulse"
+                        id="insight-status-dot"
+                        class="w-2.5 h-2.5 rounded-full bg-white/60"
                       ></div>
                       <span
                         class="font-label-caps text-[10px] text-white tracking-widest"
@@ -995,11 +1007,15 @@
       </div>
     </section>
     <!-- Statistics -->
-    <section class="py-section-gap container mx-auto px-gutter scroll-reveal">
+    <section id="stats-section" class="py-section-gap container mx-auto px-gutter scroll-reveal">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
         <div class="p-8">
-          <div class="font-display-2xl text-white text-display-2xl mb-4">
-            400M+
+          <div
+            class="font-display-2xl text-white text-display-2xl mb-4 counter"
+            data-target="400"
+            data-suffix="M+"
+          >
+            0M+
           </div>
           <div
             class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant"
@@ -1008,8 +1024,12 @@
           </div>
         </div>
         <div class="p-8">
-          <div class="font-display-2xl text-white text-display-2xl mb-4">
-            120+
+          <div
+            class="font-display-2xl text-white text-display-2xl mb-4 counter"
+            data-target="120"
+            data-suffix="+"
+          >
+            0+
           </div>
           <div
             class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant"
@@ -1018,8 +1038,13 @@
           </div>
         </div>
         <div class="p-8">
-          <div class="font-display-2xl text-white text-display-2xl mb-4">
-            99.99
+          <div
+            class="font-display-2xl text-white text-display-2xl mb-4 counter"
+            data-target="99.99"
+            data-decimals="2"
+            data-suffix="%"
+          >
+            0.00%
           </div>
           <div
             class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant"
@@ -1029,9 +1054,12 @@
         </div>
         <div class="p-8">
           <div
-            class="font-display-2xl text-on-surface-variant text-display-2xl mb-4"
+            class="font-display-2xl text-on-surface-variant text-display-2xl mb-4 counter"
+            data-target="2.4"
+            data-decimals="1"
+            data-suffix="s"
           >
-            2.4s
+            0.0s
           </div>
           <div
             class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant"
@@ -1735,6 +1763,8 @@
             scrollRevealObserver.observe(el);
           });
 
+        const statsSection = document.getElementById("stats-section");
+        const counters = document.querySelectorAll(".counter");
         const horizontalScroll = document.getElementById("horizontal-scroll");
         const casesSection = document.getElementById("cases-section");
         const parallaxLayers = document.querySelectorAll(".parallax-layer");
@@ -1742,6 +1772,7 @@
 
         window.addEventListener("scroll", () => {
           const scrolled = window.pageYOffset;
+          const viewHeight = window.innerHeight;
 
           if (scrolled < 1200) {
             parallaxLayers.forEach((layer) => {
@@ -1753,8 +1784,22 @@
             });
           }
 
+          // Statistics counters dynamic scroll progress
+          if (statsSection) {
+            const statsRect = statsSection.getBoundingClientRect();
+            if (statsRect.top < viewHeight && statsRect.bottom > 0) {
+              const statsProgress = Math.min(Math.max((viewHeight - statsRect.top) / (viewHeight + statsRect.height), 0), 1);
+              counters.forEach((counter) => {
+                const targetValue = parseFloat(counter.getAttribute("data-target"));
+                const suffix = counter.getAttribute("data-suffix") || "";
+                const decimals = parseInt(counter.getAttribute("data-decimals") || "0", 10);
+                const currentValue = statsProgress * targetValue;
+                counter.textContent = currentValue.toFixed(decimals) + suffix;
+              });
+            }
+          }
+
           const rect = casesSection.getBoundingClientRect();
-          const viewHeight = window.innerHeight;
           if (rect.top < viewHeight && rect.bottom > 0) {
             const scrollProgress =
               (viewHeight - rect.top) / (viewHeight + rect.height);
@@ -1767,6 +1812,92 @@
             horizontalScroll.style.transform = `translateX(-${moveX}px)`;
           }
         });
+
+        // GSAP ScrollTrigger pinning and animation sequence for the dashboard control center
+        gsap.registerPlugin(ScrollTrigger);
+
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!prefersReducedMotion && statsSection) {
+          // Initialize GSAP ScrollTrigger timeline
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: "#dashboard-pin",
+              start: "top top",
+              end: "+=150%",
+              pin: true,
+              scrub: 1,
+              invalidateOnRefresh: true,
+            }
+          });
+
+          // Set initial hidden states for animated elements
+          gsap.set(".pin-bullet", { opacity: 0, x: 60 });
+          gsap.set(".pin-bullet .check-icon", { scale: 0.8 });
+          gsap.set(".dashboard-shell", { opacity: 0, scale: 0.96 });
+          gsap.set("#card-network-health", { opacity: 0, x: -30 });
+          gsap.set("#bar-network-health", { width: "0%" });
+          gsap.set("#card-active-models", { opacity: 0, x: -30 });
+          gsap.set(["#active-model-bar-1", "#active-model-bar-2", "#active-model-bar-3", "#active-model-bar-4"], { width: "0%" });
+          gsap.set("#panel-radar", { opacity: 0, x: -40 });
+          gsap.set("#radar-rings", { scale: 0.7 });
+          gsap.set("#card-ai-insight", { opacity: 0, x: 40 });
+
+          // STAGE 1 — CHECKLIST BULLETS, RIGHT TO LEFT, ONE BY ONE
+          // Bullet 1
+          tl.to(".pin-bullet:nth-child(1)", { opacity: 1, x: 0, duration: 1 })
+            .to(".pin-bullet:nth-child(1) .check-icon", { scale: 1.15, duration: 0.3 })
+            .to(".pin-bullet:nth-child(1) .check-icon", { scale: 1, duration: 0.2 });
+
+          // Bullet 2
+          tl.to(".pin-bullet:nth-child(2)", { opacity: 1, x: 0, duration: 1 })
+            .to(".pin-bullet:nth-child(2) .check-icon", { scale: 1.15, duration: 0.3 })
+            .to(".pin-bullet:nth-child(2) .check-icon", { scale: 1, duration: 0.2 });
+
+          // Bullet 3
+          tl.to(".pin-bullet:nth-child(3)", { opacity: 1, x: 0, duration: 1 })
+            .to(".pin-bullet:nth-child(3) .check-icon", { scale: 1.15, duration: 0.3 })
+            .to(".pin-bullet:nth-child(3) .check-icon", { scale: 1, duration: 0.2 });
+
+          // STAGE 2 — DASHBOARD MOCKUP
+          // 2a. Browser chrome frame
+          tl.to(".dashboard-shell", { opacity: 1, scale: 1, duration: 1.2 });
+
+          // 2b. Left stacked cards
+          // Network Health
+          tl.to("#card-network-health", { opacity: 1, x: 0, duration: 1 })
+            .to("#bar-network-health", { width: "75%", duration: 1 });
+          
+          // Active Models
+          tl.to("#card-active-models", { opacity: 1, x: 0, duration: 1 })
+            .to("#active-model-bar-1", { width: "100%", duration: 0.4 })
+            .to("#active-model-bar-2", { width: "80%", duration: 0.4 })
+            .to("#active-model-bar-3", { width: "65%", duration: 0.4 })
+            .to("#active-model-bar-4", { width: "75%", duration: 0.4 });
+
+          // 2c. Large right-hand panel
+          tl.to("#panel-radar", { opacity: 1, x: 0, duration: 1.5 })
+            .to("#radar-rings", { scale: 1, duration: 1 }, "<");
+
+          // 2d. Floating "AI Insight" card
+          tl.to("#card-ai-insight", { opacity: 1, x: 0, duration: 1.5 });
+          
+          // Pulse/Ping trigger callback at the end
+          tl.call(() => {
+            const isBackward = tl.reversed() || (tl.scrollTrigger && tl.scrollTrigger.direction < 0);
+            const dot = document.getElementById("insight-status-dot");
+            if (dot) {
+              if (isBackward) {
+                dot.classList.remove("animate-ping");
+              } else {
+                dot.classList.add("animate-ping");
+              }
+            }
+          }, null, "+=0.1");
+
+          // Hold the fully assembled state briefly before releasing the pin
+          tl.to({}, { duration: 0.8 });
+        }
 
         document.addEventListener("mousemove", (e) => {
           const magnetics = document.querySelectorAll(".magnetic-hover");
