@@ -1828,6 +1828,17 @@
               pin: true,
               scrub: 1,
               invalidateOnRefresh: true,
+              onUpdate: (self) => {
+                const dot = document.getElementById("insight-status-dot");
+                if (dot) {
+                  // Activate pulse indicator once dashboard layout has fully assembled (approx. 94% timeline progress)
+                  if (tl.progress() >= 0.94) {
+                    dot.classList.add("animate-ping");
+                  } else {
+                    dot.classList.remove("animate-ping");
+                  }
+                }
+              }
             }
           });
 
@@ -1881,23 +1892,15 @@
 
           // 2d. Floating "AI Insight" card
           tl.to("#card-ai-insight", { opacity: 1, x: 0, duration: 1.5 });
-          
-          // Pulse/Ping trigger callback at the end
-          tl.call(() => {
-            const isBackward = tl.reversed() || (tl.scrollTrigger && tl.scrollTrigger.direction < 0);
-            const dot = document.getElementById("insight-status-dot");
-            if (dot) {
-              if (isBackward) {
-                dot.classList.remove("animate-ping");
-              } else {
-                dot.classList.add("animate-ping");
-              }
-            }
-          }, null, "+=0.1");
 
           // Hold the fully assembled state briefly before releasing the pin
           tl.to({}, { duration: 0.8 });
         }
+
+        // Recalculate ScrollTrigger on window resize to ensure correct pin boundaries
+        window.addEventListener("resize", () => {
+          ScrollTrigger.refresh();
+        });
 
         document.addEventListener("mousemove", (e) => {
           const magnetics = document.querySelectorAll(".magnetic-hover");
