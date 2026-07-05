@@ -3283,38 +3283,37 @@
         gsap.registerPlugin(ScrollTrigger);
         ScrollTrigger.config({ limitCallbacks: true });
 
-        // ── Stats counters: fire once when #stats-section centers in viewport ──
+        // ── Stats counters: scroll-scrubbed from top-bottom to center-center ──
+        // Numbers count up as #stats-section scrolls into view, reach their
+        // final values when the section centers, then hold. Fully reversible
+        // within the start→end range; holds at 0 above start, holds at target
+        // below end — no extra freeze/reset logic needed.
         if (document.getElementById("stats-section")) {
-          ScrollTrigger.create({
-            trigger: "#stats-section",
-            start: "center center",
-            once: true,
-            onEnter: () => {
-              document.querySelectorAll(".counter").forEach((el, i) => {
-                const target = parseFloat(el.getAttribute("data-target"));
-                const suffix = el.getAttribute("data-suffix") || "";
-                const decimals = parseInt(
-                  el.getAttribute("data-decimals") || "0",
-                  10,
-                );
-                gsap.to(
-                  { val: 0 },
-                  {
-                    val: target,
-                    duration: 1.6,
-                    ease: "power2.out",
-                    delay: i * 0.1,
-                    onUpdate: function () {
-                      el.textContent =
-                        this.targets()[0].val.toFixed(decimals) + suffix;
-                    },
-                    onComplete: function () {
-                      el.textContent = target.toFixed(decimals) + suffix;
-                    },
-                  },
-                );
-              });
-            },
+          document.querySelectorAll(".counter").forEach((el) => {
+            const target = parseFloat(el.getAttribute("data-target"));
+            const suffix = el.getAttribute("data-suffix") || "";
+            const decimals = parseInt(
+              el.getAttribute("data-decimals") || "0",
+              10,
+            );
+            const proxy = { val: 0 };
+            gsap.fromTo(
+              proxy,
+              { val: 0 },
+              {
+                val: target,
+                ease: "none",
+                onUpdate: function () {
+                  el.textContent = proxy.val.toFixed(decimals) + suffix;
+                },
+                scrollTrigger: {
+                  trigger: "#stats-section",
+                  start: "top bottom",
+                  end: "center center",
+                  scrub: 0.5,
+                },
+              },
+            );
           });
         }
 
