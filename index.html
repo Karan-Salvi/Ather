@@ -685,6 +685,25 @@
         max-width: 100%;
       }
 
+      /* -- Testimonial Card Spotlight ---------------------------------------------------- */
+      .testimonial-spotlight {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border-radius: inherit;
+        opacity: 0;
+        background: radial-gradient(
+          circle at var(--spot-x, 50%) var(--spot-y, 50%),
+          rgba(255, 255, 255, 0.12),
+          transparent 55%
+        );
+        transition: opacity 0.3s ease;
+        z-index: 1;
+      }
+      .testimonial-spotlight.active {
+        opacity: 1;
+      }
+
       /* -- Custom Cursor ----------------------------------------------------------------- */
       #custom-cursor { display: none; }
 
@@ -2225,14 +2244,15 @@
       <div class="container mx-auto px-4 sm:px-gutter">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div
-            class="glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative"
+            class=”glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative overflow-hidden testimonial-card”
           >
+            <div class=”testimonial-spotlight” aria-hidden=”true”></div>
             <span
-              class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8"
-              >“</span
+              class=”text-6xl font-display-2xl text-white/10 absolute top-8 left-8 z-10”
+              >”</span
             >
             <p
-              class="font-body-lg text-white italic mb-10 relative z-10 leading-relaxed"
+              class=”font-body-lg text-white italic mb-10 relative z-10 leading-relaxed”
             >
               Aether AI didn't just improve our workflow; it fundamentally
               redefined how we approach data architecture. The 'invisible' part
@@ -2253,14 +2273,15 @@
             </div>
           </div>
           <div
-            class="glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative md:mt-12"
+            class=”glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative overflow-hidden testimonial-card md:mt-12”
           >
+            <div class=”testimonial-spotlight” aria-hidden=”true”></div>
             <span
-              class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8"
-              >“</span
+              class=”text-6xl font-display-2xl text-white/10 absolute top-8 left-8 z-10”
+              >”</span
             >
             <p
-              class="font-body-lg text-white italic mb-10 relative z-10 leading-relaxed"
+              class=”font-body-lg text-white italic mb-10 relative z-10 leading-relaxed”
             >
               The latency we achieved with their Neural Processing nodes allowed
               us to launch real-time features we previously thought were
@@ -2281,14 +2302,15 @@
             </div>
           </div>
           <div
-            class="glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative"
+            class=”glass-panel top-light-border p-6 sm:p-12 rounded-[24px] sm:rounded-[40px] relative overflow-hidden testimonial-card”
           >
+            <div class=”testimonial-spotlight” aria-hidden=”true”></div>
             <span
-              class="text-6xl font-display-2xl text-white/10 absolute top-8 left-8"
-              >“</span
+              class=”text-6xl font-display-2xl text-white/10 absolute top-8 left-8 z-10”
+              >”</span
             >
             <p
-              class="font-body-lg text-white italic mb-10 relative z-10 leading-relaxed"
+              class=”font-body-lg text-white italic mb-10 relative z-10 leading-relaxed”
             >
               Setting up Aether was faster than setting up a basic CRM. It’s the
               first time an enterprise tool has felt like it was built for elite
@@ -3879,6 +3901,49 @@
         } catch (error) {
           console.error("Magnetic hover setup failed:", error);
         }
+
+        // ── Testimonial card cursor spotlight ────────────────────────────
+        (function initTestimonialSpotlight() {
+          if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+          var cards = document.querySelectorAll('.testimonial-card');
+          cards.forEach(function(card) {
+            var spotlight = card.querySelector('.testimonial-spotlight');
+            if (!spotlight) return;
+            var spotX = 50, spotY = 50;
+            var currentX = 50, currentY = 50;
+            var rafId = null;
+
+            function lerp(a, b, t) { return a + (b - a) * t; }
+
+            function tick() {
+              currentX = lerp(currentX, spotX, 0.12);
+              currentY = lerp(currentY, spotY, 0.12);
+              spotlight.style.setProperty('--spot-x', currentX.toFixed(2) + '%');
+              spotlight.style.setProperty('--spot-y', currentY.toFixed(2) + '%');
+              if (Math.abs(currentX - spotX) > 0.05 || Math.abs(currentY - spotY) > 0.05) {
+                rafId = requestAnimationFrame(tick);
+              } else {
+                rafId = null;
+              }
+            }
+
+            card.addEventListener('mousemove', function(e) {
+              var rect = card.getBoundingClientRect();
+              spotX = ((e.clientX - rect.left) / rect.width) * 100;
+              spotY = ((e.clientY - rect.top) / rect.height) * 100;
+              if (!rafId) rafId = requestAnimationFrame(tick);
+            });
+
+            card.addEventListener('mouseenter', function() {
+              spotlight.classList.add('active');
+            });
+
+            card.addEventListener('mouseleave', function() {
+              spotlight.classList.remove('active');
+              if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+            });
+          });
+        })();
 
         // ── Section-aware custom cursor states ───────────────────────────
         function initCustomCursor() {
