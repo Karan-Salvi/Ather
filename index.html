@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 
 <html class="dark" lang="en">
   <head>
@@ -683,6 +683,111 @@
         height: 100dvh;
         width: 100%;
         max-width: 100%;
+      }
+
+      /* -- Custom Cursor ----------------------------------------------------------------- */
+      @media (hover: hover) and (pointer: fine) {
+        * { cursor: none !important; }
+
+        #custom-cursor {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 12px;
+          height: 12px;
+          background: rgba(255, 255, 255, 0.9);
+          border-radius: 9999px;
+          border: 1.5px solid transparent;
+          pointer-events: none;
+          z-index: 99999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: translate(-50%, -50%);
+          transition:
+            width 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+            height 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+            background 0.35s ease,
+            border-color 0.35s ease,
+            opacity 0.2s ease;
+          will-change: transform;
+        }
+
+        #cursor-label,
+        .cursor-icon {
+          opacity: 0;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          color: #000;
+          font-family: 'JetBrains Mono', monospace;
+          pointer-events: none;
+          transition: opacity 0.15s ease;
+          user-select: none;
+        }
+
+        .cursor-icon {
+          width: 16px;
+          height: 16px;
+          position: absolute;
+        }
+
+        /* state-view: 80px circle, "View" label */
+        #custom-cursor.state-view {
+          width: 80px;
+          height: 80px;
+        }
+        #custom-cursor.state-view #cursor-label { opacity: 1; }
+
+        /* state-play: 80px circle, play icon */
+        #custom-cursor.state-play {
+          width: 80px;
+          height: 80px;
+        }
+        #custom-cursor.state-play #cursor-icon-play { opacity: 1; }
+
+        /* state-explore: 80px circle, "Explore" label */
+        #custom-cursor.state-explore {
+          width: 80px;
+          height: 80px;
+        }
+        #custom-cursor.state-explore #cursor-label { opacity: 1; }
+
+        /* state-select: 56px circle, "Select" label */
+        #custom-cursor.state-select {
+          width: 56px;
+          height: 56px;
+        }
+        #custom-cursor.state-select #cursor-label { opacity: 1; }
+
+        /* state-node: 36px outlined ring, no fill, no label */
+        #custom-cursor.state-node {
+          width: 36px;
+          height: 36px;
+          background: transparent;
+          border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* state-drag: 64px circle, drag icon */
+        #custom-cursor.state-drag {
+          width: 64px;
+          height: 64px;
+        }
+        #custom-cursor.state-drag #cursor-icon-drag { opacity: 1; }
+
+        /* state-hidden: invisible (over nav/footer text links) */
+        #custom-cursor.state-hidden { opacity: 0; }
+      }
+
+      /* Reduced motion: instant size changes, opacity retained */
+      @media (prefers-reduced-motion: reduce) {
+        #custom-cursor {
+          transition: opacity 0.1s ease;
+        }
+        #cursor-label,
+        .cursor-icon {
+          transition: none;
+        }
       }
     </style>
   </head>
