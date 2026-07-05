@@ -3861,6 +3861,84 @@
         } catch (error) {
           console.error("Magnetic hover setup failed:", error);
         }
+
+        // ── Section-aware custom cursor states ───────────────────────────
+        function initCustomCursor() {
+          const cursor = document.getElementById('custom-cursor');
+          const label  = document.getElementById('cursor-label');
+          if (!cursor || !label) return;
+
+          // Only run on true pointer devices — mirrors the CSS media query guard
+          if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+          // ── Follow loop: rAF lerp, factor 0.12 ───────────────────────
+          let mx = -200, my = -200; // start offscreen to avoid load-flash
+          let cx = -200, cy = -200;
+
+          document.addEventListener('mousemove', function(e) {
+            mx = e.clientX;
+            my = e.clientY;
+          });
+
+          (function loop() {
+            cx += (mx - cx) * 0.12;
+            cy += (my - cy) * 0.12;
+            cursor.style.transform = 'translate(' + cx + 'px, ' + cy + 'px) translate(-50%, -50%)';
+            requestAnimationFrame(loop);
+          })();
+
+          // ── State machine ─────────────────────────────────────────────
+          var currentState = '';
+          var labelTimeout;
+
+          function setCursorState(state, labelText) {
+            labelText = labelText || '';
+            if (state === currentState) return;
+            currentState = state;
+
+            // Fade out label text, swap content mid-fade, let CSS class re-show it
+            label.style.opacity = '0';
+            clearTimeout(labelTimeout);
+            labelTimeout = setTimeout(function() {
+              label.textContent = labelText;
+            }, 150);
+
+            cursor.className = state ? ('state-' + state) : '';
+          }
+
+          function clearCursorState() {
+            setCursorState('');
+          }
+
+          // ── Zone wiring ───────────────────────────────────────────────
+          // Selectors confirmed against actual DOM in index.html.
+          // Pricing: .max-w-6xl.mx-auto > div scopes to pricing grid only
+          // (testimonials grid lacks max-w-6xl).
+          var zones = [
+            { selector: '#horizontal-scroll > div',      state: 'view',    label: 'View'    },
+            { selector: '#hero-btn-2',                    state: 'play',    label: ''        },
+            { selector: '.dashboard-shell',               state: 'explore', label: 'Explore' },
+            { selector: '.max-w-6xl.mx-auto > div',       state: 'select',  label: 'Select'  },
+            { selector: '.step-node',                     state: 'node',    label: ''        },
+            { selector: '.marquee-container',             state: 'drag',    label: ''        },
+            { selector: 'nav a, footer a',                state: 'hidden',  label: ''        },
+          ];
+
+          zones.forEach(function(zone) {
+            document.querySelectorAll(zone.selector).forEach(function(el) {
+              el.addEventListener('mouseenter', function() {
+                setCursorState(zone.state, zone.label);
+              });
+              el.addEventListener('mouseleave', clearCursorState);
+            });
+          });
+        }
+
+        try {
+          initCustomCursor();
+        } catch (e) {
+          console.error('Cursor states failed:', e);
+        }
       });
     </script>
     <!-- ── Custom Cursor ─────────────────────────────────────────────────── -->
