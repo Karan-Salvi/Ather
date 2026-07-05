@@ -686,10 +686,13 @@
       }
 
       /* -- Custom Cursor ----------------------------------------------------------------- */
+      #custom-cursor { display: none; }
+
       @media (hover: hover) and (pointer: fine) {
         * { cursor: none !important; }
 
         #custom-cursor {
+          display: flex;
           position: fixed;
           top: 0;
           left: 0;
@@ -700,7 +703,6 @@
           border: 1.5px solid transparent;
           pointer-events: none;
           z-index: 99999;
-          display: flex;
           align-items: center;
           justify-content: center;
           transform: translate(-50%, -50%);
@@ -3949,10 +3951,10 @@
     <!-- ── Custom Cursor ─────────────────────────────────────────────────── -->
     <div id="custom-cursor" aria-hidden="true">
       <span id="cursor-label"></span>
-      <svg id="cursor-icon-play" class="cursor-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <svg id="cursor-icon-play" class="cursor-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
         <polygon points="7,4 20,12 7,20" fill="white"/>
       </svg>
-      <svg id="cursor-icon-drag" class="cursor-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <svg id="cursor-icon-drag" class="cursor-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
         <path d="M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
