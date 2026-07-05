@@ -2463,9 +2463,9 @@
       ></div>
       <div class="container mx-auto px-4 sm:px-gutter relative z-10">
         <h2
-          class="font-display-2xl text-[clamp(2.25rem,10vw,4.5rem)] lg:text-display-2xl mb-12 tracking-tighter max-w-full md:max-w-4xl mx-auto text-white leading-[1.1]"
+          class="font-display-2xl text-display-2xl mb-12 tracking-tighter max-w-4xl mx-auto text-white"
         >
-          Ready for&nbsp;the <br /><span class="gradient-text italic font-light"
+          Ready for the <br /><span class="gradient-text italic font-light"
             >FUTURE?</span
           >
         </h2>
@@ -3514,9 +3514,8 @@
           ScrollTrigger.refresh();
         });
 
-        // Second refresh after web fonts finish swapping — Geist/JetBrains Mono
-        // can change text height after the load event, shifting card heights and
-        // invalidating any trigger positions measured before the swap completed.
+        // Recalculate after web fonts finish loading — font swap changes text
+        // reflow height, which makes card heights and trigger positions stale.
         if (document.fonts && document.fonts.ready) {
           document.fonts.ready.then(() => ScrollTrigger.refresh());
         }
@@ -3807,52 +3806,54 @@
               });
             });
 
-            // ── 7. Single ScrollTrigger Parallax Timeline ──────────────────────
-            const parallaxTl = gsap.timeline({
-              scrollTrigger: {
-                trigger: servicesSection,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 0.6,
-                invalidateOnRefresh: true,
-              },
-            });
+            // ── 7. Single ScrollTrigger Parallax Timeline (desktop only) ─────────
+            // Scoped to md+ (768px) to prevent competing y-transforms on mobile's
+            // single-column stack, where the parallax offsets cause cards to overlap
+            // the entrance animation's y: 40 → y: 0 stagger on reload.
+            if (window.matchMedia("(min-width: 768px)").matches) {
+              const parallaxTl = gsap.timeline({
+                scrollTrigger: {
+                  trigger: servicesSection,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 0.6,
+                  invalidateOnRefresh: true,
+                },
+              });
 
-            parallaxTl
-              // Heading and subtext drift upward at different rates
-              .to("#services-heading", { y: -60, ease: "none", duration: 1 }, 0)
-              .to("#services-subtext", { y: -30, ease: "none", duration: 1 }, 0)
-
-              // Bar chart horizontal drift
-              .to("#chart-bars", { x: -15, ease: "none", duration: 1 }, 0)
-
-              // Background parallax depth glow
-              .fromTo(
-                "#services-bg-glow",
-                { y: 40, scale: 0.9 },
-                { y: -40, scale: 1.1, ease: "none", duration: 1 },
-                0,
-              )
-
-              // Section-exit fade (transition into next section)
-              .to(
-                "#services-grid",
-                { opacity: 0.85, ease: "power1.in", duration: 0.3 },
-                0.7,
-              );
-
-            // Card parallax depth effect — desktop only. On mobile the cards
-            // stack vertically and differential y offsets compound with the
-            // entrance y:40 initial state, causing cards to overlap on reload.
-            if (window.innerWidth >= 768) {
               parallaxTl
+                // Heading and subtext drift upward at different rates
+                .to("#services-heading", { y: -60, ease: "none", duration: 1 }, 0)
+                .to("#services-subtext", { y: -30, ease: "none", duration: 1 }, 0)
+
+                // Cards drift upward at different speeds (parallax depth)
                 .to("#card-workflows", { y: -20, ease: "none", duration: 1 }, 0)
                 .to("#card-neural", { y: -45, ease: "none", duration: 1 }, 0)
                 .to("#card-scaling", { y: -35, ease: "none", duration: 1 }, 0)
                 .to("#card-power", { y: -55, ease: "none", duration: 1 }, 0)
+
+                // Icons move in opposite direction relative to card movement (counter-movement)
                 .to("#icon-workflows", { y: 10, ease: "none", duration: 1 }, 0)
                 .to("#icon-neural", { y: 22.5, ease: "none", duration: 1 }, 0)
-                .to("#icon-scaling", { y: 17.5, ease: "none", duration: 1 }, 0);
+                .to("#icon-scaling", { y: 17.5, ease: "none", duration: 1 }, 0)
+
+                // Bar chart horizontal drift
+                .to("#chart-bars", { x: -15, ease: "none", duration: 1 }, 0)
+
+                // Background parallax depth glow
+                .fromTo(
+                  "#services-bg-glow",
+                  { y: 40, scale: 0.9 },
+                  { y: -40, scale: 1.1, ease: "none", duration: 1 },
+                  0,
+                )
+
+                // Section-exit fade (transition into next section)
+                .to(
+                  "#services-grid",
+                  { opacity: 0.85, ease: "power1.in", duration: 0.3 },
+                  0.7,
+                );
             }
           }
         }
