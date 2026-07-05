@@ -3284,10 +3284,9 @@
         ScrollTrigger.config({ limitCallbacks: true });
 
         // ── Stats counters: scroll-scrubbed from top-bottom to center-center ──
-        // Numbers count up as #stats-section scrolls into view, reach their
-        // final values when the section centers, then hold. Fully reversible
-        // within the start→end range; holds at 0 above start, holds at target
-        // below end — no extra freeze/reset logic needed.
+        // Single gsap.to per counter — proxy object is what GSAP tweens, so
+        // onUpdate always reads the live value. fromTo with two object literals
+        // would tween the inline from-object instead of proxy, breaking onUpdate.
         if (document.getElementById("stats-section")) {
           document.querySelectorAll(".counter").forEach((el) => {
             const target = parseFloat(el.getAttribute("data-target"));
@@ -3297,23 +3296,19 @@
               10,
             );
             const proxy = { val: 0 };
-            gsap.fromTo(
-              proxy,
-              { val: 0 },
-              {
-                val: target,
-                ease: "none",
-                onUpdate: function () {
-                  el.textContent = proxy.val.toFixed(decimals) + suffix;
-                },
-                scrollTrigger: {
-                  trigger: "#stats-section",
-                  start: "top bottom",
-                  end: "center center",
-                  scrub: 0.5,
-                },
+            gsap.to(proxy, {
+              val: target,
+              ease: "none",
+              onUpdate: () => {
+                el.textContent = proxy.val.toFixed(decimals) + suffix;
               },
-            );
+              scrollTrigger: {
+                trigger: "#stats-section",
+                start: "top bottom",
+                end: "center center",
+                scrub: 0.5,
+              },
+            });
           });
         }
 
