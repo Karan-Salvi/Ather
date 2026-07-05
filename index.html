@@ -1892,7 +1892,7 @@
     <!-- Statistics -->
     <section
       id="stats-section"
-      class="section-pad container mx-auto px-4 sm:px-6 lg:px-gutter scroll-reveal"
+      class="section-pad container mx-auto px-4 sm:px-6 lg:px-gutter"
     >
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 text-center">
         <div class="p-4 md:p-8">
@@ -3310,6 +3310,8 @@
               },
             });
           });
+          // Recalculate trigger positions after full layout paint
+          ScrollTrigger.refresh();
         }
 
         if (!prefersReducedMotion && document.getElementById("dashboard-pin")) {
