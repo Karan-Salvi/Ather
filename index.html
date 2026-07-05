@@ -242,7 +242,9 @@
         border-radius: 0.75rem;
         font-size: 1rem;
         color: #c4c7c8;
-        transition: background 0.2s ease, color 0.2s ease;
+        transition:
+          background 0.2s ease,
+          color 0.2s ease;
       }
 
       .navbar-mobile-menu a:hover {
@@ -870,7 +872,9 @@
             >Pricing</a
           >
         </div>
-        <div class="hidden md:flex items-center gap-2 sm:gap-4 shrink-0 navbar-desktop-actions">
+        <div
+          class="hidden md:flex items-center gap-2 sm:gap-4 shrink-0 navbar-desktop-actions"
+        >
           <button
             class="text-on-surface-variant hover:text-on-surface font-body-md transition-all hover:scale-105 active:scale-95 px-4 py-2"
           >
@@ -938,7 +942,11 @@
       <!-- 3D Sphere: proportionally scaled, half-visible on mobile as bg accent -->
       <div
         class="threejs-container absolute top-1/2 -translate-y-1/2 right-[-10%] sm:right-[-5%] lg:right-[2%] pointer-events-none z-0"
-        style="width: clamp(220px, 50vw, 600px); height: clamp(220px, 50vw, 600px); opacity: 0.25;"
+        style="
+          width: clamp(220px, 50vw, 600px);
+          height: clamp(220px, 50vw, 600px);
+          opacity: 0.25;
+        "
         id="threejs-sphere"
       ></div>
       <div
@@ -974,10 +982,7 @@
               >
             </div>
           </div>
-          <h1
-            class="hero-headline-fluid max-w-5xl"
-            id="hero-headline"
-          >
+          <h1 class="hero-headline-fluid max-w-5xl" id="hero-headline">
             <span class="reveal-word">AUTOMATE</span>
             <span class="reveal-word text-outline-variant">/</span> <br />
             <!-- Item 8: Gradient sweep applied to INTELLIGENTLY span -->
@@ -986,7 +991,7 @@
               >INTELLIGENTLY</span
             >
           </h1>
-          
+
           <!-- Item 6: Terminal/log card (now in document flow) -->
           <!-- <div
             class="w-full max-w-md z-10"
@@ -1021,14 +1026,16 @@
             id="hero-description"
           >
             Aether AI orchestrates complex enterprise workflows with invisible
-            precision. Seamless integration, predictive scaling, and neural
-            data processing at the speed of thought.
+            precision. Seamless integration, predictive scaling, and neural data
+            processing at the speed of thought.
           </p>
           <div
             class="flex flex-col gap-4 items-center md:items-start mt-2"
             id="hero-btns"
           >
-            <div class="flex flex-wrap gap-3 md:gap-4 relative z-20 justify-center md:justify-start">
+            <div
+              class="flex flex-wrap gap-3 md:gap-4 relative z-20 justify-center md:justify-start"
+            >
               <button
                 class="scale-in bg-white text-black font-bold px-8 py-4 rounded-xl text-body-md hover:scale-105 transition-transform luminous-glow delay-[1200ms]"
                 id="hero-btn-1"
@@ -1503,7 +1510,9 @@
                   </div>
                   <div class="timeline-step-connector"></div>
                 </div>
-                <div class="timeline-step-text-col md:w-1/2 text-left step-content">
+                <div
+                  class="timeline-step-text-col md:w-1/2 text-left step-content"
+                >
                   <h4
                     class="font-display-lg text-headline-md mb-3 md:mb-4 group-hover:text-white transition-colors"
                   >
@@ -1574,7 +1583,9 @@
     <!-- Dashboard Showcase (The Control Center) -->
     <section class="section-pad bg-black" id="dashboard-pin">
       <div class="container mx-auto px-4 sm:px-6 lg:px-gutter">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start lg:items-center">
+        <div
+          class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start lg:items-center"
+        >
           <!-- Left Content Column -->
           <div class="lg:col-span-4 flex flex-col items-start text-left">
             <div
@@ -1782,7 +1793,12 @@
         <div class="p-4 md:p-8">
           <div
             class="font-display-2xl text-white mb-4 counter"
-            style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
+            style="
+              font-size: clamp(2rem, 8vw, 4.5rem);
+              line-height: 1.1;
+              letter-spacing: -0.04em;
+              font-weight: 700;
+            "
             data-target="400"
             data-suffix="M+"
           >
@@ -1797,7 +1813,12 @@
         <div class="p-4 md:p-8">
           <div
             class="font-display-2xl text-white mb-4 counter"
-            style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
+            style="
+              font-size: clamp(2rem, 8vw, 4.5rem);
+              line-height: 1.1;
+              letter-spacing: -0.04em;
+              font-weight: 700;
+            "
             data-target="120"
             data-suffix="+"
           >
@@ -1812,7 +1833,12 @@
         <div class="p-4 md:p-8">
           <div
             class="font-display-2xl text-white mb-4 counter"
-            style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
+            style="
+              font-size: clamp(2rem, 8vw, 4.5rem);
+              line-height: 1.1;
+              letter-spacing: -0.04em;
+              font-weight: 700;
+            "
             data-target="99.99"
             data-decimals="2"
             data-suffix="%"
@@ -1828,7 +1854,12 @@
         <div class="p-4 md:p-8">
           <div
             class="font-display-2xl text-on-surface-variant mb-4 counter"
-            style="font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1.1; letter-spacing: -0.04em; font-weight: 700;"
+            style="
+              font-size: clamp(2rem, 8vw, 4.5rem);
+              line-height: 1.1;
+              letter-spacing: -0.04em;
+              font-weight: 700;
+            "
             data-target="2.4"
             data-decimals="1"
             data-suffix="s"
@@ -1844,12 +1875,11 @@
       </div>
     </section>
     <!-- Case Studies -->
-    <section
-      class="section-pad bg-background"
-      id="cases-section"
-    >
+    <section class="section-pad bg-background" id="cases-section">
       <div class="container mx-auto px-4 sm:px-6 lg:px-gutter mb-8 md:mb-16">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+        <div
+          class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4"
+        >
           <h2 class="font-display-lg text-display-lg text-white">
             Success in <br /><span class="text-on-surface-variant"
               >Motion.</span
@@ -1864,7 +1894,9 @@
       </div>
       <div class="px-4 sm:px-6 lg:px-gutter" id="horizontal-container">
         <div class="horizontal-scroll-wrapper" id="horizontal-scroll">
-          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
+          <div
+            class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer"
+          >
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -1898,7 +1930,9 @@
               nodes across a national power grid.
             </p>
           </div>
-          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
+          <div
+            class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer"
+          >
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -1932,7 +1966,9 @@
               using autonomous atomic processing.
             </p>
           </div>
-          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
+          <div
+            class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer"
+          >
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -1966,7 +2002,9 @@
               anomaly detection at the edge.
             </p>
           </div>
-          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
+          <div
+            class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer"
+          >
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -2000,7 +2038,9 @@
               packet loss and predictive failure alerting.
             </p>
           </div>
-          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
+          <div
+            class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer"
+          >
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -2034,7 +2074,9 @@
               spatial predictive models.
             </p>
           </div>
-          <div class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer">
+          <div
+            class="min-w-[88vw] sm:min-w-[70vw] md:min-w-[45vw] group cursor-pointer"
+          >
             <div
               class="relative aspect-[16/9] rounded-[40px] overflow-hidden mb-8"
             >
@@ -2163,7 +2205,9 @@
       </div>
     </section>
     <!-- Pricing -->
-    <section class="py-section-gap bg-surface-container-lowest scroll-reveal scroll-reveal-fade">
+    <section
+      class="py-section-gap bg-surface-container-lowest scroll-reveal scroll-reveal-fade"
+    >
       <div class="container mx-auto px-4 sm:px-gutter">
         <div class="text-center mb-16">
           <h2 class="font-display-lg text-display-lg mb-4 text-white">
@@ -2393,14 +2437,20 @@
 
           // Guard: wait for a valid paint size before initializing WebGL
           // On mobile, clientWidth may be 0 at script-parse time.
-          var width = container.clientWidth || container.getBoundingClientRect().width;
-          var height = container.clientHeight || container.getBoundingClientRect().height;
+          var width =
+            container.clientWidth || container.getBoundingClientRect().width;
+          var height =
+            container.clientHeight || container.getBoundingClientRect().height;
 
           if (width === 0 || height === 0) {
             // Defer to next animation frame to let layout settle
             requestAnimationFrame(function () {
-              width = container.clientWidth || container.getBoundingClientRect().width;
-              height = container.clientHeight || container.getBoundingClientRect().height;
+              width =
+                container.clientWidth ||
+                container.getBoundingClientRect().width;
+              height =
+                container.clientHeight ||
+                container.getBoundingClientRect().height;
               if (width > 0 && height > 0) {
                 bootThreeJS(container, width, height);
               }
@@ -2414,12 +2464,22 @@
           var isMobile = width < 600;
 
           var scene = new THREE.Scene();
-          var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+          var camera = new THREE.PerspectiveCamera(
+            75,
+            width / height,
+            0.1,
+            1000,
+          );
           camera.position.z = isMobile ? 6.5 : 5; // pull camera back on mobile so sphere isn't cropped
 
-          var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
+          var renderer = new THREE.WebGLRenderer({
+            alpha: true,
+            antialias: !isMobile,
+          });
           renderer.setSize(width, height);
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+          renderer.setPixelRatio(
+            Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2),
+          );
           container.appendChild(renderer.domElement);
 
           var coreGroup = new THREE.Group();
@@ -2427,7 +2487,11 @@
 
           // Reduce geometry density on mobile for performance
           var sphereDetail = isMobile ? 20 : 32;
-          var outerGeo = new THREE.SphereGeometry(2, sphereDetail, sphereDetail);
+          var outerGeo = new THREE.SphereGeometry(
+            2,
+            sphereDetail,
+            sphereDetail,
+          );
           var outerMat = new THREE.MeshPhongMaterial({
             color: 0x888888,
             transparent: true,
@@ -2471,7 +2535,11 @@
           for (var i = 0; i < particleCount; i++) {
             var particle = new THREE.Mesh(particleGeo, particleMat);
             var angle = (i / particleCount) * Math.PI * 2;
-            particle.userData = { angle: angle, speed: 0.002 + i * 0.0005, radius: 2.5 };
+            particle.userData = {
+              angle: angle,
+              speed: 0.002 + i * 0.0005,
+              radius: 2.5,
+            };
             particles.push(particle);
             coreGroup.add(particle);
           }
@@ -2490,8 +2558,10 @@
           if (heroSection && !isMobile) {
             heroSection.addEventListener("mousemove", function (e) {
               var rect = heroSection.getBoundingClientRect();
-              var normX = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
-              var normY = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+              var normX =
+                (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+              var normY =
+                (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
               tiltTarget.x = -normY * 0.1;
               tiltTarget.y = normX * 0.1;
             });
@@ -2510,8 +2580,10 @@
             // Same rotation speed on all devices
             coreGroup.rotation.y += 0.002;
             coreGroup.rotation.x += 0.001;
-            coreGroup.rotation.x = (coreGroup.rotation.x % (Math.PI * 2)) + tiltCurrent.x;
-            coreGroup.rotation.y = (coreGroup.rotation.y % (Math.PI * 2)) + tiltCurrent.y;
+            coreGroup.rotation.x =
+              (coreGroup.rotation.x % (Math.PI * 2)) + tiltCurrent.x;
+            coreGroup.rotation.y =
+              (coreGroup.rotation.y % (Math.PI * 2)) + tiltCurrent.y;
 
             innerCore.rotation.y -= 0.005;
             ring1.rotation.z += 0.003;
@@ -2520,8 +2592,10 @@
 
             particles.forEach(function (particle) {
               particle.userData.angle += particle.userData.speed;
-              particle.position.x = Math.cos(particle.userData.angle) * particle.userData.radius;
-              particle.position.z = Math.sin(particle.userData.angle) * particle.userData.radius;
+              particle.position.x =
+                Math.cos(particle.userData.angle) * particle.userData.radius;
+              particle.position.z =
+                Math.sin(particle.userData.angle) * particle.userData.radius;
               particle.position.y = 0;
             });
 
@@ -2529,8 +2603,11 @@
           }
 
           window.addEventListener("resize", function () {
-            var w = container.clientWidth || container.getBoundingClientRect().width;
-            var h = container.clientHeight || container.getBoundingClientRect().height;
+            var w =
+              container.clientWidth || container.getBoundingClientRect().width;
+            var h =
+              container.clientHeight ||
+              container.getBoundingClientRect().height;
             if (w === 0 || h === 0) return;
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
@@ -2946,74 +3023,75 @@
         // ═══════════════════════════════════════════════════════════════
 
         try {
+          // Item 1: Scroll indicator animation with click to scroll
+          if (!prefersReducedMotion) {
+            const scrollDot = document.getElementById("scroll-indicator-dot");
+            if (scrollDot) {
+              gsap.to(scrollDot, {
+                y: 40,
+                opacity: 0,
+                duration: 1.8,
+                ease: "power1.inOut",
+                repeat: -1,
+              });
+            }
+          }
 
-        // Item 1: Scroll indicator animation with click to scroll
-        if (!prefersReducedMotion) {
-          const scrollDot = document.getElementById("scroll-indicator-dot");
-          if (scrollDot) {
-            gsap.to(scrollDot, {
-              y: 40,
-              opacity: 0,
-              duration: 1.8,
-              ease: "power1.inOut",
-              repeat: -1,
+          const scrollIndicatorTrack = document.getElementById(
+            "scroll-indicator-track",
+          );
+          if (scrollIndicatorTrack) {
+            scrollIndicatorTrack.style.cursor = "pointer";
+            scrollIndicatorTrack.parentElement.style.cursor = "pointer";
+            scrollIndicatorTrack.parentElement.addEventListener("click", () => {
+              const servicesSection = document.getElementById("services");
+              if (servicesSection && window.lenis) {
+                window.lenis.scrollTo(servicesSection, {
+                  offset: 0,
+                  duration: 1.2,
+                });
+              } else if (servicesSection) {
+                servicesSection.scrollIntoView({ behavior: "smooth" });
+              }
             });
           }
-        }
 
-        const scrollIndicatorTrack = document.getElementById(
-          "scroll-indicator-track",
-        );
-        if (scrollIndicatorTrack) {
-          scrollIndicatorTrack.style.cursor = "pointer";
-          scrollIndicatorTrack.parentElement.style.cursor = "pointer";
-          scrollIndicatorTrack.parentElement.addEventListener("click", () => {
-            const servicesSection = document.getElementById("services");
-            if (servicesSection && window.lenis) {
-              window.lenis.scrollTo(servicesSection, {
-                offset: 0,
-                duration: 1.2,
-              });
-            } else if (servicesSection) {
-              servicesSection.scrollIntoView({ behavior: "smooth" });
-            }
-          });
-        }
+          // Item 3: Status ticker crossfade animation
+          if (!prefersReducedMotion) {
+            const tickerTexts = document.querySelectorAll(
+              ".status-ticker-text",
+            );
+            if (tickerTexts.length > 0) {
+              let currentIndex = 0;
 
-        // Item 3: Status ticker crossfade animation
-        if (!prefersReducedMotion) {
-          const tickerTexts = document.querySelectorAll(".status-ticker-text");
-          if (tickerTexts.length > 0) {
-            let currentIndex = 0;
+              function crossfadeToNext() {
+                const current = tickerTexts[currentIndex];
+                const nextIndex = (currentIndex + 1) % tickerTexts.length;
+                const next = tickerTexts[nextIndex];
 
-            function crossfadeToNext() {
-              const current = tickerTexts[currentIndex];
-              const nextIndex = (currentIndex + 1) % tickerTexts.length;
-              const next = tickerTexts[nextIndex];
-
-              const tl = gsap.timeline();
-              tl.to(current, {
-                opacity: 0,
-                y: -4,
-                duration: 0.4,
-                ease: "power2.in",
-              }).to(
-                next,
-                {
-                  opacity: 1,
-                  y: 0,
+                const tl = gsap.timeline();
+                tl.to(current, {
+                  opacity: 0,
+                  y: -4,
                   duration: 0.4,
-                  ease: "power2.out",
-                },
-                "-=0.2",
-              );
+                  ease: "power2.in",
+                }).to(
+                  next,
+                  {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.4,
+                    ease: "power2.out",
+                  },
+                  "-=0.2",
+                );
 
-              currentIndex = nextIndex;
+                currentIndex = nextIndex;
+              }
+
+              setInterval(crossfadeToNext, 4000);
             }
-
-            setInterval(crossfadeToNext, 4000);
           }
-        }
         } catch (e) {
           console.error("Hero Enhancements (Items 1 & 3) failed:", e);
         }
@@ -3037,15 +3115,10 @@
             // GSAP owns that element's transform; IntersectionObserver must not touch it.
             if (el.id === "dashboard-pin" || el.closest("#dashboard-pin"))
               return;
-            const isMobileReveal = window.matchMedia(
-              "(max-width: 767px)",
-            ).matches;
+            const isMobileReveal =
+              window.matchMedia("(max-width: 767px)").matches;
             const fadeOnly = el.classList.contains("scroll-reveal-fade");
-            el.classList.add(
-              "transition-all",
-              "duration-1000",
-              "opacity-0",
-            );
+            el.classList.add("transition-all", "duration-1000", "opacity-0");
             if (!fadeOnly || !isMobileReveal) {
               el.classList.add("translate-y-10");
             }
@@ -3347,8 +3420,7 @@
             const mobileIcon = step.querySelector(".timeline-step-icon");
             const iconTargets = [node, mobileIcon].filter(Boolean);
             const content = step.querySelector(".step-content");
-            const isRightSide =
-              step.classList.contains("md:flex-row-reverse");
+            const isRightSide = step.classList.contains("md:flex-row-reverse");
             const startX = isRightSide ? 30 : -30;
 
             gsap.set(content, { opacity: 0.1, x: startX });
@@ -3664,15 +3736,16 @@
         }
 
         try {
-          document.addEventListener("mousemove", function(e) {
+          document.addEventListener("mousemove", function (e) {
             var magnetics = document.querySelectorAll(".magnetic-hover");
-            magnetics.forEach(function(btn) {
+            magnetics.forEach(function (btn) {
               var rect = btn.getBoundingClientRect();
               var x = e.clientX - rect.left - rect.width / 2;
               var y = e.clientY - rect.top - rect.height / 2;
               var radius = 120;
               if (Math.abs(x) < radius && Math.abs(y) < radius) {
-                btn.style.transform = "translate(" + (x * 0.2) + "px, " + (y * 0.2) + "px) scale(1.05)";
+                btn.style.transform =
+                  "translate(" + x * 0.2 + "px, " + y * 0.2 + "px) scale(1.05)";
                 btn.style.zIndex = "10";
               } else {
                 btn.style.transform = "translate(0, 0) scale(1)";
@@ -3685,5 +3758,15 @@
         }
       });
     </script>
+    <!-- ── Custom Cursor ─────────────────────────────────────────────────── -->
+    <div id="custom-cursor" aria-hidden="true">
+      <span id="cursor-label"></span>
+      <svg id="cursor-icon-play" class="cursor-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="7,4 20,12 7,20" fill="white"/>
+      </svg>
+      <svg id="cursor-icon-drag" class="cursor-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
   </body>
 </html>
