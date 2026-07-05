@@ -3230,8 +3230,6 @@
             scrollRevealObserver.observe(el);
           });
 
-        const statsSection = document.getElementById("stats-section");
-        const counters = document.querySelectorAll(".counter");
         const horizontalScroll = document.getElementById("horizontal-scroll");
         const casesSection = document.getElementById("cases-section");
         const parallaxLayers = document.querySelectorAll(".parallax-layer");
@@ -3252,32 +3250,6 @@
               const drift = i === 0 ? -0.05 : 0.04;
               glow.style.transform = `translate3d(${scrolled * drift}px, ${scrolled * Math.abs(drift) * 0.5}px, 0)`;
             });
-          }
-
-          if (statsSection) {
-            const statsRect = statsSection.getBoundingClientRect();
-            if (statsRect.top < viewHeight && statsRect.bottom > 0) {
-              const statsProgress = Math.min(
-                Math.max(
-                  (viewHeight - statsRect.top) /
-                    (viewHeight + statsRect.height),
-                  0,
-                ),
-                1,
-              );
-              counters.forEach((counter) => {
-                const targetValue = parseFloat(
-                  counter.getAttribute("data-target"),
-                );
-                const suffix = counter.getAttribute("data-suffix") || "";
-                const decimals = parseInt(
-                  counter.getAttribute("data-decimals") || "0",
-                  10,
-                );
-                const currentValue = statsProgress * targetValue;
-                counter.textContent = currentValue.toFixed(decimals) + suffix;
-              });
-            }
           }
 
           if (casesSection && horizontalScroll) {
@@ -3310,6 +3282,41 @@
         // GSAP ScrollTrigger pinning and animation sequence for the dashboard control center
         gsap.registerPlugin(ScrollTrigger);
         ScrollTrigger.config({ limitCallbacks: true });
+
+        // ── Stats counters: fire once when #stats-section centers in viewport ──
+        if (document.getElementById("stats-section")) {
+          ScrollTrigger.create({
+            trigger: "#stats-section",
+            start: "center center",
+            once: true,
+            onEnter: () => {
+              document.querySelectorAll(".counter").forEach((el, i) => {
+                const target = parseFloat(el.getAttribute("data-target"));
+                const suffix = el.getAttribute("data-suffix") || "";
+                const decimals = parseInt(
+                  el.getAttribute("data-decimals") || "0",
+                  10,
+                );
+                gsap.to(
+                  { val: 0 },
+                  {
+                    val: target,
+                    duration: 1.6,
+                    ease: "power2.out",
+                    delay: i * 0.1,
+                    onUpdate: function () {
+                      el.textContent =
+                        this.targets()[0].val.toFixed(decimals) + suffix;
+                    },
+                    onComplete: function () {
+                      el.textContent = target.toFixed(decimals) + suffix;
+                    },
+                  },
+                );
+              });
+            },
+          });
+        }
 
         if (!prefersReducedMotion && document.getElementById("dashboard-pin")) {
           // ── Set initial hidden states (pin animation — all viewports) ────────
