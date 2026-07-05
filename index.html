@@ -3284,34 +3284,36 @@
         ScrollTrigger.config({ limitCallbacks: true });
 
         // ── Stats counters: scroll-scrubbed from top-bottom to center-center ──
-        // Single gsap.to per counter — proxy object is what GSAP tweens, so
-        // onUpdate always reads the live value. fromTo with two object literals
-        // would tween the inline from-object instead of proxy, breaking onUpdate.
+        // Registered on window.load (not DOMContentLoaded) so ScrollTrigger
+        // calculates trigger positions against the fully-painted layout including
+        // fonts and images. invalidateOnRefresh recalculates on window resize.
         if (document.getElementById("stats-section")) {
-          document.querySelectorAll(".counter").forEach((el) => {
-            const target = parseFloat(el.getAttribute("data-target"));
-            const suffix = el.getAttribute("data-suffix") || "";
-            const decimals = parseInt(
-              el.getAttribute("data-decimals") || "0",
-              10,
-            );
-            const proxy = { val: 0 };
-            gsap.to(proxy, {
-              val: target,
-              ease: "none",
-              onUpdate: () => {
-                el.textContent = proxy.val.toFixed(decimals) + suffix;
-              },
-              scrollTrigger: {
-                trigger: "#stats-section",
-                start: "top bottom",
-                end: "center center",
-                scrub: 0.5,
-              },
+          window.addEventListener("load", () => {
+            document.querySelectorAll(".counter").forEach((el) => {
+              const target = parseFloat(el.getAttribute("data-target"));
+              const suffix = el.getAttribute("data-suffix") || "";
+              const decimals = parseInt(
+                el.getAttribute("data-decimals") || "0",
+                10,
+              );
+              const proxy = { val: 0 };
+              gsap.to(proxy, {
+                val: target,
+                ease: "none",
+                onUpdate: () => {
+                  el.textContent = proxy.val.toFixed(decimals) + suffix;
+                },
+                scrollTrigger: {
+                  trigger: "#stats-section",
+                  start: "top bottom",
+                  end: "center center",
+                  scrub: 0.5,
+                  invalidateOnRefresh: true,
+                },
+              });
             });
+            ScrollTrigger.refresh();
           });
-          // Recalculate trigger positions after full layout paint
-          ScrollTrigger.refresh();
         }
 
         if (!prefersReducedMotion && document.getElementById("dashboard-pin")) {
